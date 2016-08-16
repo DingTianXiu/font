@@ -1,0 +1,57 @@
+<!DOCTYPE html >
+<html>
+<head>
+	<meta charset="UTF-8">
+	<title></title>
+	<link type="text/css" rel="stylesheet" href="/bower_components/jquery-ui/themes/base/jquery-ui.css" />
+	<link type="text/css" rel="stylesheet" href="css/ui.css">
+	<link type="text/css" rel="stylesheet" href="css/common.css"/>
+</head>
+<body>
+		<div class="container">
+			<div class="side">
+				<div class="logo"></div>
+				<ul class="menu">
+					<li><a href="#">方案一</a></li>
+					<li><a href="#" id="addSchemeBtn">添加方案</a></li>
+				</ul>
+				<a href="#" class="componentBtn">构件库</a>
+				<div class="user"><a href="#">华为</a></div>
+			</div>
+			<div class="main"><iframe width="100%" height="500" src="views/scheme.html"></iframe></div>
+		</div>
+
+		<div id="goods-popup" class="hide">
+			<div class="m-cg-search">
+				<div class="fm-row">
+					<div>
+						<label for="search" class="fm-lb fm-lb-s">方案名称</label>
+						<div class="fm-ipt">
+							<input id="schemeName" type="text">
+						</div>
+					</div>
+					<div>
+						<label for="search" class="fm-lb fm-lb-s">附属模块名称</label>
+						<div class="fm-ipt">
+							<p><input class="moduleName" type="text"></p>
+							<button id="addModuleBtn">添加附属模块</button>
+						</div>
+					</div>
+					<div class="btn-grp">
+						<button id="confirm-btn" class="btn">
+							<i class="icon-ok-u"></i>
+							创建
+						</button>
+
+
+					</div>
+				</div>
+			</div>
+
+		</div>
+	<script type="text/javascript" src="/bower_components/jquery/dist/jquery.min.js"></script>
+	<script type="text/javascript" src="/bower_components/jquery-ui/jquery-ui.min.js"></script>
+	<script type="text/javascript" src="js/ui.js"></script>
+	<script type="text/javascript" src="js/scheme.js"></script>
+</body>
+</html>

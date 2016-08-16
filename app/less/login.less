@@ -1,0 +1,178 @@
+*{
+  margin: 0;
+  padding: 0;
+  list-style-type: none;
+  text-decoration: none;
+}
+html{
+  height: 100%;
+  body{
+    height: 100%;
+    .login{
+      height: 100%;
+      background-color: #3f4044;
+      padding: 0 30px;
+      .head{
+        height: 140px;
+        img{
+          margin: 45px 0 0 30px;
+        }
+      }
+      .center{
+        height: 424px;
+        min-width: 1100px;
+        background-color: #ffffff;
+        div{
+          width: 50%;
+          float: left;
+          text-align: center;
+          img{
+            margin: 50px auto 0;
+          }
+        }
+        .loginForm{
+          float: left;
+          margin: 66px 0 0 100px;
+          ul{
+            p:first-child{
+              margin: 30px 0 0 5%;
+              font-size: 12px;
+              color: #d9d9da;
+            }
+            p:nth-child(2){
+              height: 80px;
+              text-align: center;
+              line-height: 80px;
+              font-size: 24px;
+            }
+            li{
+              width: 380px;
+              height: 60px;
+              position: relative;
+              //border-bottom: 1px solid #d9d9da;
+              line-height: 60px;
+              input{
+                width: 70%;
+                height: 57px;
+                float: left;
+                padding: 0 25% 0 5%;
+                border: none;
+                border-bottom: 1px solid #d9d9da;
+                outline: none;
+                font-size: 18px;
+              }
+              input:focus{
+                border-bottom: 2px solid #3f4044;
+              }
+              .errorInputBorder{
+                border-bottom: 2px solid #f25e61 !important;
+              }
+              a{
+                position: absolute;
+                right: 5px;
+                font-size: 12px;
+                color: #999;
+              }
+              span{
+                position: absolute;
+                top: 15px;
+                right: 5%;
+                display: inline-block;
+                height: 30px;
+                width: 89px;
+                background-color: #3f4044;
+                color: #cccccc;
+                font-size: 14px;
+                text-align: center;
+                line-height: 30px;
+              }
+              img{
+                position: absolute;
+                right: 5%;
+                height: 57px;
+              }
+            }
+            li:last-child{
+              border-bottom: none;
+              margin-top: 24px;
+              button{
+                width: 380px;
+                height: 50px;
+                background-color: #f25e61;
+                border: none;
+                -webkit-border-radius: 4px;
+                -moz-border-radius: 4px;
+                border-radius: 4px;
+                outline: none;
+                font-size: 24px;
+                color: #ffffff;
+                letter-spacing: 5px;
+              }
+              .btnState{
+                width: 380px;
+                height: 50px;
+                -webkit-border-radius: 4px;
+                -moz-border-radius: 4px;
+                border-radius: 4px;
+                line-height: 50px;
+                font-size: 22px;
+              }
+              .btnEmptyState{
+                background-color: #d9d9da;
+                color: #fff;
+                text-align: center;
+              }
+              .btnWaitState{
+                background-color: #f25e61;
+                background-image: url(../../../../img/loading.png);
+                background-repeat: no-repeat;
+                background-position: 120px 13px;
+                font-size: 16px;
+                color: #fff;
+              }
+              .btnErrState{
+                background-color: #fff1f1;
+                font-size: 16px;
+                color: #f25e61;
+                text-align: center;
+              }
+              //.errBtn{
+              //  background-color: #d9d9da;
+              //}
+              //.loginErr{
+              //  background-color: #fff1f1;
+              //  font-size: 16px;
+              //  color: #f25e61;
+              //  letter-spacing: normal;
+              //}
+            }
+          }
+          p:last-child{
+            margin-top: 20px;
+            line-height: 20px;
+            font-size: 12px;
+            color: #d9d9da;
+          }
+        }
+      }
+      .foot{
+        ul{
+          width: 400px;
+          margin: 30px auto 0;
+          li{
+            display: inline-block;
+            border-right: 1px solid #999999;
+            padding: 0 12px;
+            a{
+              color: #999;
+              text-decoration: none;
+            }
+          }
+          li:last-child{
+            border-right: none;
+          }
+        }
+      }
+    }
+  }
+}

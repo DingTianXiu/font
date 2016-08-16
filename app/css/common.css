@@ -1,0 +1,201 @@
+/** reset
+**/
+body,
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+hr,
+p,
+blockquote,
+dl,
+dt,
+dd,
+ul,
+ol,
+li,
+pre,
+fieldset,
+lengend,
+button,
+input,
+textarea,
+th,
+td {
+  margin: 0;
+  padding: 0;
+}
+body,
+button,
+input,
+select,
+textarea {
+  font: 12px/1 "微软雅黑", Tahoma, Helvetica, Arial, "\5b8b\4f53", sans-serif;
+}
+h1 {
+  font-size: 18px;
+}
+h2 {
+  font-size: 16px;
+}
+h3 {
+  font-size: 14px;
+}
+h4,
+h5,
+h6 {
+  font-size: 100%;
+}
+address,
+cite,
+dfn,
+em,
+var {
+  font-style: normal;
+}
+code,
+kbd,
+pre,
+samp,
+tt {
+  font-family: "Courier New", Courier, monospace;
+}
+small {
+  font-size: 12px;
+}
+ul,
+ol {
+  list-style: none;
+}
+a {
+  text-decoration: none;
+}
+a:hover {
+  text-decoration: none;
+}
+abbr[title],
+acronym[title] {
+  border-bottom: 1px dotted;
+  cursor: help;
+}
+q:before,
+q:after {
+  content: '';
+}
+legend {
+  color: #000;
+}
+fieldset,
+img {
+  border: none;
+}
+button,
+input,
+select,
+textarea {
+  font-size: 100%;
+}
+table {
+  border-collapse: collapse;
+  border-spacing: 0;
+}
+hr {
+  border: none;
+  height: 1px;
+}
+iframe {
+  border: none;
+}
+.clearfix {
+  *overflow: hidden;
+  *zoom: 1;
+}
+.clearfix:after {
+  display: block;
+  content: "";
+  width: 0;
+  clear: both;
+}
+/**
+end reset
+**/
+body {
+  overflow: hidden;
+}
+.side {
+  width: 95px;
+  position: absolute;
+  left: 0;
+  top: 0;
+  min-height: 500px;
+  background: #3f4044;
+}
+.side .logo {
+  height: 68px;
+  background: #f25e61 url(../img/logo.png) no-repeat center center;
+}
+.side .menu li {
+  height: 97px;
+  text-align: center;
+  background: #3f4044;
+}
+.side .menu li a {
+  display: block;
+  height: 45px;
+  padding: 52px 0 0 0;
+  text-align: center;
+  color: #7d8088;
+  background: url(../img/icon_scheme.png) no-repeat center 25px;
+}
+.side .menu li a:hover {
+  color: #f25e61;
+  background-color: #373737;
+}
+.side .menu li a:active {
+  outline: none;
+}
+.side .menu li a#addSchemeBtn {
+  color: #7d8088;
+  background: url(../img/icon_add_scheme.png) no-repeat center 25px;
+}
+.side .menu li.active a {
+  color: #f25e61;
+  background: #373737;
+}
+.side .componentBtn {
+  display: block;
+  height: 45px;
+  padding: 52px 0 0 0;
+  text-align: center;
+  background: url(../img/icon_component.png) no-repeat center 25px;
+  color: #7d8088;
+  position: fixed;
+  left: 0;
+  bottom: 80px;
+  width: 95px;
+}
+.side .user {
+  width: 95px;
+  height: 80px;
+  position: fixed;
+  left: 0;
+  bottom: 0;
+  background: #373737;
+}
+.side .user a {
+  display: block;
+  width: 40px;
+  height: 40px;
+  border-radius: 20px;
+  background: #aac4da;
+  margin: 20px auto;
+}
+.main {
+  margin-left: 95px;
+  min-height: 500px;
+}
+.hide {
+  display: none;
+}
