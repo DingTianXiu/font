@@ -1,0 +1,28 @@
+
+<div class="login">
+    <div class="head">
+        <img src="../../img/logo1.png" title="亿商-登录">
+    </div>
+    <div class="center">
+        <div><img src="./../../img/插画.png"></div>
+        <form class="loginForm" novalidate name="loginForm">
+            <ul ng-class="{hidden:resetPassword}">
+                <li>
+                    <input ng-click="userClick()" name="user" ng-required="true" ng-model="auth.userName" type="text" placeholder="账号">
+                </li>
+                <li>
+                    <input ng-click="passwordClick()" ng-class="{errorInputBorder:passwordWrong}" name="password" ng-required="true" ng-model="auth.password" type="password" placeholder="密码">
+                    <a ui-sref="losePassword">忘记密码?</a>
+                </li>
+                <li>
+                    <input ng-click="codeClick()" ng-class="{errorInputBorder:codeWrong}" name="code" type="text" ng-required="true" ng-model="auth.code" placeholder="验证码">
+                    <img ng-src="" >
+                </li>
+                <li>
+                    <button ng-click="goLogin()" ng-hide="!loginForm.$valid||err||waiting">登录</button>
+                    <div class="btnState" ng-class="{btnEmptyState:!loginForm.$valid,btnWaitState:waiting,btnErrState:err}" ng-show="!loginForm.$valid||err||waiting" ng-class="{loginErr:errBtn}" ng-bind="message"></div>
+                </li>
+            </ul>
+        </form>
+    </div>
+</div>

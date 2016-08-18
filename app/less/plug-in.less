@@ -1,0 +1,178 @@
+*{
+  margin: 0;
+  padding: 0;
+  list-style-type: none;
+  text-decoration: none;
+  button{
+    cursor: pointer;
+  }
+  @font-face {
+    font-family: 'iconfont';
+    src: url('//at.alicdn.com/t/font_1471416865_392484.eot'); /* IE9*/
+    src: url('//at.alicdn.com/t/font_1471416865_392484.eot?#iefix') format('embedded-opentype'), /* IE6-IE8 */
+    url('//at.alicdn.com/t/font_1471416865_392484.woff') format('woff'), /* chrome、firefox */
+    url('//at.alicdn.com/t/font_1471416865_392484.ttf') format('truetype'), /* chrome、firefox、opera、Safari, Android, iOS 4.2+*/
+    url('//at.alicdn.com/t/font_1471416865_392484.svg#iconfont') format('svg'); /* iOS 4.1- */
+  }
+}
+#editContainer{
+  margin: 24px 26px;
+  padding: 0 24px 40px 24px;
+  background-color: #fff;
+  span{
+    display: inline-block;
+    height: 74px;
+    font-size: 22px;
+    line-height: 74px;
+  }
+  a{
+    float: right;
+    font-family: 'iconfont';
+    font-size: 14px;
+    color: #636874;
+    line-height: 74px;
+    cursor: pointer;
+  }
+  a:hover{
+    color: #9f9fa1;
+  }
+  #optionContainer{
+    ul{
+      li{
+        height: 48px;
+        display: inline-block;
+        margin-right: 14px;
+        line-height: 48px;
+        font-size: 14px;
+        .select{
+          height: 38px;
+          width: 200px;
+          background-color: #fff;
+          border: 1px solid #d5d9dc;
+          -webkit-border-radius: 4px;
+          -moz-border-radius: 4px;
+          border-radius: 4px;
+          outline: none;
+        }
+        .addBtn{
+          height: 38px;
+          width: 80px;
+          background-color: #f4f4f4;
+          border: 1px solid #d5d9dc;
+          -webkit-border-radius: 4px;
+          -moz-border-radius: 4px;
+          border-radius: 4px;
+          outline: none;
+          font-family: 'iconfont';
+          font-size: 12px;
+          color: #9f9fa1;
+        }
+        button:hover{
+          color: #757b8b;
+        }
+      }
+    }
+    .selectedList{
+      height: 78px;
+      margin-bottom: 60px;
+      li:hover{
+        background-color: #fff9f9;
+        border-color: #b1b3ba;
+        margin-left: -1px;
+        border-left: 1px solid #b1b3ba;
+      }
+      li:first-child{
+        border-left: 1px solid #d5d9dc;
+      }
+      li{
+        display: inline-block;
+        float: left;
+        margin: 0;
+        height: 78px;
+        width: 392px;
+        border: 1px solid #d5d9dc;
+        border-left: none;
+        line-height: 78px;
+        img{
+          width: 50px;
+          margin: 0 15px 0 10px;
+        }
+        span{
+          display: inline-block;
+          float: left;
+          width: auto;
+          line-height: 78px;
+          border: none;
+          p:first-child{
+            height: 30px;
+            margin-top: 10px;
+            line-height: 30px;
+            font-size: 16px;
+          }
+          p:nth-child(2){
+            font-size: 12px;
+            color: #b0b0b0;
+            line-height: normal;
+          }
+          #resourceName{
+            height: 78px;
+            line-height: 78px;
+            margin: 0px;
+          }
+        }
+        .deleteBtn{
+          float: right;
+          margin-right: 15px;
+          font-family: 'iconfont';
+          font-size: 14px;
+          color: #636874;
+          cursor: pointer;
+        }
+        .deleteBtn:hover{
+          color: #f25e61;
+        }
+      }
+    }
+    #styleListContainer{
+      p{
+        font-size: 14px;
+        margin-bottom: 15px;
+      }
+      #styleList{
+        height: 180px;
+        white-space:nowrap;
+        overflow-x: auto;
+        li{
+          display: inline-block;
+          width: 178px;
+          height: 178px;
+          margin-left: 15px;
+          border: 1px solid #efeeec;
+        }
+        li:first-child{
+          margin-left: 0;
+        }
+        li:hover{
+          border: 1px solid #b1b3ba;
+        }
+      }
+    }
+  }
+}
+#generateBtn{
+  height: 104px;
+  text-align: center;
+  line-height: 104px;
+  button{
+    height: 50px;
+    width: 380px;
+    background-color: #f25e61;
+    border: none;
+    -webkit-border-radius: 4px;
+    -moz-border-radius: 4px;
+    border-radius: 4px;
+    outline: none;
+    font-size: 24px;
+    color: #fff;
+  }
+}

@@ -21,3 +21,9 @@ svn:wc:ra_dav:version-url
 V 79
 /svn/data/!svn/ver/17665/typsm/code/trunk/dmb4.0/front-end/app/less/common.less
 END
+login.less
+K 25
+svn:wc:ra_dav:version-url
+V 78
+/svn/data/!svn/ver/17691/typsm/code/trunk/dmb4.0/front-end/app/less/login.less
+END

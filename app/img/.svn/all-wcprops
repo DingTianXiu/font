@@ -9,6 +9,18 @@ svn:wc:ra_dav:version-url
 V 82
 /svn/data/!svn/ver/17665/typsm/code/trunk/dmb4.0/front-end/app/img/icon_scheme.png
 END
+插画.png
+K 25
+svn:wc:ra_dav:version-url
+V 89
+/svn/data/!svn/ver/17691/typsm/code/trunk/dmb4.0/front-end/app/img/%E6%8F%92%E7%94%BB.png
+END
+loading.png
+K 25
+svn:wc:ra_dav:version-url
+V 78
+/svn/data/!svn/ver/17691/typsm/code/trunk/dmb4.0/front-end/app/img/loading.png
+END
 tab_bg.png
 K 25
 svn:wc:ra_dav:version-url
@@ -20,6 +32,12 @@ K 25
 svn:wc:ra_dav:version-url
 V 75
 /svn/data/!svn/ver/17665/typsm/code/trunk/dmb4.0/front-end/app/img/logo.png
+END
+logo1.png
+K 25
+svn:wc:ra_dav:version-url
+V 76
+/svn/data/!svn/ver/17691/typsm/code/trunk/dmb4.0/front-end/app/img/logo1.png
 END
 icon_add_scheme.png
 K 25
