@@ -30,11 +30,6 @@
     <ConfirmationsSetting value="0" id="Remove" />
   </component>
   <component name="ProjectRootManager" version="2" project-jdk-name="ruby-2.0.0-p648" project-jdk-type="RUBY_SDK" />
-  <component name="SvnConfiguration">
-    <configuration>$USER_HOME$/.subversion</configuration>
-    <option name="sshConnectionType" value="PASSWORD" />
-    <option name="sshUserName" value="dingtianxiu" />
-  </component>
   <component name="masterDetails">
     <states>
       <state key="ScopeChooserConfigurable.UI">

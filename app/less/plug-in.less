@@ -15,7 +15,8 @@
     url('//at.alicdn.com/t/font_1471416865_392484.svg#iconfont') format('svg'); /* iOS 4.1- */
   }
 }
-#editContainer{
+.editContainer{
+  float: left;
   margin: 24px 26px;
   padding: 0 24px 40px 24px;
   background-color: #fff;
@@ -36,7 +37,7 @@
   a:hover{
     color: #9f9fa1;
   }
-  #optionContainer{
+  .optionContainer{
     ul{
       li{
         height: 48px;
@@ -73,16 +74,19 @@
       }
     }
     .selectedList{
-      height: 78px;
       margin-bottom: 60px;
+      border-left: 1px solid #d5d9dc;
+      border-top: 1px solid #d5d9dc;
       li:hover{
         background-color: #fff9f9;
         border-color: #b1b3ba;
         margin-left: -1px;
+        margin-top: -1px;
         border-left: 1px solid #b1b3ba;
-      }
-      li:first-child{
-        border-left: 1px solid #d5d9dc;
+        border-top: 1px solid #b1b3ba;
+        .deleteBtn{
+          display: block;
+        }
       }
       li{
         display: inline-block;
@@ -90,7 +94,8 @@
         margin: 0;
         height: 78px;
         width: 392px;
-        border: 1px solid #d5d9dc;
+        border-right: 1px solid #d5d9dc;
+        border-bottom: 1px solid #d5d9dc;
         border-left: none;
         line-height: 78px;
         img{
@@ -121,6 +126,7 @@
           }
         }
         .deleteBtn{
+          display: none;
           float: right;
           margin-right: 15px;
           font-family: 'iconfont';
@@ -133,20 +139,17 @@
         }
       }
     }
-    #styleListContainer{
+    .styleListContainer{
+      float: left;
       p{
         font-size: 14px;
-        margin-bottom: 15px;
       }
-      #styleList{
-        height: 180px;
-        white-space:nowrap;
-        overflow-x: auto;
+      .styleList{
         li{
           display: inline-block;
           width: 178px;
           height: 178px;
-          margin-left: 15px;
+          margin-top: 15px;
           border: 1px solid #efeeec;
         }
         li:first-child{
@@ -159,8 +162,10 @@
     }
   }
 }
-#generateBtn{
+.generateBtn{
   height: 104px;
+  width: 100%;
+  float: left;
   text-align: center;
   line-height: 104px;
   button{
