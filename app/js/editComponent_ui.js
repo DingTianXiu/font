@@ -1,7 +1,5 @@
 /**
- * Created by dtx on 16/8/18.
- * var aa = $(".demo").widget(element,{});
- * aa.getData();
+ * Created by dtx on 16/8/23.
  */
 
 (function ($) {
@@ -18,7 +16,6 @@
         }
     };
     EditComponent.prototype = {
-
         Constructor : EditComponent,
         /*添加新构建start*/
         _addEditContainer : function () {
@@ -31,8 +28,6 @@
             $(".componentList").append(dom);
             $(".editContainer").after(generate_dom);
         },
-        /*添加新构建end*/
-
         /*选择产品start*/
         _addSelectProduct : function () {
             var dom = "<ul class='selectProduct'>" +
@@ -204,6 +199,7 @@
                 this.addSelectStyle();
             }
         }
-    };
+        /*添加新构建end*/
+    }
     $.fn.editComponent = EditComponent;
-})(window.jQuery);
+})(jQuery);

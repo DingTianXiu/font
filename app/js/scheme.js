@@ -2,8 +2,8 @@
 	var URL = {
 
 	},
+	schemeData = [];
 	scheme = {
-		$m : $("#account"),
 		getParams : function(){
 			var params = $(".header .account").f2j();
 			this.$m.find(".date").each(function(){
@@ -13,24 +13,58 @@
 			});
 			return params;
 		},
+		getSchemeList : function(data){
+			//$.ajaxJSON({
+			//	name: '',
+			//	url: URL.GET_AREA_INFO,
+			//	data: {},
+			//	success: function (data) {
+			//
+			//	}
+			//});
+			if(data){
+				schemeData.push({"name":data[0],"id":""});
+			}
+			var template = "";
+			for(var i = 0; i < schemeData.length;i++){
+				template += '<li><a href="views/scheme.html?id='+ schemeData[i]["id"] +'" target="mainIframe">'+ schemeData[i]["name"] +'</a></li>';
+			}
+			$(".menu").html(template);
+		},
+		getModuleList : function(data){
+
+		},
 		validate : function(){
 			return true;
 		},
-		openComponentDialog : function(){},
+
 		addScheme : function(){
 			if(this.validate()){
-				$("#addSchemeBtn").dialog("close");
-				this.openComponentDialog();
+				var data = [];
+				$("#add-scheme-popup input:text").each(function(i){
+					data.push($(this).eq(i).val());
+				});
+				//$.ajaxJSON({
+				//	name: '',
+				//	url: URL.GET_AREA_INFO,
+				//	data: {},
+				//	success: function (data) {
+                //
+				//	}
+				//});
+				this.getSchemeList(data);
+				this.getModuleList(data);
+				$("#add-scheme-popup").addClass("hide");
+				document.getElementById("mainIframe").contentWindow.openComponentDialog();
 			}
-
 		},
 		addModuleItem : function(){
-			$('<p><input class="moduleName" type="text"></p>').insertBefore("#addModuleBtn");
+			$("#addModuleBtn").parent().parent().append('<div class="fm-ipt"><input class="moduleName" type="text"></div>');
 		},
 		bindEvent : function(){
 			var that = this;
 			$("#addSchemeBtn").on("click",function(){
-				$('#goods-popup').dialog('open');
+				$('#add-scheme-popup').removeClass("hide");
 			});
 			$("#addModuleBtn").on("click",function(){
 				that.addModuleItem();
@@ -45,26 +79,17 @@
 			$(".side").height(h);
 			$("iframe").height(h-3);
 		},
-		initDialog : function(){
-			$('#goods-popup').dialog({
-				title : '华为技术有限公司',
-				width : 780,
-				autoOpen : false,
-				resizable : false,
-				close: function() {
 
-				}
-			});
-		},
 		init : function(){
 			var that = this;
-
-			this.initDialog();
+			this.getSchemeList();
+			this.getModuleList();
 			this.bindEvent();
 			this.setLayout();
 			$(window).resize(function(){
 				that.setLayout();
 			});
+
 			//$.ajaxJSON({
 			//	name : '',
 			//	url : URL.GET_AREA_INFO,

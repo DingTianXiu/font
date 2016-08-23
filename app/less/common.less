@@ -47,11 +47,25 @@ hr {
 iframe{
     border:none;
 }
+
 .clearfix { *overflow: hidden; *zoom: 1; }
 .clearfix:after { display: block; content: ""; width: 0; clear: both; }
 /**
 end reset
 **/
+/*
+iconfont
+*/
+@font-face {font-family: 'iconfont';
+    src: url('iconfont.eot'); /* IE9*/
+    src: url('iconfont.eot?#iefix') format('embedded-opentype'), /* IE6-IE8 */
+    url('iconfont.woff') format('woff'), /* chrome、firefox */
+    url('iconfont.ttf') format('truetype'), /* chrome、firefox、opera、Safari, Android, iOS 4.2+*/
+    url('iconfont.svg#iconfont') format('svg'); /* iOS 4.1- */
+}
+/*
+end iconfont
+*/
 body{overflow:hidden;}
 .side {
     width: 95px;
@@ -85,15 +99,23 @@ body{overflow:hidden;}
             a:active{
                 outline:none;
             }
-            a#addSchemeBtn{
-                color:#7d8088;
-                background:url(../img/icon_add_scheme.png) no-repeat center 25px;
-            }
         }
         li.active a {
             color: #f25e61;
             background:#373737;
         }
+    }
+    #addSchemeBtn{
+        display:block;
+        height:45px;
+        padding:52px 0 0 0;
+        text-align:center;
+        color:#7d8088;
+        background:url(../img/icon_add_scheme.png) no-repeat center 25px;
+    }
+    #addSchemeBtn.active{
+        color: #f25e61;
+        background:#373737;
     }
     .componentBtn {
         display: block;
@@ -131,4 +153,73 @@ body{overflow:hidden;}
 }
 .hide{
     display:none;
+}
+#add-scheme-popup{
+    position:absolute;
+    left:95px;
+    top:0;
+    width:100%;
+    background:#f4f4f4;
+    .title{
+        color:#7d8088;
+        font-size:22px;
+        height:68px;
+        line-height:68px;
+        border-bottom:1px solid #e1e1e1;
+        background:#fff;
+        padding-left:24px;
+    }
+    .box{
+        margin:24px;
+        background:#fff;
+        padding-bottom:55px;
+        h1{
+            padding:25px 18px;
+            font-size:22px;
+            color:#282828;
+            font-weight:normal;
+        }
+        .fm-row{
+            width:500px;
+            margin:10px auto 53px auto;
+            .fm-lb{
+                font-size:14px;
+                color:#333333;
+                margin:10px 0 ;
+                display:block;
+            }
+            .fm-ipt{
+                margin:10px 0;
+                input[type=text]{
+                    border:1px solid #e1e1e1;
+                    border-radius:4px;
+                    line-height:34px;
+                    color:#cccccc;
+                    width:380px;
+                    margin-bottom:10px;
+                    text-indent:9px;
+                    font-size:14px;
+                }
+                #addModuleBtn{
+                    background:url(../img/icon_add_module.png) no-repeat 10px center;
+                    padding:10px 10px 10px 39px;
+                    font-weight:normal;
+                    color:#737989;
+                    font-size:14px;
+                }
+            }
+            #confirm-btn{
+                height:50px;
+                line-height:50px;
+                background:#f25e61;
+                color:#fff;
+                font-size:24px;
+                text-align:center;
+                border: none;
+                border-radius: 4px;
+                width: 380px;
+                cursor:pointer;
+            }
+        }
+    }
 }
