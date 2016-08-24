@@ -1,0 +1,74 @@
+* {
+  margin: 0;
+  padding: 0;
+}
+body {
+  background-color: #f4f4f4;
+}
+body li {
+  list-style-type: none;
+}
+body a {
+  text-decoration: none;
+}
+body .componentListTabContent {
+  height: 44px;
+  padding-top: 24px;
+  background-color: #fff;
+}
+body .componentListTabContent .componentListTab li {
+  display: inline-block;
+  width: 120px;
+  height: 44px;
+  line-height: 44px;
+  text-align: center;
+  font-size: 14px;
+  color: #737989;
+  font-weight: bold;
+  position: relative;
+}
+body .componentListTabContent .componentListTab li a {
+  position: absolute;
+  width: 120px;
+  height: 44px;
+  left: 0;
+  top: 2px;
+}
+body .componentListTabContent .componentListTab li:first-child {
+  margin-left: 25px;
+}
+body .componentListTabContent .componentListTab .aSelected {
+  background: url(../img/tab_bg.png) no-repeat left top;
+  color: #f25e61;
+}
+body .componentList {
+  padding: 0 25px;
+  border-top: 1px solid #e1e1e1;
+}
+body .componentList .industry {
+  margin-bottom: 20px;
+}
+body .componentList .industry p {
+  height: 48px;
+  border-bottom: 1px solid #e1e1e1;
+  font-size: 18px;
+  color: #282828;
+  line-height: 48px;
+}
+body .componentList .industry .component {
+  display: inline-block;
+  width: 285px;
+  height: 240px;
+  margin-right: 25px;
+  margin-top: 30px;
+  text-align: center;
+}
+body .componentList .industry .component img {
+  display: block;
+}
+body .componentList .industry .component span {
+  display: block;
+  margin-top: 14px;
+  font-size: 14px;
+  color: #505155;
+}

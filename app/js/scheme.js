@@ -72,7 +72,6 @@
 			$("#confirm-btn").on("click",function(){
 				that.addScheme();
 			});
-
 		},
 		setLayout : function(){
 			var h = document.documentElement.clientHeight;
