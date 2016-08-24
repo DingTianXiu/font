@@ -240,7 +240,7 @@
                 var industry_dom = "<div class='industry'><p>"+data[index].data[i].name+"</p></div>";
                 $(".componentList").append(industry_dom);
                 for(var j=0;j<data[index].data[i].data.length;j++){
-                    var component_dom = "<div class='component'><a href='views/componentDetail.html?id='"+data[index].data[i].data[j].id+" target='mainIframe'><img src="+data[index].data[i].data[j].cfgDgm+"><span>"+data[index].data[i].data[j].cptName+"</span></a></div>";
+                    var component_dom = "<div class='component'><a href='componentDetail.html?id="+data[index].data[i].data[j].id+"' target='mainIframe'><img src="+data[index].data[i].data[j].cfgDgm+"><span>"+data[index].data[i].data[j].cptName+"</span></a></div>";
                     $($(".industry")[i]).append(component_dom);
                 }
             }

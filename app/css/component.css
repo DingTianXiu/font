@@ -332,9 +332,9 @@ body {
   margin: 16px 0;
 }
 .componentList .related {
-  margin-top: 24px;
   background: #fff;
   padding: 13px;
+  border-top: 1px solid #efeeec;
 }
 .componentList .related h1 {
   display: inline-block;
@@ -354,4 +354,5 @@ body {
   margin-right: 10px;
   font-size: 14px;
   color: #3f4044;
+  background: #f4f4f4;
 }

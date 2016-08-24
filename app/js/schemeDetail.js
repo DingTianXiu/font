@@ -46,6 +46,9 @@
 			}
 		});
 
+	},
+	getModuleList = function(schemeId){
+		//获取
 	};
 	schemeDetail.init();
 //})(window);

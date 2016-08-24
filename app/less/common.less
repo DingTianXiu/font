@@ -53,20 +53,18 @@ iframe{
 /**
 end reset
 **/
-/*
-iconfont
-*/
-@font-face {font-family: 'iconfont';
-    src: url('iconfont.eot'); /* IE9*/
-    src: url('iconfont.eot?#iefix') format('embedded-opentype'), /* IE6-IE8 */
-    url('iconfont.woff') format('woff'), /* chrome、firefox */
-    url('iconfont.ttf') format('truetype'), /* chrome、firefox、opera、Safari, Android, iOS 4.2+*/
-    url('iconfont.svg#iconfont') format('svg'); /* iOS 4.1- */
-}
-/*
-end iconfont
-*/
+
 body{overflow:hidden;}
+.ui-loading:after {
+    background: url("../img/ys_logo_18x18.png") center center no-repeat rgba(0, 0, 0, 0.25);
+    content: '加载中...';
+    height: 100%;
+    left: 0;
+    position: fixed;
+    top: 0;
+    width: 100%;
+    z-index: 10000;
+}
 .side {
     width: 95px;
     position: absolute;
