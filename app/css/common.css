@@ -149,15 +149,20 @@ body {
 .side .menu li {
   height: 97px;
   text-align: center;
-  background: #3f4044;
 }
 .side .menu li a {
   display: block;
-  height: 45px;
-  padding: 52px 0 0 0;
+  height: 55px;
+  padding: 20px;
   text-align: center;
   color: #7d8088;
-  background: url(../img/icon_scheme.png) no-repeat center 25px;
+  background: #3f4044;
+}
+.side .menu li a .iconfont {
+  font-size: 22px;
+}
+.side .menu li a p {
+  margin-top: 10px;
 }
 .side .menu li a:hover {
   color: #f25e61;
@@ -166,17 +171,22 @@ body {
 .side .menu li a:active {
   outline: none;
 }
-.side .menu li.active a {
+.side .menu li a.active {
   color: #f25e61;
   background: #373737;
 }
 .side #addSchemeBtn {
   display: block;
-  height: 45px;
-  padding: 52px 0 0 0;
+  height: 55px;
+  padding: 20px;
   text-align: center;
   color: #7d8088;
-  background: url(../img/icon_add_scheme.png) no-repeat center 25px;
+}
+.side #addSchemeBtn .iconfont {
+  font-size: 22px;
+}
+.side #addSchemeBtn p {
+  margin-top: 10px;
 }
 .side #addSchemeBtn.active {
   color: #f25e61;
@@ -184,15 +194,24 @@ body {
 }
 .side .componentBtn {
   display: block;
-  height: 45px;
-  padding: 52px 0 0 0;
+  height: 55px;
+  padding: 20px;
   text-align: center;
-  background: url(../img/icon_component.png) no-repeat center 25px;
   color: #7d8088;
   position: fixed;
   left: 0;
   bottom: 80px;
-  width: 95px;
+  width: 55px;
+}
+.side .componentBtn .iconfont {
+  font-size: 22px;
+}
+.side .componentBtn p {
+  margin-top: 10px;
+}
+.side .componentBtn.active {
+  color: #f25e61;
+  background: #373737;
 }
 .side .user {
   width: 95px;

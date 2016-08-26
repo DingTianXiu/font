@@ -4,19 +4,15 @@
         this.data = {
             "title" : "手机新品发布监测",
             "condition" : {
-                //"baseCptId" : options.baseCptId,
-                //"moduleId" : options.moduleId,
-                "beforeDateNum" : 28,
-                "afterDateNum" : 30
+                "baseCptId" : options.baseCptId,
+                "moduleId" : options.moduleId,
+                "searchDateScope" : {
+                    "beforeDateNum": options.beforeDateNum ? options.beforeDateNum : 28,
+                    "afterDateNum": options.afterDateNum ? options.afterDateNum : 30
+                }
             },
             "result" : {},
-            "related" : [{
-                name:"新品声量对比",
-                key : "newProductCompare"
-            },{
-                name:"新品声量情感分析",
-                key : "newProductCompare"
-            }]
+            "related" : []
         };
 
         this.$element = $(element);
@@ -33,7 +29,7 @@
             if(this.step == 0){
                 this._renderCondition();
             }else{
-                this._renderResult();
+                this._getData(this.data.condition.baseCptId);
             }
             this._bindEvent();
         },
@@ -50,10 +46,10 @@
                 range: true,
                 min: -90,
                 max: 30,
-                values: [that.data.condition["beforeDateNum"]*-1 , that.data.condition["afterDateNum"] ],
+                values: [that.data.condition.searchDateScope["beforeDateNum"]*-1 , that.data.condition.searchDateScope["afterDateNum"] ],
                 slide: function( event, ui ) {
-                    that.data.condition["beforeDateNum"] = ui.values[ 0 ];
-                    that.data.condition["afterDateNum"] = ui.values[ 1 ];
+                    that.data.condition.searchDateScope["beforeDateNum"] = ui.values[ 0 ];
+                    that.data.condition.searchDateScope["afterDateNum"] = ui.values[ 1 ];
                 }
             });
         },
@@ -71,9 +67,46 @@
         },
         _createWidget : function(){
             var params = this.data.condition;
-            //新增构件实例
-            //获取构件实例属性
-            //获取构件实例数据
+            var that = this;
+            $.ajaxJSON({
+                name: '新增构件实例',
+                url: URL.CREATE_CPTINST,
+                data: JSON.stringify(params),
+                iframe:true,
+                contentType : 'application/json; charset=UTF-8',
+                success: function (r) {
+                    that._getData(r.data.cptInstId);
+                }
+            });
+        },
+        _renderResult : function(){
+            var source = $("#newPhoneQuery1").html();
+            var template = Handlebars.compile(source);
+            var html = template(this.data);
+            this.$element.html(html);
+            this._initSlider($(".sliderBox"));
+
+        },
+        _getData : function(id){
+            var that = this;
+            $.ajaxJSON({
+                name : '获取构件实例数据',
+                url :URL.GET_CPTINST_DATA,
+                data : {cptInstId : id},
+                success : function(r){
+                    that.data.result = r.data;
+                    $.ajaxJSON({
+                        name: '获取构件的关联构件',
+                        url: URL.GET_REL_CPT,
+                        data: {baseCptId:that.condition.baseCptId},
+                        success: function (r) {
+                            that.data.related = r.data;
+                            that._renderResult();
+                            that._onComplete(this.data);
+                        }
+                    });
+                }
+            });
             this.data.result = {
                 "released" : [{
                     id:123,
@@ -94,20 +127,15 @@
 
                 }]
             };
-            this._renderResult();
-            this._onComplete(this.data);
-        },
-        _renderResult : function(){
-            var source = $("#newPhoneQuery1").html();
-            var template = Handlebars.compile(source);
-            var html = template(this.data);
-            this.$element.html(html);
-            this._initSlider($(".sliderBox"));
-
-        },
-        _getData : function(){
-            //ajax
-            this._renderResult();
+            this.data.related = [{
+                "key" : "",
+                "name": "新品声量（监测）对比构件"
+            },{
+                "key" : "",
+                "name": "新品发布声量情感分析构件"
+            }];
+            that._renderResult();
+            that._onComplete(this.data);
         },
         _close : function(){
             this.$element.remove();

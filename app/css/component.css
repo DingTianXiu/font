@@ -70,24 +70,24 @@ body {
   font-size: 24px;
   display: none;
 }
-.widget-popup {
+.widgetPopup {
   padding: 29px 15px 15px 15px;
 }
-.widget-popup .tab {
+.widgetPopup .tab {
   padding: 0 10px 13px 10px;
   height: 24px;
   line-height: 24px;
   font-size: 18px;
   border-bottom: 1px solid #dcdcdc;
 }
-.widget-popup .tab h1 {
+.widgetPopup .tab h1 {
   color: #282828;
   font-size: 18px;
   font-weight: normal;
   display: inline-block;
   margin-right: 25px;
 }
-.widget-popup .tab a {
+.widgetPopup .tab a {
   display: inline-block;
   margin: 0 13px;
   font-size: 14px;
@@ -96,10 +96,10 @@ body {
   border-bottom: 1px dotted #373737;
   text-align: center;
 }
-.widget-popup .tab a:hover {
+.widgetPopup .tab a:hover {
   color: #373737;
 }
-.widget-popup .tab a.active {
+.widgetPopup .tab a.active {
   width: 50px;
   height: 24px;
   border-radius: 12px;

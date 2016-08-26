@@ -491,7 +491,6 @@
 	 * @return(jQuery Ajax Object) 返回jQuery Ajax对象
 	 */
 	$.ajaxJSON = function(options) {
-		var tokenObj = {"acf_ticket" : $.cookie('acf_ticket')};
 		var opts = {
 			el : options.iframe ? parent.document.body : 'body',
 			identify : $.now()
@@ -508,8 +507,9 @@
 			dataType : 'json',
 			type : options.type ? options.type : 'POST',
 			//contentType : 'application/json; charset=UTF-8',
-			url : options.url,
-			data : $.extend(true,options.data,tokenObj )
+			url : AJAX.getUrl(options.url),
+			data : options.data
+				//$.extend(true,options.data,tokenObj )
 				//options.data? ($.isPlainObject(options.data) ? JSON.stringify($.extend(true,options.data,tokenObj )) : options.data) : JSON.stringify(tokenObj)
 		});
 		AJAX.addMask(opts);
@@ -544,6 +544,14 @@
 		success : function(data, options, args) {
 			if (data.code == 200) {
 				options.success && options.success.apply(this, args);
+			}else if(data.code == '401') {
+				console.log(data.code);
+				if(options.iframe) {
+					window.parent.location.href = window.ROOT + '/login.html';
+					return;
+				}else{
+					location.href = window.ROOT + '/login.html';
+				}
 			} else {
 				options.fail && options.fail.apply(this, args);
 				if (!options.hideError) {
@@ -570,6 +578,9 @@
 			if ($el.is('body') || $el.is(parent.document.body)) {
 				$el.addClass('ui-loading');
 			}
+		},
+		getUrl : function(url){
+			return url + "?acf_ticket=" + $.cookie('acf_ticket');
 		}
 	};
 	var Error = {
