@@ -7,21 +7,99 @@
 	<link type="text/css" rel="stylesheet" href="../css/ui.css">
 	<link type="text/css" rel="stylesheet" href="../css/common.css"/>
 	<link type="text/css" rel="stylesheet" href="../css/component.css"/>
-	<link type="text/css" rel="stylesheet" href="../css/plug-in.css">
+	<link type="text/css" rel="stylesheet" href="../font/iconfont.css"/>
+	<link type="text/css" rel="stylesheet" href="../css/editComponent_ui.css"/>
 </head>
 <body>
-		<div class="container">
-			<ul class="moduleList">
-				<li><a href="#" class="active">模块一</a></li>
-				<li><a href="#" class="addModuleBtn" id="addModuleBtn">新建模块</a></li>
-			</ul>
-			<div class="componentList"></div>
+	<div class="container">
+		<ul class="moduleList">
+			<li><a href="#" class="addModuleBtn">新建模块</a></li>
+		</ul>
+		<a href="#" class="moduleData">当前模块引用数据</a>
+		<div class="componentList"></div>
+		<div class="btnbox">
+			<a href="#" id="addWidgetBtn">添加新构件</a>
 		</div>
+	</div>
+	<script type="text/x-handlebars-template" id="newPhoneQuery0">
+		<div class='header clearfix'>
+			<h1>{{title}}</h1>
+			<a href='#' class='icon iconfont configBtn'>&#xe60b;</a>
+		</div>
+		<div class='first'>
+			<div class="inner">
+				<p>设置监测时间范围：</p>
+				<div class='sliderBox'></div>
+				<a href='#' class='nextStep'>生成监测</a>
+			</div>
+		</div>
+	</script>
+	<script type="text/x-handlebars-template" id="newPhoneQuery1">
+		<div class='header clearfix'>
+			<h1>{{title}}</h1>
+			<a href='#' class='icon iconfont configBtn'>&#xe60b;</a>
+			<div class='dateBox clearfix'>
+				<span>今天前 {{condition.beforeDateNum}} 天 至后 {{condition.afterDateNum}}天</span>
+				<span class='arrow'></span>
+			</div>
+		</div>
+		<div class='second'>
+				<div class='dateHoverBox'>
+				<p>设置监测时间范围：</p>
+				<div class='sliderBox'></div>
+				<a href='#' class='confirmBtn'>确定</a>
+			</div>
+			{{#with result}}
+			<div class='phoneList clearfix'>
+				<ul class="left">
+					<div class="label">已发布</div>
+					{{#each released}}
+						<li>
+							<a href="#" class="clearfix">
+								<span class="circle"></span>
+								<span class="releaseDate">{{this.releaseDate}}</span>
+								<img src="../img/{{this.picUrl}}"/>
+								<span class="brandName">{{this.brandName}}</span>
+								<span class="selected"></span>
+							</a>
+						</li>
+					{{/each}}
 
+				</ul>
+				<ul class="left">
+					<div class="label">即将发布</div>
+					{{#each releasing}}
+					<li>
+						<a href="#" class="clearfix">
+							<span class="circle"></span>
+							<span class="releaseDate">{{this.releaseDate}}</span>
+							<img src="../img/{{this.picUrl}}"/>
+							<span class="brandName">{{this.brandName}}</span>
+							<span class=""></span>
+						</a>
+					</li>
+					{{/each}}
+				</ul>
+			</div>
+			{{/with}}
+		</div>
+		<div class='related'>
+			<h1>关联构件：</h1>
+			{{#each related}}
+				<a href="#" type="{{this.key}}">{{this.name}}</a>
+			{{/each}}
+		 </div>
+	</script>
 	<script type="text/javascript" src="/bower_components/jquery/dist/jquery.min.js"></script>
 	<script type="text/javascript" src="/bower_components/jquery-ui/jquery-ui.min.js"></script>
+	<script type="text/javascript" src="/bower_components/handlebars/handlebars.min.js"></script>
+	<script type="text/javascript" src="/bower_components/jquery.cookie/jquery.cookie.js"></script>
+	<script type="text/javascript" src="../js/config.js"></script>
 	<script type="text/javascript" src="../js/ui.js"></script>
+	<script type="text/javascript" src="../js/widgetPicker.js"></script>
+	<script type="text/javascript" src="../js/widget/newPhoneQuery.js"></script>
 	<script type="text/javascript" src="../js/editComponent_ui.js"></script>
-	<script type="text/javascript" src="../js/plug-in.js"></script>
+	<script type="text/javascript" src="../js/widget/newAffectionAnalysed.js"></script>
+	<script type="text/javascript" src="../js/schemeDetail.js"></script>
 </body>
 </html>

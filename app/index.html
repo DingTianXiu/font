@@ -3,55 +3,53 @@
 <head>
 	<meta charset="UTF-8">
 	<title></title>
+	<link rel="shortcut icon" href="img/ys_logo_18x18.png" type="image/x-icon"/>
 	<link type="text/css" rel="stylesheet" href="/bower_components/jquery-ui/themes/base/jquery-ui.css" />
-	<link type="text/css" rel="stylesheet" href="css/ui.css">
 	<link type="text/css" rel="stylesheet" href="css/common.css"/>
 </head>
 <body>
-		<div class="container">
-			<div class="side">
-				<div class="logo"></div>
-				<ul class="menu">
-					<li><a href="#">方案一</a></li>
-					<li><a href="#" id="addSchemeBtn">添加方案</a></li>
-				</ul>
-				<a href="#" class="componentBtn">构件库</a>
-				<div class="user"><a href="#">华为</a></div>
-			</div>
-			<div class="main"><iframe width="100%" height="500" src="views/scheme.html"></iframe></div>
+	<div class="container">
+		<div class="side">
+			<div class="logo"></div>
+			<ul class="menu">
+			</ul>
+			<a href="javascript:;" id="addSchemeBtn"><i class="icon iconfont icon-iconprojectadd"></i><p>添加方案</p></a>
+			<a href="javascript:;" class="componentBtn"><i class="icon iconfont icon-iconlibrary"></i><p>构件库</p></a>
+<!--			<div class="user"><a href="#">华为</a></div>-->
 		</div>
+		<div class="main"><iframe id="mainIframe" name="mainIframe" width="100%" height="500" src="views/scheme.html"></iframe></div>
+	</div>
 
-		<div id="goods-popup" class="hide">
-			<div class="m-cg-search">
-				<div class="fm-row">
-					<div>
-						<label for="search" class="fm-lb fm-lb-s">方案名称</label>
-						<div class="fm-ipt">
-							<input id="schemeName" type="text">
-						</div>
-					</div>
-					<div>
-						<label for="search" class="fm-lb fm-lb-s">附属模块名称</label>
-						<div class="fm-ipt">
-							<p><input class="moduleName" type="text"></p>
-							<button id="addModuleBtn">添加附属模块</button>
-						</div>
-					</div>
-					<div class="btn-grp">
-						<button id="confirm-btn" class="btn">
-							<i class="icon-ok-u"></i>
-							创建
-						</button>
-
-
+	<div id="add-scheme-popup" class="hide">
+		<div class="title">华为</div>
+		<div class="box">
+			<h1>新建方案</h1>
+			<div class="fm-row">
+				<div>
+					<label class="fm-lb fm-lb-s">方案名称</label>
+					<div class="fm-ipt">
+						<input id="schemeName" name="sltName" type="text" placeholder="输入方案名称">
 					</div>
 				</div>
+				<div>
+					<label class="fm-lb fm-lb-s">附属模块名称</label>
+					<div class="fm-ipt">
+						<input class="moduleName" name="moduleName" type="text" placeholder="输入模块名称">
+						<a href="#" id="addModuleBtn">新建模块</a>
+					</div>
+				</div>
+				<div class="btn-grp">
+					<button id="confirm-btn" class="btn">
+						创建
+					</button>
+				</div>
 			</div>
-
 		</div>
+	</div>
 	<script type="text/javascript" src="/bower_components/jquery/dist/jquery.min.js"></script>
 	<script type="text/javascript" src="/bower_components/jquery-ui/jquery-ui.min.js"></script>
 	<script type="text/javascript" src="js/ui.js"></script>
+	<script type="text/javascript" src="js/config.js"></script>
 	<script type="text/javascript" src="js/scheme.js"></script>
 </body>
 </html>

@@ -1,0 +1,73 @@
+﻿<!DOCTYPE html>
+<html lang="zh_CN">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
+    <title>login</title>
+    <link rel="shortcut icon" href="img/ys_logo_18x18.png" type="image/x-icon"/>
+    <link type="text/css" rel="stylesheet" href="/bower_components/jquery-ui/themes/base/jquery-ui.css" />
+    <link type="text/css" rel="stylesheet" href="css/common.css"/>
+</head>
+
+<body>
+<div class="login-bd">
+    <div class="wrap clearfix">
+        <div style="height:100px;"></div>
+        <input type="hidden" name="forwardUrl" value="" id="forwardUrl"/>
+        <form method="post" id="fm1" onsubmit="return sso.loginValidate();" action="" target="ssoLoginFrame">
+            <input type="hidden" name="execution" value="" id="fk"/>
+            <input type="hidden" name="lt" value="" id="lt"/>
+            <input type="hidden" name="_eventId" value="submit"/>
+            <input type="hidden" name="isajax" value="true"/>
+            <input type="hidden" name="isframe" value="true"/>
+            <input type="hidden" name="callback" value="sso.feedBackUrlCallBack"/>
+            <input type="hidden" name="sysCode" value=""/>
+
+            <div class="login-box">
+                <ul>
+                    <li class="login-error-tip">
+                        <div class="prompt" id="errorBox">
+                            <i id="errorIcon" style="display: none;" class="icon icon-login-error-icon"></i>
+                            <span id="errorStr"></span>
+                        </div>
+                    </li>
+                    <!--<form>-->
+                        <li class="login-input">
+                            <input type="text" name="loginKey" class="inp-text user" id="email" placeholder="请输入帐号"
+                                   autocomplete="on" />
+                        </li>
+                        <li class="login-input">
+                            <input type="password" class="inp-text password" name="passwordTemp" id="passwordTemp"
+                                   placeholder="请输入登录密码" autocomplete="on"/>
+                            <input type="hidden" name="password" id="password"/>
+                        </li>
+                        <li class="login-cap">
+                            <input type="text" name="validateCode" class="inp-text inp-reg validate" id="validateCode"
+                                   placeholder="请输入验证码" value="" style="width:110px;"/>
+                            <img style="cursor:pointer;" id="capt" class="capt" width="120" height="50"
+                                 src="http://sso007.adt100.com/image?t=1449653442237" />
+                            <span class="link-change-capt">
+                                <a href="">换一个</a>
+                            </span>
+                        </li>
+                        <li class="login-btn">
+                            <input type="submit" value="登录" class="btn-login submit" id="J-submit"/>
+                        </li>
+                    <!--</form>-->
+                </ul>
+            </div>
+        </form>
+    </div>
+</div>
+</body>
+<script type="text/javascript" src="/bower_components/jquery/dist/jquery.min.js"></script>
+<script type="text/javascript" src="/bower_components/jquery-ui/jquery-ui.min.js"></script>
+<script type="text/javascript" src="js/ui.js"></script>
+<script src="/bower_components/jquery.cookie/jquery.cookie.js"></script>
+<script src="js/md5.js"></script>
+<script src="./example/sso_core.js"></script>
+<script src="js/config.js"></script>
+<script src="./example/login.js"></script>
+<script src="/bower_components/jquery.placeholder/jquery.placeholder.js"></script>
+</html>
