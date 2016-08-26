@@ -4,6 +4,7 @@
 
 (function ($) {
     //ajax
+<<<<<<< HEAD
     // var componentList_data = [
     //     {
     //         "name" : "新品分析1",
@@ -219,6 +220,223 @@
     //         ]
     //     }
     // ];
+=======
+    var componentList_data = [
+        {
+            "name" : "新品分析1",
+            "value" : "2",
+            "data" :[{
+                "name" : "手机行业",
+                "value" : "2",
+                data : [
+                    {
+                        "id":4,
+                        "cptName":"手机新品查询(监测)",
+                        "cptType":"0",
+                        "busiType":"2",
+                        "cptDesc":null,
+                        "inDesc":null,
+                        "outDesc":null,
+                        "cfgDgm":"../img/1.jpg",
+                        "showDgm":null,
+                        "createTime":"2016-08-16 10:50:33"
+                    },
+                    {
+                        "id":4,
+                        "cptName":"新品查询声量分析",
+                        "cptType":"0",
+                        "busiType":"2",
+                        "cptDesc":null,
+                        "inDesc":null,
+                        "outDesc":null,
+                        "cfgDgm":"../img/2.jpg",
+                        "showDgm":null,
+                        "createTime":"2016-08-16 10:50:33"
+                    },
+                    {
+                        "id":4,
+                        "cptName":"电商用户关注度分析",
+                        "cptType":"0",
+                        "busiType":"2",
+                        "cptDesc":null,
+                        "inDesc":null,
+                        "outDesc":null,
+                        "cfgDgm":"../img/3.jpg",
+                        "showDgm":null,
+                        "createTime":"2016-08-16 10:50:33"
+                    },
+                    {
+                        "id":4,
+                        "cptName":"电商用户关注度分析",
+                        "cptType":"0",
+                        "busiType":"2",
+                        "cptDesc":null,
+                        "inDesc":null,
+                        "outDesc":null,
+                        "cfgDgm":"../img/3.jpg",
+                        "showDgm":null,
+                        "createTime":"2016-08-16 10:50:33"
+                    },{
+                        "id":4,
+                        "cptName":"电商用户关注度分析",
+                        "cptType":"0",
+                        "busiType":"2",
+                        "cptDesc":null,
+                        "inDesc":null,
+                        "outDesc":null,
+                        "cfgDgm":"../img/3.jpg",
+                        "showDgm":null,
+                        "createTime":"2016-08-16 10:50:33"
+                    },{
+                        "id":4,
+                        "cptName":"电商用户关注度分析",
+                        "cptType":"0",
+                        "busiType":"2",
+                        "cptDesc":null,
+                        "inDesc":null,
+                        "outDesc":null,
+                        "cfgDgm":"../img/3.jpg",
+                        "showDgm":null,
+                        "createTime":"2016-08-16 10:50:33"
+                    },
+
+                ]
+            },
+            {
+                "name" : "电脑行业",
+                "value" : "2",
+                data : [
+                    {
+                        "id":4,
+                        "cptName":"手机新品查询(监测)2",
+                        "cptType":"0",
+                        "busiType":"2",
+                        "cptDesc":null,
+                        "inDesc":null,
+                        "outDesc":null,
+                        "cfgDgm":"../img/1.jpg",
+                        "showDgm":null,
+                        "createTime":"2016-08-16 10:50:33"
+                    },
+                    {
+                        "id":4,
+                        "cptName":"新品查询声量分析2",
+                        "cptType":"0",
+                        "busiType":"2",
+                        "cptDesc":null,
+                        "inDesc":null,
+                        "outDesc":null,
+                        "cfgDgm":"../img/2.jpg",
+                        "showDgm":null,
+                        "createTime":"2016-08-16 10:50:33"
+                    },
+                    {
+                        "id":4,
+                        "cptName":"电商用户关注度分析2",
+                        "cptType":"0",
+                        "busiType":"2",
+                        "cptDesc":null,
+                        "inDesc":null,
+                        "outDesc":null,
+                        "cfgDgm":"../img/3.jpg",
+                        "showDgm":null,
+                        "createTime":"2016-08-16 10:50:33"
+                    }
+                ]
+            }
+            ]
+        },
+        {
+            "name" : "新品分析2",
+            "value" : "2",
+            "data" :[{
+                "name" : "奶粉行业",
+                "value" : "2",
+                data : [
+                    {
+                        "id":4,
+                        "cptName":"手机新品查询(监测)",
+                        "cptType":"0",
+                        "busiType":"2",
+                        "cptDesc":null,
+                        "inDesc":null,
+                        "outDesc":null,
+                        "cfgDgm":"../img/1.jpg",
+                        "showDgm":null,
+                        "createTime":"2016-08-16 10:50:33"
+                    },
+                    {
+                        "id":4,
+                        "cptName":"新品查询声量分析",
+                        "cptType":"0",
+                        "busiType":"2",
+                        "cptDesc":null,
+                        "inDesc":null,
+                        "outDesc":null,
+                        "cfgDgm":"../img/2.jpg",
+                        "showDgm":null,
+                        "createTime":"2016-08-16 10:50:33"
+                    },
+                    {
+                        "id":4,
+                        "cptName":"电商用户关注度分析",
+                        "cptType":"0",
+                        "busiType":"2",
+                        "cptDesc":null,
+                        "inDesc":null,
+                        "outDesc":null,
+                        "cfgDgm":"../img/3.jpg",
+                        "showDgm":null,
+                        "createTime":"2016-08-16 10:50:33"
+                    }
+                ]
+            },
+                {
+                    "name" : "金融行业",
+                    "value" : "2",
+                    data : [
+                        {
+                            "id":4,
+                            "cptName":"手机新品查询(监测)",
+                            "cptType":"0",
+                            "busiType":"2",
+                            "cptDesc":null,
+                            "inDesc":null,
+                            "outDesc":null,
+                            "cfgDgm":"../img/1.jpg",
+                            "showDgm":null,
+                            "createTime":"2016-08-16 10:50:33"
+                        },
+                        {
+                            "id":4,
+                            "cptName":"新品查询声量分析",
+                            "cptType":"0",
+                            "busiType":"2",
+                            "cptDesc":null,
+                            "inDesc":null,
+                            "outDesc":null,
+                            "cfgDgm":"../img/2.jpg",
+                            "showDgm":null,
+                            "createTime":"2016-08-16 10:50:33"
+                        },
+                        {
+                            "id":4,
+                            "cptName":"电商用户关注度分析",
+                            "cptType":"0",
+                            "busiType":"2",
+                            "cptDesc":null,
+                            "inDesc":null,
+                            "outDesc":null,
+                            "cfgDgm":"../img/3.jpg",
+                            "showDgm":null,
+                            "createTime":"2016-08-16 10:50:33"
+                        }
+                    ]
+                }
+            ]
+        }
+    ];
+>>>>>>> 23016f9123aaf4a1d48f5064d474e528fb1c3cfd
     componentList = {
         getSceneListList : function (data) {
             for(var i=0;i<data.length;i++){
@@ -245,6 +463,7 @@
                 }
             }
         },
+<<<<<<< HEAD
         getComponentLibrary : function () {
             var that = this;
             $.ajaxJSON({
@@ -257,6 +476,8 @@
                 }
             });
         },
+=======
+>>>>>>> 23016f9123aaf4a1d48f5064d474e528fb1c3cfd
         bindEvent : function () {
             var that = this;
             $(".tab").on("click",function () {
@@ -272,10 +493,19 @@
 
             })
         },
+<<<<<<< HEAD
         init : function () {
             this.getComponentLibrary();
             this.bindEvent();
         }
     }.init();
+=======
+        init : function (data) {
+            this.getSceneListList(data);
+            this.getIndustryList(data,"0");
+            this.bindEvent();
+        }
+    }.init(componentList_data);
+>>>>>>> 23016f9123aaf4a1d48f5064d474e528fb1c3cfd
 
 })(jQuery);

@@ -1,4 +1,5 @@
 //(function(){
+<<<<<<< HEAD
 	var options = {
 		"name" : "新品声量情感分析",
 		"data" : {
@@ -119,17 +120,41 @@
 					baseCptId : param.baseCptId,
 					moduleId : that.currentModuleId,
 					instCptId : param.instCptId ? param.instCptId : "",
+=======
+	var URL = {
+
+	},
+	componentList = [],
+	schemeDetail = {
+		createWidget : function(type,step){
+			var that = this;
+			var ele = $("<div class='component'></div>").appendTo(".componentList");
+			var index = step ? (typeof step == "number" ? step : 0) : 0;
+			if(type == "newPhoneQuery"){
+				$(ele).newPhoneQuery({
+					step: index,
+>>>>>>> 23016f9123aaf4a1d48f5064d474e528fb1c3cfd
 					onComplete : function(data){
 						componentList.push(data);
 						that.setBtnStatus();
 					}
 				});
+<<<<<<< HEAD
 				console.log(componentList);
 			}
 			$(".addModuleBtn").on("click",function () {
 				var ele = $(".componentList");
 				ele.newAffectionAnalysed(ele,options);
 			})
+=======
+			}
+		},
+		bindEvent : function(){
+			var that = this;
+			$("#addWidgetBtn").on("click",function(){
+				openComponentDialog();
+			});
+>>>>>>> 23016f9123aaf4a1d48f5064d474e528fb1c3cfd
 		},
 		setBtnStatus : function(){
 			if(componentList.length > 0){
@@ -139,6 +164,7 @@
 		init : function(){
 			var that = this;
 			this.bindEvent();
+<<<<<<< HEAD
 			if(localStorage.userInfo){
 				this.userInfo = JSON.parse(localStorage.userInfo);
 			}else{
@@ -149,11 +175,20 @@
 			}else {
 				this.getSchemeList();
 			}
+=======
+			//this.createWidget("newPhoneQuery",1);
+
+
+>>>>>>> 23016f9123aaf4a1d48f5064d474e528fb1c3cfd
 		}
 	},
 	openComponentDialog = function(){
 		var that = this;
+<<<<<<< HEAD
 		var ele = $("<div class='widgetPopup'></div>").appendTo(".componentList");
+=======
+		var ele = $("<div class='widget-popup'></div>").appendTo(".componentList");
+>>>>>>> 23016f9123aaf4a1d48f5064d474e528fb1c3cfd
 		var w = $(ele).widgetPicker({
 			onSelect : function(type){
 				schemeDetail.createWidget(type);
@@ -162,6 +197,7 @@
 
 	},
 	getModuleList = function(schemeId){
+<<<<<<< HEAD
 		schemeId = schemeId ? schemeId : $.getQueryParams()["id"];
 		//获取模块列表
 		$.ajaxJSON({
@@ -180,3 +216,9 @@
 	};
 	schemeDetail.init();
 })(jQuery);
+=======
+		//获取
+	};
+	schemeDetail.init();
+//})(window);
+>>>>>>> 23016f9123aaf4a1d48f5064d474e528fb1c3cfd

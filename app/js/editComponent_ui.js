@@ -41,7 +41,11 @@
             $(element).append(dom);
             $(".editContainer").after(generate_dom);
         },
+<<<<<<< HEAD
 
+=======
+        /*选择产品start*/
+>>>>>>> 23016f9123aaf4a1d48f5064d474e528fb1c3cfd
         _addSelectProduct : function () {
             var dom = "<ul class='selectProduct'>" +
                 "<li>选择目标产品:</li>" +
@@ -130,6 +134,20 @@
         },
 
 
+<<<<<<< HEAD
     };
+=======
+        _addVolume_component : function (componentName,selectedId) {
+            if(!$('.editContainer').length){
+                this.addEditContainer(componentName, selectedId);
+                this.addSelectProduct();
+                this.addSelectResource();
+                this.addTime();
+                this.addSelectStyle();
+            }
+        }
+        /*添加新构建end*/
+    }
+>>>>>>> 23016f9123aaf4a1d48f5064d474e528fb1c3cfd
     $.fn.editComponent = EditComponent;
 })(jQuery);

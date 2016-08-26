@@ -171,23 +171,35 @@ body {
 .side .menu li a:active {
   outline: none;
 }
+<<<<<<< HEAD
 .side .menu li a.active {
+=======
+.side .menu li.active a {
+>>>>>>> 23016f9123aaf4a1d48f5064d474e528fb1c3cfd
   color: #f25e61;
   background: #373737;
 }
 .side #addSchemeBtn {
   display: block;
+<<<<<<< HEAD
   height: 55px;
   padding: 20px;
+=======
+  height: 45px;
+  padding: 52px 0 0 0;
+>>>>>>> 23016f9123aaf4a1d48f5064d474e528fb1c3cfd
   text-align: center;
   color: #7d8088;
 }
+<<<<<<< HEAD
 .side #addSchemeBtn .iconfont {
   font-size: 22px;
 }
 .side #addSchemeBtn p {
   margin-top: 10px;
 }
+=======
+>>>>>>> 23016f9123aaf4a1d48f5064d474e528fb1c3cfd
 .side #addSchemeBtn.active {
   color: #f25e61;
   background: #373737;

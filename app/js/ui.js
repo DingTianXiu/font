@@ -463,6 +463,7 @@
 			}
 		}, opts);
 		return $('<div>').html(opts.msg).dialog(nopts);
+<<<<<<< HEAD
 	};
 	/**
 	 * @param options(boolean)
@@ -478,6 +479,23 @@
 		return $this;
 	};
 	/**
+=======
+	};
+	/**
+	 * @param options(boolean)
+	 **/
+	$.fn.mask = function(options) {
+		options = options == undefined ? true : options;
+		var $this = $(this);
+		if (options === true) {
+			$this.addClass('ui-loading');
+		} else {
+			$this.removeClass('ui-loading');
+		}
+		return $this;
+	};
+	/**
+>>>>>>> 23016f9123aaf4a1d48f5064d474e528fb1c3cfd
 	 * @param options(JSON)
 	 *            JSON : AJAX参数(基于jQuery.ajax) 扩展属性包括：
 	 *				1. data			:	发送数据（JSON对象）
@@ -507,10 +525,16 @@
 			dataType : 'json',
 			type : options.type ? options.type : 'POST',
 			//contentType : 'application/json; charset=UTF-8',
+<<<<<<< HEAD
 			url : AJAX.getUrl(options.url),
 			data : options.data
 				//$.extend(true,options.data,tokenObj )
 				//options.data? ($.isPlainObject(options.data) ? JSON.stringify($.extend(true,options.data,tokenObj )) : options.data) : JSON.stringify(tokenObj)
+=======
+			url : options.url,
+			data : options.data
+				//? ($.isPlainObject(options.data) ? JSON.stringify(options.data) : options.data) : ""
+>>>>>>> 23016f9123aaf4a1d48f5064d474e528fb1c3cfd
 		});
 		AJAX.addMask(opts);
 		return $.ajax(opts);
@@ -523,10 +547,17 @@
 			//如果是401，表明登录状态过期需要重新登录
 			if(jqXHR.status == '401') {
 				if(options.iframe) {
+<<<<<<< HEAD
 					window.parent.location.href = window.ROOT + '/login.html';
 					return;
 				}else{
 					location.href = window.ROOT + '/login.html';
+=======
+					window.parent.location.href = window.ROOT + '/html/login.html';
+					return;
+				}else{
+					location.href = window.ROOT + '/html/login.html';
+>>>>>>> 23016f9123aaf4a1d48f5064d474e528fb1c3cfd
 				}
 			}
 			if (!options.hideError) {
@@ -539,6 +570,7 @@
 						? '解析错误' : ('parsererror' === tStatus
 						? '服务器错误' : '服务器错误[' + jqXHR.status + ']'))))
 				});
+<<<<<<< HEAD
 			}
 		},
 		success : function(data, options, args) {
@@ -559,6 +591,20 @@
 				}
 			}
 		},
+=======
+			}
+		},
+		success : function(data, options, args) {
+			if (data.code == 200) {
+				options.success && options.success.apply(this, args);
+			} else {
+				options.fail && options.fail.apply(this, args);
+				if (!options.hideError) {
+					Error.generateList(data.errors);
+				}
+			}
+		},
+>>>>>>> 23016f9123aaf4a1d48f5064d474e528fb1c3cfd
 		removeMask : function(opts) {
 			var $el = $(opts.el);
 			if ($el.is('body') || $el.is(parent.document.body)) {
@@ -578,9 +624,12 @@
 			if ($el.is('body') || $el.is(parent.document.body)) {
 				$el.addClass('ui-loading');
 			}
+<<<<<<< HEAD
 		},
 		getUrl : function(url){
 			return url + "?acf_ticket=" + $.cookie('acf_ticket');
+=======
+>>>>>>> 23016f9123aaf4a1d48f5064d474e528fb1c3cfd
 		}
 	};
 	var Error = {
