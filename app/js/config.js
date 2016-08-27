@@ -1,5 +1,4 @@
 var URL = {
-<<<<<<< HEAD
     GET_USER_INFO : "/Yishang/user/detail",
     SOLUTION_LIST : "/Yishang/solution/list",
     CREATE_SCHEME : "/Yishang/solution/insert",
@@ -14,8 +13,3 @@ var URL = {
     GET_COMPONENT_BASE_DETAIL : "/Yishang/component/base/detail"
 
 };
-=======
-    SOLUTION_LIST : "/Yishang/solution/list",
-    CREATE_SCHEME : "/Yishang/solution/insert"
-};
->>>>>>> 23016f9123aaf4a1d48f5064d474e528fb1c3cfd

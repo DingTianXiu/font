@@ -65,11 +65,111 @@ body{overflow:hidden;}
     width: 100%;
     z-index: 10000;
 }
+.head{
+    position: absolute;
+    z-index: 1000;
+    top: 0;
+    width: 100%;
+    background-color: #f4f4f4;
+    height: 25px;
+    box-shadow: 0 1px 5px #cccccc;
+    ul{
+        float: right;
+        height: 25px;
+        li{
+            display: inline-block;
+            vertical-align: middle;
+            height: 25px;
+            margin-left: 24px;
+            line-height: 25px;
+            position: relative;
+            .tip{
+                position: absolute;
+                top: -12px;
+                left: 208px
+            }
+            a{
+                color: #3f4044;
+                font-size: 12px;
+                text-decoration: underline;
+            }
+            //.personalDisplayNone{
+            //    display: none;
+            //}
+            .personalDisplay{
+                position: absolute;
+                left: -310%;
+                top: 40px;
+                width: 336px;
+                height: 160px;
+                border: 1px solid #CCCCCC;
+                box-shadow: 1px 1px 5px #cccccc;
+                background-color: #fff;
+                div{
+                    float: left;
+                    margin-top: 30px;
+                    margin-left: 20px;
+                    width: 98px;
+                    height: 98px;
+                    -webkit-border-radius: 98px;
+                    -moz-border-radius: 98px;
+                    border-radius: 98px;
+                    overflow: hidden;
+                    img{
+                        height: 98px;
+                    }
+                }
+                ul{
+                    float: left;
+                    margin-top: 45px;
+                    li{
+                        display: inherit;
+                        height: 20px;
+                        font-size: 12px;
+                        line-height: 20px;
+                        background-color: #fff;
+                    }
+                    li:first-child{
+                        font-weight: bold;
+                    }
+                    li:nth-child(2){
+                        color: #666666;
+                    }
+                    li:last-child{
+                        width: 180px;
+                        margin-top: 15px;
+                        button{
+                            width: 78px;
+                            height: 30px;
+                            margin-right: 10px;
+                            -webkit-border-radius: 4px;
+                            -moz-border-radius: 4px;
+                            border-radius: 4px;
+                            border: 1px solid #cccccc;
+                            outline: none;
+                            background-color: #fdfdfd;
+                            font-size: 13px;
+                            color: #444444;
+                        }
+                    }
+                }
+            }
+        }
+        li:last-child{
+            width: 88px;
+            background-color: #7d8088;
+            text-align: center;
+            a{
+                color: #fff;
+            }
+        }
+    }
+}
 .side {
     width: 95px;
     position: absolute;
     left: 0;
-    top: 0;
+    top: 25px;
     min-height: 500px;
     background:#3f4044;
     .logo{
@@ -102,13 +202,10 @@ body{overflow:hidden;}
             a:active{
                 outline:none;
             }
-<<<<<<< HEAD
             a.active{
                 color: #f25e61;
                 background:#373737;
             }
-=======
->>>>>>> 23016f9123aaf4a1d48f5064d474e528fb1c3cfd
         }
     }
     #addSchemeBtn{
@@ -123,18 +220,6 @@ body{overflow:hidden;}
         p{
             margin-top:10px;
         }
-    }
-    #addSchemeBtn.active{
-        color: #f25e61;
-        background:#373737;
-    }
-    #addSchemeBtn{
-        display:block;
-        height:45px;
-        padding:52px 0 0 0;
-        text-align:center;
-        color:#7d8088;
-        background:url(../img/icon_add_scheme.png) no-repeat center 25px;
     }
     #addSchemeBtn.active{
         color: #f25e61;
@@ -181,6 +266,7 @@ body{overflow:hidden;}
 .main {
     margin-left: 95px;
     min-height: 500px;
+    margin-top: 25px;
 }
 .hide{
     display:none;

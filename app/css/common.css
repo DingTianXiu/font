@@ -134,11 +134,104 @@ body {
   width: 100%;
   z-index: 10000;
 }
+.head {
+  position: absolute;
+  z-index: 1000;
+  top: 0;
+  width: 100%;
+  background-color: #f4f4f4;
+  height: 25px;
+  box-shadow: 0 1px 5px #cccccc;
+}
+.head ul {
+  float: right;
+  height: 25px;
+}
+.head ul li {
+  display: inline-block;
+  vertical-align: middle;
+  height: 25px;
+  margin-left: 24px;
+  line-height: 25px;
+  position: relative;
+}
+.head ul li .tip {
+  position: absolute;
+  top: -12px;
+  left: 208px;
+}
+.head ul li a {
+  color: #3f4044;
+  font-size: 12px;
+  text-decoration: underline;
+}
+.head ul li .personalDisplay {
+  position: absolute;
+  left: -310%;
+  top: 40px;
+  width: 336px;
+  height: 160px;
+  border: 1px solid #CCCCCC;
+  box-shadow: 1px 1px 5px #cccccc;
+  background-color: #fff;
+}
+.head ul li .personalDisplay div {
+  float: left;
+  margin-top: 30px;
+  margin-left: 20px;
+  width: 98px;
+  height: 98px;
+  border-radius: 98px;
+  overflow: hidden;
+}
+.head ul li .personalDisplay div img {
+  height: 98px;
+}
+.head ul li .personalDisplay ul {
+  float: left;
+  margin-top: 45px;
+}
+.head ul li .personalDisplay ul li {
+  display: inherit;
+  height: 20px;
+  font-size: 12px;
+  line-height: 20px;
+  background-color: #fff;
+}
+.head ul li .personalDisplay ul li:first-child {
+  font-weight: bold;
+}
+.head ul li .personalDisplay ul li:nth-child(2) {
+  color: #666666;
+}
+.head ul li .personalDisplay ul li:last-child {
+  width: 180px;
+  margin-top: 15px;
+}
+.head ul li .personalDisplay ul li:last-child button {
+  width: 78px;
+  height: 30px;
+  margin-right: 10px;
+  border-radius: 4px;
+  border: 1px solid #cccccc;
+  outline: none;
+  background-color: #fdfdfd;
+  font-size: 13px;
+  color: #444444;
+}
+.head ul li:last-child {
+  width: 88px;
+  background-color: #7d8088;
+  text-align: center;
+}
+.head ul li:last-child a {
+  color: #fff;
+}
 .side {
   width: 95px;
   position: absolute;
   left: 0;
-  top: 0;
+  top: 25px;
   min-height: 500px;
   background: #3f4044;
 }
@@ -171,35 +264,23 @@ body {
 .side .menu li a:active {
   outline: none;
 }
-<<<<<<< HEAD
 .side .menu li a.active {
-=======
-.side .menu li.active a {
->>>>>>> 23016f9123aaf4a1d48f5064d474e528fb1c3cfd
   color: #f25e61;
   background: #373737;
 }
 .side #addSchemeBtn {
   display: block;
-<<<<<<< HEAD
   height: 55px;
   padding: 20px;
-=======
-  height: 45px;
-  padding: 52px 0 0 0;
->>>>>>> 23016f9123aaf4a1d48f5064d474e528fb1c3cfd
   text-align: center;
   color: #7d8088;
 }
-<<<<<<< HEAD
 .side #addSchemeBtn .iconfont {
   font-size: 22px;
 }
 .side #addSchemeBtn p {
   margin-top: 10px;
 }
-=======
->>>>>>> 23016f9123aaf4a1d48f5064d474e528fb1c3cfd
 .side #addSchemeBtn.active {
   color: #f25e61;
   background: #373737;
@@ -244,6 +325,7 @@ body {
 .main {
   margin-left: 95px;
   min-height: 500px;
+  margin-top: 25px;
 }
 .hide {
   display: none;

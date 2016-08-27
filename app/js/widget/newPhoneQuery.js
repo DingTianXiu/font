@@ -4,7 +4,6 @@
         this.data = {
             "title" : "手机新品发布监测",
             "condition" : {
-<<<<<<< HEAD
                 "baseCptId" : options.baseCptId,
                 "moduleId" : options.moduleId,
                 "searchDateScope" : {
@@ -14,21 +13,6 @@
             },
             "result" : {},
             "related" : []
-=======
-                //"baseCptId" : options.baseCptId,
-                //"moduleId" : options.moduleId,
-                "beforeDateNum" : 28,
-                "afterDateNum" : 30
-            },
-            "result" : {},
-            "related" : [{
-                name:"新品声量对比",
-                key : "newProductCompare"
-            },{
-                name:"新品声量情感分析",
-                key : "newProductCompare"
-            }]
->>>>>>> 23016f9123aaf4a1d48f5064d474e528fb1c3cfd
         };
 
         this.$element = $(element);
@@ -45,11 +29,7 @@
             if(this.step == 0){
                 this._renderCondition();
             }else{
-<<<<<<< HEAD
                 this._getData(this.data.condition.baseCptId);
-=======
-                this._renderResult();
->>>>>>> 23016f9123aaf4a1d48f5064d474e528fb1c3cfd
             }
             this._bindEvent();
         },
@@ -66,17 +46,10 @@
                 range: true,
                 min: -90,
                 max: 30,
-<<<<<<< HEAD
                 values: [that.data.condition.searchDateScope["beforeDateNum"]*-1 , that.data.condition.searchDateScope["afterDateNum"] ],
                 slide: function( event, ui ) {
                     that.data.condition.searchDateScope["beforeDateNum"] = ui.values[ 0 ];
                     that.data.condition.searchDateScope["afterDateNum"] = ui.values[ 1 ];
-=======
-                values: [that.data.condition["beforeDateNum"]*-1 , that.data.condition["afterDateNum"] ],
-                slide: function( event, ui ) {
-                    that.data.condition["beforeDateNum"] = ui.values[ 0 ];
-                    that.data.condition["afterDateNum"] = ui.values[ 1 ];
->>>>>>> 23016f9123aaf4a1d48f5064d474e528fb1c3cfd
                 }
             });
         },
@@ -94,7 +67,6 @@
         },
         _createWidget : function(){
             var params = this.data.condition;
-<<<<<<< HEAD
             var that = this;
             $.ajaxJSON({
                 name: '新增构件实例',
@@ -135,11 +107,6 @@
                     });
                 }
             });
-=======
-            //新增构件实例
-            //获取构件实例属性
-            //获取构件实例数据
->>>>>>> 23016f9123aaf4a1d48f5064d474e528fb1c3cfd
             this.data.result = {
                 "released" : [{
                     id:123,
@@ -160,7 +127,6 @@
 
                 }]
             };
-<<<<<<< HEAD
             this.data.related = [{
                 "key" : "",
                 "name": "新品声量（监测）对比构件"
@@ -170,22 +136,6 @@
             }];
             that._renderResult();
             that._onComplete(this.data);
-=======
-            this._renderResult();
-            this._onComplete(this.data);
-        },
-        _renderResult : function(){
-            var source = $("#newPhoneQuery1").html();
-            var template = Handlebars.compile(source);
-            var html = template(this.data);
-            this.$element.html(html);
-            this._initSlider($(".sliderBox"));
-
-        },
-        _getData : function(){
-            //ajax
-            this._renderResult();
->>>>>>> 23016f9123aaf4a1d48f5064d474e528fb1c3cfd
         },
         _close : function(){
             this.$element.remove();

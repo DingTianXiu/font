@@ -70,39 +70,24 @@ body {
   font-size: 24px;
   display: none;
 }
-<<<<<<< HEAD
 .widgetPopup {
   padding: 29px 15px 15px 15px;
 }
 .widgetPopup .tab {
-=======
-.widget-popup {
-  padding: 29px 15px 15px 15px;
-}
-.widget-popup .tab {
->>>>>>> 23016f9123aaf4a1d48f5064d474e528fb1c3cfd
   padding: 0 10px 13px 10px;
   height: 24px;
   line-height: 24px;
   font-size: 18px;
   border-bottom: 1px solid #dcdcdc;
 }
-<<<<<<< HEAD
 .widgetPopup .tab h1 {
-=======
-.widget-popup .tab h1 {
->>>>>>> 23016f9123aaf4a1d48f5064d474e528fb1c3cfd
   color: #282828;
   font-size: 18px;
   font-weight: normal;
   display: inline-block;
   margin-right: 25px;
 }
-<<<<<<< HEAD
 .widgetPopup .tab a {
-=======
-.widget-popup .tab a {
->>>>>>> 23016f9123aaf4a1d48f5064d474e528fb1c3cfd
   display: inline-block;
   margin: 0 13px;
   font-size: 14px;
@@ -111,17 +96,10 @@ body {
   border-bottom: 1px dotted #373737;
   text-align: center;
 }
-<<<<<<< HEAD
 .widgetPopup .tab a:hover {
   color: #373737;
 }
 .widgetPopup .tab a.active {
-=======
-.widget-popup .tab a:hover {
-  color: #373737;
-}
-.widget-popup .tab a.active {
->>>>>>> 23016f9123aaf4a1d48f5064d474e528fb1c3cfd
   width: 50px;
   height: 24px;
   border-radius: 12px;

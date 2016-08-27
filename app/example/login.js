@@ -1,6 +1,5 @@
 $(function () {
     var _isDev = true;
-<<<<<<< HEAD
     var _location = "localhost";
 	
     $('[name="sysCode"]').val("oss-yishang");
@@ -9,16 +8,6 @@ $(function () {
 
     $("form").submit(function () {
         var v = $.md5($("#passwordTemp").val());
-=======
-    var _location = "127.0.0.1";
-	
-    $('[name="sysCode"]').val("dms");
-
-    $("#passwordTemp").removeAttr('disabled');
-
-    $("form").submit(function (e) {
-        var v = $("#passwordTemp").val();
->>>>>>> 23016f9123aaf4a1d48f5064d474e528fb1c3cfd
         $("#password").val(v);
         return true;
     });
