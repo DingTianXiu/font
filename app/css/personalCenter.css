@@ -1,0 +1,77 @@
+body {
+  background-color: #f4f4f4;
+}
+body .personal_head {
+  height: 68px;
+  border-bottom: 1px solid #e1e1e1;
+  line-height: 68px;
+  padding-right: 25px;
+}
+body .personal_head span {
+  padding-right: 15px;
+  padding-left: 15px;
+  font-size: 24px;
+  color: #7d8088;
+}
+body .personal_head .userName {
+  color: #f25e61;
+  border-right: 1px solid #e1e1e1;
+}
+body .personal_center {
+  padding: 35px 0 0 25px;
+}
+body .personal_center ul {
+  float: left;
+  margin-right: 145px;
+}
+body .personal_center ul li {
+  height: 40px;
+  width: 248px;
+  padding-left: 20px;
+  background-color: #fff;
+  border: 1px solid #e1e1e1;
+  border-radius: 4px 4px 4px 4px;
+  line-height: 40px;
+  color: #bbbbbb;
+}
+body .personal_center ul li:first-child {
+  border-bottom: none;
+  border-radius: 4px 4px 0px 0px;
+}
+body .personal_center ul li:last-child {
+  border-radius: 0px 0px 4px 4px;
+}
+body .personal_center ul .optionSelected {
+  color: #333333;
+}
+body .personal_center .personal_center_right {
+  float: left;
+}
+body .personal_center .personal_center_right .photo {
+  float: left;
+  width: 98px;
+  height: 98px;
+  margin-right: 38px;
+  border-radius: 98px;
+  overflow: hidden;
+}
+body .personal_center .personal_center_right .photo img {
+  height: 98px;
+}
+body .personal_center .personal_center_right table {
+  width: 340px;
+}
+body .personal_center .personal_center_right table tr {
+  border-bottom: 1px solid #e1e1e1;
+}
+body .personal_center .personal_center_right table tr td {
+  height: 44px;
+  vertical-align: middle;
+}
+body .personal_center .personal_center_right table tr td:first-child {
+  width: 90px;
+  padding-left: 20px;
+}
+body .personal_center .personal_center_right table tr td:last-child {
+  width: auto;
+}
