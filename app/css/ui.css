@@ -269,7 +269,7 @@
 /*
  * END OF DATEPICKER
  */
-.ui-ht-widget {
+.ui-widget {
   font-size: 1.2em;
   color: #222;
 }
@@ -282,7 +282,7 @@
   box-sizing: border-box;
   width: 100%;
   background-color: #ffffff;
-  border: 1px solid #fbb450;
+  border: 1px solid #d4d4d4;
   /* 	border-radius: 6px 6px 6px 6px; */
   box-shadow: 0 5px 10px rgba(0, 0, 0, 0.2);
   list-style: none outside none;
@@ -356,9 +356,8 @@
 .ui-select-button {
   box-sizing: border-box;
   padding: 3px;
-  height: 24px;
   width: 100%;
-  vertical-align: baseline;
+  vertical-align: middle;
   background-color: #fff;
   border: 1px solid #d4d4d4;
   border-radius: 2px;
@@ -371,14 +370,22 @@
   text-align: center;
   outline: none;
   text-shadow: 0 1px 1px rgba(255, 255, 255, 0.75);
+  height: 36px;
+  line-height: 36px;
+  text-indent: 8px;
+  color: #cccccc;
+  font-size: 14px;
 }
 .ui-select-button:hover {
-  border: 1px solid #ffbc09;
+  border-color: #d4d4d4;
+}
+.ui-select-button:hover .ui-select-icon {
+  background-position: left top;
 }
 .ui-select-button:focus,
 .ui-widget-open .ui-select-button {
-  border-color: #fbb450;
-  box-shadow: 0 1px 1px rgba(0, 0, 0, 0.075) inset, 0 0 8px rgba(255, 188, 9, 0.6);
+  border-color: #d4d4d4;
+  box-shadow: 0 1px 1px rgba(0, 0, 0, 0.075) inset, 0 0 8px rgba(0, 0, 0, 0.2);
 }
 .ui-select-disabled .ui-select-button {
   cursor: default;
@@ -400,14 +407,14 @@
 }
 .ui-select-icon {
   position: absolute;
-  right: 0;
-  top: 0;
+  right: 7px;
+  top: 10px;
   content: "";
   vertical-align: top;
-  background: url(images/combo_arrow.png) no-repeat center center;
   display: block;
-  width: 22px;
-  height: 22px;
+  background: url(../img/select_icon.png) no-repeat right top;
+  width: 15px;
+  height: 15px;
 }
 .ui-select.ui-widget-open .ui-select-dropdown {
   display: block;
@@ -439,7 +446,7 @@
 /*
 * START OF DATAGRID
 */
-.ui-tb .ui-ht-widget {
+.ui-tb .ui-widget {
   font-size: 1em;
 }
 .ui-tb .ui-select {

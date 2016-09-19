@@ -17,12 +17,14 @@ body {
   background-color: #f4f4f4;
 }
 body .head {
+  position: inherit;
   min-width: 890px;
   background-color: #fff;
-  padding: 22px 25px;
+  padding: 22px 0;
   border-bottom: 1px solid #e1e1e1;
 }
 body .head span:first-child {
+  padding-left: 25px;
   padding-right: 20px;
   border-right: 1px solid #e1e1e1;
   color: #f25e61;

@@ -9,32 +9,78 @@
 }
 @font-face {
   font-family: 'iconfont';
-  src: url('//at.alicdn.com/t/font_1471416865_392484.eot');
+  src: url('//at.alicdn.com/t/font_1474187032_5674539.eot');
   /* IE9*/
-  src: url('//at.alicdn.com/t/font_1471416865_392484.eot?#iefix') format('embedded-opentype'), /* IE6-IE8 */ url('//at.alicdn.com/t/font_1471416865_392484.woff') format('woff'), /* chrome、firefox */ url('//at.alicdn.com/t/font_1471416865_392484.ttf') format('truetype'), /* chrome、firefox、opera、Safari, Android, iOS 4.2+*/ url('//at.alicdn.com/t/font_1471416865_392484.svg#iconfont') format('svg');
+  src: url('//at.alicdn.com/t/font_1474187032_5674539.eot?#iefix') format('embedded-opentype'), /* IE6-IE8 */ url('//at.alicdn.com/t/font_1474187032_5674539.woff') format('woff'), /* chrome、firefox */ url('//at.alicdn.com/t/font_1474187032_5674539.ttf') format('truetype'), /* chrome、firefox、opera、Safari, Android, iOS 4.2+*/ url('//at.alicdn.com/t/font_1474187032_5674539.svg#iconfont') format('svg');
   /* iOS 4.1- */
 }
-.editContainer {
-  margin: 24px 26px;
-  padding: 0 24px 40px 24px;
-  background-color: #fff;
+body {
+  background-color: #f4f4f4;
 }
-.editContainer span {
+.editContainer .titleContainer {
+  background-color: #fff;
+  padding: 0 17px;
+}
+.editContainer .titleContainer .componentName {
   display: inline-block;
   height: 74px;
   font-size: 22px;
   line-height: 74px;
 }
-.editContainer a {
+.editContainer .titleContainer .rightContainer {
   float: right;
+  position: relative;
+  top: 20px;
+}
+.editContainer .titleContainer .rightContainer .dateBox {
+  position: relative;
+  z-index: 2;
+  display: inline-block;
+  height: 30px;
+  line-height: 30px;
+  border-radius: 4px;
+  background: url(../img/calendar.png) no-repeat 13px center;
+  padding: 0 0 0 36px;
+  margin-right: 0;
+  cursor: pointer;
+  border: 1px solid #fff;
+  border-bottom-left-radius: 0;
+  border-bottom-right-radius: 0;
+  border-bottom: none;
+}
+.editContainer .titleContainer .rightContainer .dateBox .arrow {
+  width: 30px;
+  height: 30px;
+  line-height: 30px;
+  text-align: center;
+  display: inline-block;
+  background: url(../img/icon_arrow.png) no-repeat center center;
+}
+.editContainer .titleContainer .rightContainer .dateBox span {
+  float: left;
+}
+.editContainer .titleContainer .rightContainer .active {
+  border: 1px solid #b9bcc4;
+  background-color: #fff9f9;
+  border-bottom: none;
+}
+.editContainer .titleContainer .rightContainer .dateHoverBox {
+  right: 14px;
+  top: 30px;
+}
+.editContainer .titleContainer .rightContainer a {
   font-family: 'iconfont';
   font-size: 14px;
   color: #636874;
-  line-height: 74px;
   cursor: pointer;
+  position: relative;
+  top: -10px;
 }
-.editContainer a:hover {
+.editContainer .titleContainer .rightContainer a:hover {
   color: #9f9fa1;
+}
+.editContainer .optionContainer {
+  background-color: #fff;
 }
 .editContainer .optionContainer ul li {
   height: 48px;
@@ -172,6 +218,165 @@
 }
 .editContainer .optionContainer .styleListContainer .styleList .selectStyle {
   border: 1px solid #b1b3ba;
+}
+.editContainer .tabContainer {
+  padding: 0 23px;
+  background-color: #fff;
+}
+.editContainer .tabContainer ul {
+  float: left;
+  display: inline-block;
+  position: relative;
+  z-index: 1;
+}
+.editContainer .tabContainer ul li {
+  display: inline-block;
+  height: 28px;
+  width: 172px;
+  border: 1px solid #e5e5e5;
+  border-right: none;
+  text-align: center;
+  line-height: 28px;
+  position: relative;
+}
+.editContainer .tabContainer ul li span {
+  font-size: 12px;
+}
+.editContainer .tabContainer ul li .deleteBtn {
+  float: right;
+  margin-right: 15px;
+  font-family: 'iconfont';
+  font-size: 14px;
+  color: #636874;
+  cursor: pointer;
+  position: absolute;
+  right: 0;
+  font-size: 10px;
+}
+.editContainer .tabContainer ul li .deleteBtn:hover {
+  color: #f25e61;
+}
+.editContainer .tabContainer ul li:last-child {
+  border-right: 1px solid #e5e5e5;
+}
+.editContainer .tabContainer ul .tabSelected {
+  height: 35px;
+  background-color: #eaf6f4;
+  border: 1px solid #e5e5e5 !important;
+  margin-right: -1px;
+  top: -7px;
+}
+.editContainer .tabContainer ul .tabSelected .phoneName {
+  position: relative;
+  top: 3px;
+}
+.editContainer .tabContainer ul .tabSelected .deleteBtn {
+  top: 4px;
+}
+.editContainer .tabContainer .addShowBtnContainer {
+  display: inline-block;
+  position: relative;
+}
+.editContainer .tabContainer .addShowBtnContainer .selectProduct_updata {
+  position: absolute;
+  z-index: 1;
+  top: 30px;
+  left: 0px;
+  width: 640px;
+  padding: 18px 0;
+  background-color: #fbfbfb;
+  border: 1px solid #e5e5e5;
+}
+.editContainer .tabContainer .addShowBtnContainer .selectProduct_updata li {
+  height: 36px;
+  border: none;
+  width: auto;
+  margin-right: 10px;
+  line-height: 39px;
+}
+.editContainer .tabContainer .addShowBtnContainer .selectProduct_updata li button {
+  height: 36px;
+  width: 80px;
+  border: 1px solid #e5e5e5;
+  border-radius: 4px;
+  outline: none;
+}
+.editContainer .tabContainer .addShowBtnContainer .selectProduct_updata li:first-child {
+  margin-left: 26px;
+  font-size: 14px;
+}
+.editContainer .tabContainer .addShowBtnContainer .selectProduct_updata li:first-child select {
+  height: 36px;
+  width: 199px;
+}
+.editContainer .tabContainer button {
+  height: 30px;
+  width: 44px;
+  border: 1px solid #e5e5e5;
+  border-left: none;
+  outline: none;
+  background-color: #f4f4f4;
+  font-family: "iconfont";
+  font-size: 12px;
+  color: #9f9fa1;
+}
+.editContainer .tabContainer button:hover {
+  color: #757b8b;
+}
+.editContainer .tabContainer .timeSelect {
+  float: right;
+  width: 175px;
+  height: 28px;
+  border: 1px solid #e5e5e5;
+  border-radius: 4px;
+}
+.editContainer .tabContainer .timeSelect button {
+  width: 87px;
+  height: 100%;
+  border: none;
+  outline: none;
+  background: #f4f4f4;
+}
+.editContainer .tabContainer .timeSelect button:first-child {
+  width: 88px;
+  border-right: 1px solid #e5e5e5;
+}
+.editContainer .tabContainer .timeSelect .btnSelected {
+  background: none;
+  box-shadow: 0 0 10px #f4f4f4 inset;
+}
+.editContainer .echartsContainer {
+  background-color: #fff !important;
+}
+.editContainer .relateCompanentContainer {
+  padding: 15px 0 0;
+  height: 54px;
+  margin-top: 25px;
+  background-color: #fff;
+}
+.editContainer .relateCompanentContainer span {
+  display: inline-block;
+  margin: 0 17px;
+  font-size: 18px;
+  color: #3f4044;
+}
+.editContainer .relateCompanentContainer .relateCompanentList {
+  display: inline-block;
+}
+.editContainer .relateCompanentContainer .relateCompanentList li {
+  display: inline-block;
+  width: 206px;
+  height: 38px;
+  margin-right: 10px;
+  border: 1px solid #e5e5e5;
+  border-radius: 4px;
+  font-size: 14px;
+  text-align: center;
+  color: #3f4044;
+  line-height: 38px;
+}
+.editContainer .relateCompanentContainer .relateCompanentList li:last-child {
+  margin-right: 0;
 }
 .generateBtn {
   height: 104px;

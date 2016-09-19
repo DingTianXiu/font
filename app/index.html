@@ -11,7 +11,7 @@
 <body>
 	<div class="head">
 		<ul>
-			<li><a href="#">亿商</a></li>
+			<li><a href="./views/test.html">亿商</a></li>
 			<li><a href="#">物料工坊</a></li>
 			<li><a href="#">报表系统</a></li>
 			<li><a href="#">舆情</a></li>
@@ -30,7 +30,7 @@
 							<li class="email"></li>
 							<li>
 								<a href="views/personalCenter.html" target='mainIframe'>账号信息</a>
-								<a>退出</a>
+								<a href="javascript:;" id="logOut">退出</a>
 							</li>
 						</ul>
 					</div>
@@ -42,16 +42,17 @@
 	<div class="container">
 		<div class="side">
 			<div class="logo"></div>
-			<ul class="menu">
-			</ul>
-			<a href="javascript:;" id="addSchemeBtn"><i class="icon iconfont icon-iconprojectadd"></i><p>添加方案</p></a>
+			<div class="menuBox">
+				<ul class="menu"></ul>
+				<a href="javascript:;" id="addSchemeBtn"><i class="icon iconfont icon-iconprojectadd"></i><p>添加方案</p></a>
+			</div>
 			<a href='./views/library.html' target='mainIframe' class="componentBtn"><i class="icon iconfont icon-iconlibrary"></i><p>构件库</p></a>
 <!--			<div class="user"><a href="#">华为</a></div>-->
 		</div>
 		<div class="main"><iframe id="mainIframe" name="mainIframe" width="100%" height="500" src="views/scheme.html"></iframe></div>
 	</div>
 
-	<div id="add-scheme-popup" class="hide">
+	<div id="add-scheme-popup" class="form hide">
 		<div class="title">华为</div>
 		<div class="box">
 			<h1>新建方案</h1>
@@ -80,8 +81,8 @@
 	<script type="text/javascript" src="/bower_components/jquery/dist/jquery.min.js"></script>
 	<script type="text/javascript" src="/bower_components/jquery-ui/jquery-ui.min.js"></script>
 	<script type="text/javascript" src="/bower_components/jquery.cookie/jquery.cookie.js"></script>
-	<script type="text/javascript" src="js/ui.js?v=fb914c3320?v=c1cbe6956a?v=c1cbe6956a?v=c1cbe6956a"></script>
-	<script type="text/javascript" src="js/config.js?v=abb0adc341?v=abb0adc341?v=abb0adc341?v=abb0adc341"></script>
-	<script type="text/javascript" src="js/scheme.js?v=0c37c8f9ed?v=0c37c8f9ed?v=0c37c8f9ed?v=0c37c8f9ed"></script>
+	<script type="text/javascript" src="js/ui.js"></script>
+	<script type="text/javascript" src="js/config.js"></script>
+	<script type="text/javascript" src="js/scheme.js"></script>
 </body>
 </html>

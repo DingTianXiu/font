@@ -6,6 +6,7 @@
             "condition" : {
                 "baseCptId" : options.baseCptId,
                 "moduleId" : options.moduleId,
+                "cptInstId" : options.cptInstId,
                 "searchDateScope" : {
                     "beforeDateNum": options.beforeDateNum ? options.beforeDateNum : 28,
                     "afterDateNum": options.afterDateNum ? options.afterDateNum : 30
@@ -21,6 +22,18 @@
                 this._onComplete = options.onComplete;
             }
         }
+        //同步关联属性
+        if(options.onUpdateAttr){
+            if(typeof options.onUpdateAttr == "function"){
+                this._onUpdateAttr = options.onUpdateAttr;
+            }
+        }
+        //创建关联构件
+        if(options.onRelatedWidget){
+            if(typeof options.onRelatedWidget == "function"){
+                this._onRelatedWidget = options.onRelatedWidget;
+            }
+        }
         this._init(element,options);
     };
     NewPhoneQuery.prototype = {
@@ -29,17 +42,46 @@
             if(this.step == 0){
                 this._renderCondition();
             }else{
-                this._getData(this.data.condition.baseCptId);
+                this._getAttr();
             }
             this._bindEvent();
         },
         _bindEvent : function(){
-           $(".configBtn").on("click",function(){
+            var that = this;
+            this.$element.delegate(".configBtn","click",function(){
              //设置构件同步关系
                that._initConfigSync();
            });
+            this.$element.delegate("li","click",function(){
+                that._updatePhoneModel($(this));
+            });
+            this.$element.delegate(".relatedBtn","click",function(){
+                var param = {
+                    baseCptId: $(this).attr("baseCptId"),
+                    cptKey: $(this).attr("type"),
+                    conCptInstId : that.data.condition.cptInstId
+                };
+                that._onRelatedWidget(param);
+            });
         },
-        _initConfigSync:function(){},
+        _initConfigSync:function(){
+            var that = this;
+            $.msg({
+                type : "confirm",
+                msg : "确认删除？",
+                ok : function(){
+                    $.ajaxJSON({
+                        name: '删除构件实例',
+                        url: URL.DELETE_CPTINT,
+                        data: {"cptInstId": that.data.condition.cptInstId},
+                        iframe: true,
+                        success: function (r) {
+                            $.msg("删除成功");
+                        }
+                    });
+                }
+            })
+        },
         _initSlider : function($ele){
             var that = this;
             $ele.slider({
@@ -48,7 +90,7 @@
                 max: 30,
                 values: [that.data.condition.searchDateScope["beforeDateNum"]*-1 , that.data.condition.searchDateScope["afterDateNum"] ],
                 slide: function( event, ui ) {
-                    that.data.condition.searchDateScope["beforeDateNum"] = ui.values[ 0 ];
+                    that.data.condition.searchDateScope["beforeDateNum"] = ui.values[ 0 ] * -1;
                     that.data.condition.searchDateScope["afterDateNum"] = ui.values[ 1 ];
                 }
             });
@@ -59,7 +101,7 @@
             var template = Handlebars.compile(source);
             var html = template(this.data);
             this.$element.html(html);
-            this._initSlider($(".sliderBox"));
+            this._initSlider(this.$element.find(".first").find(".sliderBox"));
             $(".nextStep").on("click",function(){
                 that._createWidget();
             });
@@ -75,67 +117,149 @@
                 iframe:true,
                 contentType : 'application/json; charset=UTF-8',
                 success: function (r) {
-                    that._getData(r.data.cptInstId);
-                }
-            });
-        },
-        _renderResult : function(){
-            var source = $("#newPhoneQuery1").html();
-            var template = Handlebars.compile(source);
-            var html = template(this.data);
-            this.$element.html(html);
-            this._initSlider($(".sliderBox"));
-
-        },
-        _getData : function(id){
-            var that = this;
-            $.ajaxJSON({
-                name : '获取构件实例数据',
-                url :URL.GET_CPTINST_DATA,
-                data : {cptInstId : id},
-                success : function(r){
-                    that.data.result = r.data;
+                    that.data.condition.cptInstId = r.data.cptInstId;
                     $.ajaxJSON({
                         name: '获取构件的关联构件',
                         url: URL.GET_REL_CPT,
-                        data: {baseCptId:that.condition.baseCptId},
-                        success: function (r) {
-                            that.data.related = r.data;
-                            that._renderResult();
-                            that._onComplete(this.data);
+                        data: {baseCptId: that.data.condition.baseCptId},
+                        iframe:true,
+                        success: function (relData) {
+                            that.data.related = relData.data;
+                            that._getData();
                         }
                     });
                 }
             });
-            this.data.result = {
-                "released" : [{
-                    id:123,
-                    brandName : "三星 - GALAXY S7",
-                    modelName : "",
-                    releaseDate : "2016-08-01",
-                    picUrl : "5.jpg",
-                    otherAttr : [{name:"",value:""}],
+        },
+        _renderResult : function(){
+            var that = this;
+            var source = $("#newPhoneQuery1").html();
+            var template = Handlebars.compile(source);
+            for(var i in this.data.result){
+                for(var j = 0; j < this.data.result[i].length;j++){
+                    this.data.result[i][j]["selected"] = that.selectedIdStr.indexOf(this.data.result[i][j].id) > -1 ? "selected" : "";
+                }
+            }
+            var html = template(this.data);
+            this.$element.html(html).attr("id", that.data.condition.cptInstId);
+            this.$element.find(".dateBox").datePicker({
+                beforeDateNum : that.data.condition.searchDateScope["beforeDateNum"]*-1,
+                afterDateNum : that.data.condition.searchDateScope["afterDateNum"],
+                onSaveDate : function(beforeDateNum,afterDateNum){
+                    that.data.condition.searchDateScope.beforeDateNum = beforeDateNum*-1;
+                    that.data.condition.searchDateScope.afterDateNum = afterDateNum;
 
-                }],
-                "releasing":[{
-                    id:123,
-                    brandName : "Apple（苹果） - iPhone 6s",
-                    modelName : "",
-                    releaseDate : "2016-11-01",
-                    picUrl : "5.jpg",
-                    otherAttr : [{name:"",value:""}],
-
-                }]
+                    that._updateDate(beforeDateNum,afterDateNum);
+                }
+            });
+        },
+        _getAttr : function(){
+            var that = this;
+            var param = {"cptInstId" : this.data.condition.cptInstId};
+            $.ajaxJSON({
+                name: '获取构件实例属性',
+                url: URL.GET_CPTINST_ATTR,
+                data: param,
+                iframe: true,
+                success: function (r) {
+                    var selectedData = [];
+                    var list = r.data.phoneModel.value;
+                    if(list) {
+                        for (var i = 0; i < list.length; i++) {
+                            selectedData.push(list[i].id);
+                        }
+                        that.selectedIdStr = selectedData.join(",");
+                    }else{
+                       that.selectedIdStr = "";
+                    }
+                    $.ajaxJSON({
+                        name: '获取构件的关联构件',
+                        url: URL.GET_REL_CPT,
+                        data: {baseCptId: that.data.condition.baseCptId},
+                        iframe:true,
+                        success: function (relData) {
+                            that.data.related = relData.data;
+                            for(var i = 0; i < relData.length;i++){
+                                that.data.related.push({
+                                    "baseCptId" : relData[i].baseCptId,
+                                    "baseCptName" : relData[i].baseCptName
+                                });
+                            }
+                            that.data.condition["searchDateScope"] = r.data.searchDateScope.value;
+                            that._getData();
+                        }
+                    });
+                }
+            });
+        },
+        _getData : function(){
+            var that = this;
+            var param = {"cptInstId" : this.data.condition.cptInstId};
+            $.ajaxJSON({
+                name : '获取构件实例数据',
+                url :URL.GET_CPTINST_DATA,
+                data : param,
+                iframe:true,
+                success : function(r){
+                    that.data.result = r.data;
+                    that._renderResult();
+                    that._onComplete(this.data);
+                }
+            });
+        },
+        _updatePhoneModel : function($ele){
+            var that = this;
+            var param = {
+                "cptInstId" : this.data.condition.cptInstId,
+                "phoneModel" : []
             };
-            this.data.related = [{
-                "key" : "",
-                "name": "新品声量（监测）对比构件"
-            },{
-                "key" : "",
-                "name": "新品发布声量情感分析构件"
-            }];
-            that._renderResult();
-            that._onComplete(this.data);
+            $ele.find(".checkBoxIcon").toggleClass("selected");
+            this.$element.find(".phoneList").find(".selected").each(function(){
+                var index = $(this).parents("li").attr("index");
+                var type = $(this).parents("li").attr("type");
+                var item = that.data.result[type][index];
+                param["phoneModel"].push({
+                    "id" : item.id,
+                    "brandName" : item.brandName,
+                    "modelName" : item.modelName,
+                    "releaseDate" : item.releaseDate,
+                    "picUrl" : item.picUrl
+                });
+            });
+
+            //console.log(JSON.stringify(param));
+            $.ajaxJSON({
+                url: URL.UPDATE_CPTiNST_ATTR,
+                data : param,
+                data : JSON.stringify(param),
+                contentType : 'application/json; charset=UTF-8',
+                iframe:true,
+                success:function(r){
+                    that._onUpdateAttr(r.data.syncCptInstIdList);
+
+                }
+            });
+        },
+        _updateDate : function(beforeDateNum,afterDateNum){
+            var that = this;
+            var param = {
+                "cptInstId" : that.data.condition.cptInstId,
+                "searchDateScope" : {
+                    "beforeDateNum" : beforeDateNum,
+                    "afterDateNum" : afterDateNum
+                }
+            };
+            $.ajaxJSON({
+                url: URL.UPDATE_GET_DATA,
+                data : JSON.stringify(param),
+                contentType : 'application/json; charset=UTF-8',
+                iframe:true,
+                success:function(r){
+                    that.data.result = r.data.cptData;
+                    that._renderResult();
+                    that._onComplete(that.data);
+                }
+            });
         },
         _close : function(){
             this.$element.remove();

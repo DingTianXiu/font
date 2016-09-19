@@ -6,7 +6,7 @@
     componentList = {
         getSceneListList : function (data) {
             for(var i=0;i<data.length;i++){
-                $(".componentListTab").append("<li><a class='tab' index="+i+">"+data[i].name+"</a></li>");
+                $(".componentListTab").append("<li><a class='tab' index="+i+">"+data[i].busiName+"</a></li>");
             }
             var dom = $(".tab:first-child")[0];
             $(dom).addClass("aSelected");
@@ -21,7 +21,7 @@
                 $(".industry").remove();
             }
             for(var i=0;i<data[index].data.length;i++){
-                var industry_dom = "<div class='industry'><p>"+data[index].data[i].name+"</p></div>";
+                var industry_dom = "<div class='industry'><p>"+data[index].data[i].typeName+"</p></div>";
                 $(".componentList").append(industry_dom);
                 for(var j=0;j<data[index].data[i].data.length;j++){
                     if(!data[index].data[i].data[j].cfgDgm){
@@ -39,8 +39,10 @@
             $.ajaxJSON({
                 name: '构件库',
                 url: URL.GET_COMPONENT_BASE_LIST,
+                iframe: true,
                 success: function (r) {
                     var data = r.data.data;
+                    console.log(data);
                     that.getSceneListList(data);
                     that.getIndustryList(data,"0");
                 }
@@ -54,6 +56,10 @@
                 $(this).addClass("aSelected");
                 that.getIndustryList(componentList_data,index);
             });
+            $("#sl").on("click",function () {
+                var ele = $("#gj");
+                $("#gj").newAffectionAnalysed(ele,options);
+            })
         },
         init : function () {
             this.getComponentLibrary();

@@ -56,8 +56,10 @@ end reset
 
 body{overflow:hidden;}
 .ui-loading:after {
-    background: url("../img/ys_logo_18x18.png") center center no-repeat rgba(0, 0, 0, 0.25);
-    content: '加载中...';
+    background: url("../img/loading2.png") center center no-repeat rgba(0, 0, 0, 0.25);
+    content: '';
+    text-align:center;
+    color:#fff;
     height: 100%;
     left: 0;
     position: fixed;
@@ -186,37 +188,87 @@ body{overflow:hidden;}
         height:68px;
         background:#f25e61 url(../img/logo.png) no-repeat center center;
     }
-    .menu {
-        li {
-            height:97px;
-            text-align: center;
-
-            a{
-                display:block;
-                height:55px;
-                padding:20px;
-                text-align:center;
-                color:#7d8088;
-                background:#3f4044;
-                .iconfont{
-                    font-size:22px;
+    .menuBox {
+        position:relative;
+        overflow:auto;
+        .prevBtn{
+            position:absolute;
+            left:0;
+            top:0;
+            width:95px;
+            font-weight:bold;
+            display:none;
+            background:#fff;
+            cursor:pointer;
+            z-index:2;
+        }
+        .nextBtn{
+            position:absolute;
+            left:0;
+            bottom:0;
+            width:95px;
+            font-weight:bold;
+            background:#fff;
+            cursor:pointer;
+            z-index:2;
+        }
+        .menu {
+            position:absolute;
+            left:0;
+            top:0;
+            li {
+                height: 97px;
+                text-align: center;
+                a {
+                    display: block;
+                    height: 55px;
+                    padding: 20px;
+                    text-align: center;
+                    color: #7d8088;
+                    background: #3f4044;
+                    .iconfont {
+                        font-size: 22px;
+                    }
+                    p {
+                        margin-top: 10px;
+                    }
                 }
-                p{
-                    margin-top:10px;
+                a:hover {
+                    color: #f25e61;
+                    background-color: #373737;
                 }
-            }
-            a:hover{
-                color:#f25e61;
-                background-color:#373737;
-            }
-            a:active{
-                outline:none;
-            }
-            a.active{
-                color: #f25e61;
-                background:#373737;
+                a:active {
+                    outline: none;
+                }
+                a.active {
+                    color: #f25e61;
+                    background: #373737;
+                }
             }
         }
+    }
+    .menuBox::-webkit-scrollbar {
+        width:5px;
+        height:5px;
+    }
+    .menuBox::-webkit-scrollbar-button    {
+        background-color:#3f4044;
+    }
+    .menuBox::-webkit-scrollbar-track     {
+        background:#3f4044;
+    }
+    .menuBox::-webkit-scrollbar-track-piece {
+        background:#3f4044;
+    }
+    .menuBox::-webkit-scrollbar-thumb{
+        background:#292727;
+        border-radius:4px;
+    }
+    .menuBox::-webkit-scrollbar-corner {
+        background:#3f4044;
+    }
+    .menuBox::-webkit-scrollbar-resizer  {
+        background:#3f4044;
     }
     #addSchemeBtn{
         display:block;
@@ -241,9 +293,9 @@ body{overflow:hidden;}
         padding:20px;
         text-align: center;
         color:#7d8088;
-        position:fixed;
+        position:absolute;
         left:0;
-        bottom:80px;
+        bottom:0;
         width:55px;
         .iconfont{
             font-size:22px;
@@ -281,7 +333,7 @@ body{overflow:hidden;}
 .hide{
     display:none;
 }
-#add-scheme-popup{
+.form{
     position:absolute;
     left:95px;
     top:0;
@@ -293,6 +345,7 @@ body{overflow:hidden;}
         height:68px;
         line-height:68px;
         border-bottom:1px solid #e1e1e1;
+
         background:#fff;
         padding-left:24px;
     }
@@ -349,4 +402,7 @@ body{overflow:hidden;}
             }
         }
     }
+}
+#add-scheme-popup{
+  top:25px;
 }

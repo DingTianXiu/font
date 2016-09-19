@@ -46,7 +46,7 @@
             var template = "",
                 data = this.data;
             for(var i =0 ; i < data.length;i++) {
-                template += "<a href='#' index='" + i + "'>" + data[i].name + "</a>";
+                template += "<a href='#' index='" + i + "'>" + data[i].typeName + "</a>";
             }
             this.$tab.append(template);
             $(".tab a").on("click",function(){

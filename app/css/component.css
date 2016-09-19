@@ -6,6 +6,7 @@ body {
 }
 .container {
   position: relative;
+  padding-bottom: 50px;
 }
 .moduleList {
   background: #fff;
@@ -29,6 +30,7 @@ body {
   height: 44px;
   left: 0;
   top: 4px;
+  color: #737989;
 }
 .moduleList li a.active {
   background: url(../img/tab_bg.png) no-repeat left top;
@@ -56,19 +58,25 @@ body {
   right: 25px;
   top: 18px;
 }
-.componentList {
-  border-top: 1px solid #e1e1e1;
+.btnbox {
+  width: 640px;
+  margin: 24px auto;
 }
-#addWidgetBtn {
+.btnbox a {
   height: 50px;
-  width: 380px;
+  width: 300px;
+  display: inline-block;
   text-align: center;
   line-height: 50px;
   color: #fff;
   border-radius: 4px;
   background: #f25e61;
   font-size: 24px;
-  display: none;
+  margin: 0 9px;
+}
+.btnbox #cancelPublish {
+  margin: 0 auto;
+  display: block;
 }
 .widgetPopup {
   padding: 29px 15px 15px 15px;
@@ -92,16 +100,14 @@ body {
   margin: 0 13px;
   font-size: 14px;
   color: #7d8088;
-  width: 30px;
   border-bottom: 1px dotted #373737;
   text-align: center;
+  padding: 0 6px;
 }
 .widgetPopup .tab a:hover {
   color: #373737;
 }
 .widgetPopup .tab a.active {
-  width: 50px;
-  height: 24px;
   border-radius: 12px;
   background: #f25e61;
   border: none;
@@ -168,24 +174,43 @@ body {
   background: #eaeaea;
 }
 /*end widget*/
-.componentList {
+.componentListWrapper {
+  border-top: 1px solid #e1e1e1;
+}
+.componentListWrapper .publishTip {
+  height: 42px;
+  line-height: 42px;
+  background: #fff9f9 url(../img/icon_tip.png) no-repeat 17px center;
+  color: #f25e61;
+  padding: 0 0 0 40px;
+  margin: 24px 24px 0 24px;
+  border-radius: 4px;
+}
+.componentListWrapper .publishTip a {
+  font-weight: bold;
+  text-decoration: underline;
+  color: #f25e61;
+  margin-left: 5px;
+}
+.componentListWrapper .componentList {
   padding: 24px;
 }
-.componentList .component {
+.componentListWrapper .componentList .component {
   margin-bottom: 24px;
+  position: relative;
 }
-.componentList .component .header {
+.componentListWrapper .componentList .component .header {
   padding: 24px 18px 0 18px;
   background: #fff;
   position: relative;
 }
-.componentList .component .header h1 {
+.componentListWrapper .componentList .component .header h1 {
   float: left;
   font-size: 22px;
   color: #282828;
   font-weight: normal;
 }
-.componentList .component .header .configBtn {
+.componentListWrapper .componentList .component .header .configBtn {
   height: 30px;
   width: 30px;
   float: right;
@@ -195,22 +220,27 @@ body {
   line-height: 30px;
   color: #9f9fa1;
 }
-.componentList .component .header .dateBox {
+.componentListWrapper .componentList .component .header .dateBox {
   height: 30px;
   line-height: 30px;
   position: absolute;
   bottom: 0;
   right: 64px;
   border-radius: 4px;
-  background: #f4f4f4 url(../img/calendar.png) no-repeat 13px center;
+  background: url(../img/calendar.png) no-repeat 13px center;
   padding: 0 0 0 36px;
-  margin-right: 9px;
+  margin-right: 0;
   cursor: pointer;
+  border: 1px solid #fff;
+  border-bottom-left-radius: 0;
+  border-bottom-right-radius: 0;
+  border-bottom: none;
+  z-index: 2;
 }
-.componentList .component .header .dateBox span {
+.componentListWrapper .componentList .component .header .dateBox span {
   float: left;
 }
-.componentList .component .header .dateBox .arrow {
+.componentListWrapper .componentList .component .header .dateBox .arrow {
   width: 30px;
   height: 30px;
   line-height: 30px;
@@ -218,23 +248,28 @@ body {
   display: inline-block;
   background: url(../img/icon_arrow.png) no-repeat center center;
 }
-.componentList .first {
+.componentListWrapper .componentList .component .header .dateBox.active {
+  border: 1px solid #b9bcc4;
+  background-color: #fff9f9;
+  border-bottom: none;
+}
+.componentListWrapper .componentList .first {
   background: #fff;
   padding: 48px 0 40px;
 }
-.componentList .first .inner {
+.componentListWrapper .componentList .first .inner {
   width: 516px;
   height: 209px;
   margin: 0 auto;
 }
-.componentList .first .inner p {
+.componentListWrapper .componentList .first .inner p {
   color: #333;
   margin-bottom: 28px;
 }
-.componentList .first .inner .sliderBox {
+.componentListWrapper .componentList .first .inner .sliderBox {
   margin: 28px 0 60px 0;
 }
-.componentList .first .inner .nextStep {
+.componentListWrapper .componentList .first .inner .nextStep {
   width: 382px;
   height: 50px;
   line-height: 50px;
@@ -246,80 +281,160 @@ body {
   margin: 0 auto;
   border-radius: 4px;
 }
-.componentList .second {
+.componentListWrapper .componentList .second {
   position: relative;
   padding: 29px 18px;
   background: #fff;
 }
-.componentList .second .phoneList {
+.componentListWrapper .componentList .second .phoneList {
   border-left: 1px solid #efeeec;
   border-top: 1px solid #efeeec;
 }
-.componentList .second .phoneList .left {
+.componentListWrapper .componentList .second .phoneList .left {
   float: left;
   width: 50%;
   position: relative;
 }
-.componentList .second .phoneList .left .label {
+.componentListWrapper .componentList .second .phoneList .left .label {
   position: absolute;
   left: 29px;
   top: 18px;
+  color: #999;
 }
-.componentList .second .phoneList .left li {
+.componentListWrapper .componentList .second .phoneList .left li {
   border-right: 1px solid #efeeec;
   border-bottom: 1px solid #efeeec;
 }
-.componentList .second .phoneList .left li a {
+.componentListWrapper .componentList .second .phoneList .left li a {
   display: block;
   padding: 18px 0 18px 83px;
 }
-.componentList .second .phoneList .left li a span {
+.componentListWrapper .componentList .second .phoneList .left li a span {
   float: left;
 }
-.componentList .second .phoneList .left li a .circle {
+.componentListWrapper .componentList .second .phoneList .left li a .circle {
   width: 6px;
   height: 6px;
   border: 1px solid #ccc;
   border-radius: 6px;
   margin: 2px 13px;
 }
-.componentList .second .phoneList .left li a img {
+.componentListWrapper .componentList .second .phoneList .left li a .releaseDate {
+  color: #b0b0b0;
+}
+.componentListWrapper .componentList .second .phoneList .left li a img {
   float: left;
   margin: 0 20px;
 }
-.componentList .second .phoneList .left li a .brandName {
+.componentListWrapper .componentList .second .phoneList .left li a .brandName {
   margin: 20px 32px 0 0;
   font-size: 16px;
   color: #282828;
 }
-.componentList .second .phoneList .left li a .selected {
+.componentListWrapper .componentList .second .phoneList .left li a .selected {
   float: right;
   width: 17px;
   height: 17px;
   margin: 20px 32px 0 0;
   background: url(../img/icon_selected.png) no-repeat left top;
 }
-.componentList .second .phoneList .left li a:hover {
+.componentListWrapper .componentList .second .phoneList .left li a:hover {
   background: #fff9f9;
 }
-.componentList .second .dateHoverBox {
-  width: 414px;
-  height: 157px;
-  padding: 24px;
+.componentListWrapper .componentList .second .noData {
+  content: "无数据";
+  text-align: center;
+}
+.componentListWrapper .componentList .second .legend {
+  border-bottom: 1px solid #b9bcc4;
+  height: 35px;
+}
+.componentListWrapper .componentList .second .legend a {
+  display: inline-block;
+  height: 30px;
+  line-height: 30px;
+  width: 173px;
+  border: 1px solid #e5e5e5;
+  border-bottom: none;
+  text-align: center;
+  color: #3f4044;
+  padding-top: 0;
+  background: #fff;
+  position: relative;
+}
+.componentListWrapper .componentList .second .legend a i {
+  color: #9f9fa1;
+  display: none;
+  postion: absolute;
+  right: 12px;
+  top: 12px;
+  cursor: pointer;
+}
+.componentListWrapper .componentList .second .legend a.active {
+  padding-top: 3px;
+  background: #fff9f9;
+  border-color: #b9bcc4;
+}
+.componentListWrapper .componentList .second .legend a.active i {
+  color: #f25e61;
+}
+.componentListWrapper .componentList .second .legend .addBtn,
+.componentListWrapper .componentList .second .legend .delBtn {
+  width: 44px;
+  height: 30px;
+  line-height: 30px;
+  text-align: center;
+  color: #9f9fa1;
   background: #f4f4f4;
+}
+.componentListWrapper .componentList .second .legend .addBtn .iconfont,
+.componentListWrapper .componentList .second .legend .delBtn .iconfont {
+  display: block;
+}
+.componentListWrapper .componentList .second .chart {
+  height: 400px;
+  margin: 30px 90px;
+}
+.componentListWrapper .componentList .second .chartLabel {
+  position: absolute;
+  left: 135px;
+  top: 155px;
+  width: 40px;
+  height: 400px;
+}
+.componentListWrapper .componentList .second .chartLabel .middle {
+  margin-top: 140px;
+}
+.componentListWrapper .componentList .second .chartLabel .bottom {
+  margin-top: 135px;
+}
+.componentListWrapper .componentList .dateHoverBox {
+  width: 414px;
+  height: 110px;
+  padding: 24px;
+  background: #fff9f9;
+  border: 1px solid #b9bcc4;
   position: absolute;
   right: 64px;
-  top: 0;
+  top: 53px;
   display: none;
+  z-index: 1;
+  border-radius: 4px;
+  border-top-right-radius: 0;
 }
-.componentList .second .dateHoverBox p {
+.componentListWrapper .componentList .dateHoverBox p {
   color: #333;
-  margin-bottom: 28px;
 }
-.componentList .second .dateHoverBox .sliderBox {
-  margin: 28px 0 60px 0;
+.componentListWrapper .componentList .dateHoverBox .sliderBox {
+  margin: 8px 0 19px 0;
+  font-size: 12px;
+  font-style: normal;
 }
-.componentList .second .dateHoverBox .confirmBtn {
+.componentListWrapper .componentList .dateHoverBox .sliderTip {
+  height: 20px;
+  line-height: 20px;
+}
+.componentListWrapper .componentList .dateHoverBox .confirmBtn {
   width: 60px;
   height: 30px;
   line-height: 30px;
@@ -331,12 +446,149 @@ body {
   float: right;
   margin: 16px 0;
 }
-.componentList .related {
+.componentListWrapper .componentList .firstMultiAttr {
+  background: #fff;
+  padding: 0 0 40px 0;
+}
+.componentListWrapper .componentList .firstMultiAttr .proContainer,
+.componentListWrapper .componentList .firstMultiAttr .infoContainer {
+  padding: 27px 24px;
+}
+.componentListWrapper .componentList .firstMultiAttr .proContainer .sBox,
+.componentListWrapper .componentList .firstMultiAttr .infoContainer .sBox {
+  margin-bottom: 14px;
+}
+.componentListWrapper .componentList .firstMultiAttr .proContainer .sBox label,
+.componentListWrapper .componentList .firstMultiAttr .infoContainer .sBox label {
+  line-height: 36px;
+  display: inline-block;
+  margin-right: 10px;
+  font-size: 14px;
+}
+.componentListWrapper .componentList .firstMultiAttr .proContainer .sBox .ui-select,
+.componentListWrapper .componentList .firstMultiAttr .infoContainer .sBox .ui-select {
+  margin-right: 10px;
+}
+.componentListWrapper .componentList .firstMultiAttr .proContainer .sBox .addBtn,
+.componentListWrapper .componentList .firstMultiAttr .infoContainer .sBox .addBtn {
+  width: 78px;
+  line-height: 34px;
+  text-align: center;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  color: #757b8b;
+  background: #f4f4f4;
+  display: inline-block;
+}
+.componentListWrapper .componentList .firstMultiAttr .proContainer .rBox .proWrapper,
+.componentListWrapper .componentList .firstMultiAttr .infoContainer .rBox .proWrapper {
+  width: 33%;
+  display: inline-block;
+}
+.componentListWrapper .componentList .firstMultiAttr .proContainer .rBox .proWrapper .pro,
+.componentListWrapper .componentList .firstMultiAttr .infoContainer .rBox .proWrapper .pro {
+  cursor: pointer;
+  border: 1px solid #efeeec;
+  padding: 15px;
+}
+.componentListWrapper .componentList .firstMultiAttr .proContainer .rBox .proWrapper .pro .phoneThumb,
+.componentListWrapper .componentList .firstMultiAttr .infoContainer .rBox .proWrapper .pro .phoneThumb {
+  width: 50px;
+  height: 50px;
+  float: left;
+  margin-right: 15px;
+}
+.componentListWrapper .componentList .firstMultiAttr .proContainer .rBox .proWrapper .pro .info,
+.componentListWrapper .componentList .firstMultiAttr .infoContainer .rBox .proWrapper .pro .info {
+  font-size: 14px;
+  float: left;
+}
+.componentListWrapper .componentList .firstMultiAttr .proContainer .rBox .proWrapper .pro .info p,
+.componentListWrapper .componentList .firstMultiAttr .infoContainer .rBox .proWrapper .pro .info p {
+  line-height: 27px;
+  color: #282828;
+  font-size: 16px;
+}
+.componentListWrapper .componentList .firstMultiAttr .proContainer .rBox .proWrapper .pro .info .pubDate,
+.componentListWrapper .componentList .firstMultiAttr .infoContainer .rBox .proWrapper .pro .info .pubDate {
+  font-size: 12px;
+  color: #b0b0b0;
+}
+.componentListWrapper .componentList .firstMultiAttr .proContainer .rBox .proWrapper .pro i,
+.componentListWrapper .componentList .firstMultiAttr .infoContainer .rBox .proWrapper .pro i {
+  color: #f25e61;
+  cursor: pointer;
+  float: right;
+  margin-top: 19px;
+}
+.componentListWrapper .componentList .firstMultiAttr .proContainer .rBox .proWrapper .pro:hover,
+.componentListWrapper .componentList .firstMultiAttr .infoContainer .rBox .proWrapper .pro:hover {
+  background: #fff9f9;
+}
+.componentListWrapper .componentList .firstMultiAttr .infoContainer .rBox .proWrapper {
+  width: 16.6%;
+}
+.componentListWrapper .componentList .firstMultiAttr .infoContainer .rBox .proWrapper .pro .info p {
+  line-height: 16px;
+}
+.componentListWrapper .componentList .firstMultiAttr .infoContainer .rBox .proWrapper .pro i {
+  margin-top: 0;
+}
+.componentListWrapper .componentList .firstMultiAttr .dateContainer {
+  padding: 27px 24px;
+}
+.componentListWrapper .componentList .firstMultiAttr .dateContainer label {
+  float: left;
+  margin-right: 10px;
+}
+.componentListWrapper .componentList .firstMultiAttr .dateContainer .sliderBox {
+  float: left;
+  width: 500px;
+}
+.componentListWrapper .componentList .firstMultiAttr .styleContainer {
+  padding: 27px 24px;
+}
+.componentListWrapper .componentList .firstMultiAttr .styleContainer label {
+  display: block;
+  margin-bottom: 15px;
+}
+.componentListWrapper .componentList .firstMultiAttr .styleContainer li {
+  float: left;
+  margin-right: 20px;
+}
+.componentListWrapper .componentList .firstMultiAttr .styleContainer li img {
+  border: 1px solid #efeeec;
+}
+.componentListWrapper .componentList .firstMultiAttr .styleContainer li p {
+  height: 30px;
+  line-height: 30px;
+  text-align: center;
+  color: #898989;
+}
+.componentListWrapper .componentList .firstMultiAttr .styleContainer li:hover {
+  margin-right: 18px;
+}
+.componentListWrapper .componentList .firstMultiAttr .styleContainer li:hover img {
+  border: 1px solid #b1b3ba;
+}
+.componentListWrapper .componentList .firstMultiAttr .nextStep {
+  width: 382px;
+  height: 50px;
+  line-height: 50px;
+  text-align: center;
+  background: #f25e61;
+  color: #fff;
+  font-size: 24px;
+  display: block;
+  margin: 0 auto;
+  border-radius: 4px;
+}
+.componentListWrapper .related {
   background: #fff;
   padding: 13px;
   border-top: 1px solid #efeeec;
 }
-.componentList .related h1 {
+.componentListWrapper .related h1 {
   display: inline-block;
   font-size: 18px;
   color: #282828;
@@ -344,7 +596,7 @@ body {
   font-weight: normal;
   margin-right: 15px;
 }
-.componentList .related a {
+.componentListWrapper .related a {
   display: inline-block;
   line-height: 37px;
   width: 204px;
@@ -355,4 +607,386 @@ body {
   font-size: 14px;
   color: #3f4044;
   background: #f4f4f4;
+}
+/* 新品声量对比 begin */
+.WraNewPro {
+  padding: 25px;
+}
+.WraNewPro .newProContra {
+  background: #fff;
+  width: 100%;
+  /* 页面大标题 */
+  /* 选择目标商品 */
+  /* 折线图 */
+}
+.WraNewPro .newProContra .newProTitle {
+  font-weight: normal;
+  height: 80px;
+  line-height: 80px;
+  font-size: 22px;
+  color: #282828;
+  margin-left: 25px;
+}
+.WraNewPro .newProContra .proContraIn {
+  margin-left: 25px;
+}
+.WraNewPro .newProContra .proContraIn .chooTarProWra {
+  margin-bottom: 65px;
+}
+.WraNewPro .newProContra .proContraIn .chooTarProWra {
+  margin-bottom: 65px;
+}
+.WraNewPro .newProContra .proContraIn .monitorScope {
+  margin-bottom: 65px;
+}
+.WraNewPro .newProContra .chooTitle {
+  font-size: 14px;
+  color: #333;
+  display: inline-block;
+  *display: inline;
+  zoom: 1;
+  vertical-align: top;
+  line-height: 35px;
+}
+.WraNewPro .newProContra .chooTarPro {
+  margin-bottom: 14px;
+}
+.WraNewPro .newProContra .chooBrand {
+  width: 198px;
+  height: 36px;
+  color: #ccc;
+  font-size: 14px;
+  margin-right: 10px;
+  display: inline-block;
+  *display: inline;
+  zoom: 1;
+  vertical-align: top;
+}
+.WraNewPro .newProContra .chooBrand select {
+  width: 198px;
+  height: 36px;
+  border-radius: 3px;
+  border: 1px solid #dddddd;
+}
+.WraNewPro .newProContra .btnAdd {
+  width: 78px;
+  height: 36px;
+  border: 1px solid #d5d9dc;
+  background: #f4f4f4;
+  border-radius: 3px;
+  display: inline-block;
+  *display: inline;
+  zoom: 1;
+  vertical-align: top;
+  color: #757b8b;
+  font-size: 14px;
+  line-height: 35px;
+  text-align: center;
+}
+.WraNewPro .newProContra .phoneList {
+  width: 100%;
+  min-width: px;
+  display: none;
+  margin-bottom: 80px;
+  border-left: 1px solid #efeeec;
+}
+.WraNewPro .newProContra .phoneList ul {
+  font-size: 0;
+  overflow: hidden;
+}
+.WraNewPro .newProContra .phoneList ul .tarProWidth {
+  width: 33.33%;
+  display: inline-block;
+  *display: inline;
+  zoom: 1;
+  vertical-align: top;
+  border: 1px solid #efeeec;
+  border-left: none;
+  height: 78px;
+}
+.WraNewPro .newProContra .phoneList ul .tarProWidth a {
+  background: #fff;
+  position: relative;
+  width: 100%;
+  display: block;
+  height: 78px;
+}
+.WraNewPro .newProContra .phoneList ul .tarProWidth a .iconfont {
+  font-family: 'iconfont';
+  position: absolute;
+  top: 32px;
+  right: 15px;
+  font-size: 12px;
+  color: #f25e61;
+  display: none;
+}
+.WraNewPro .newProContra .phoneList ul .tarProWidth a .phoneImg {
+  width: 50px;
+  height: 50px;
+  margin: 15px 10px 0 15px;
+  display: inline-block;
+  *display: inline;
+  zoom: 1;
+  vertical-align: top;
+}
+.WraNewPro .newProContra .phoneList ul .tarProWidth a .phoneImg img {
+  width: 50px;
+  height: 50px;
+}
+.WraNewPro .newProContra .phoneList ul .tarProWidth a .pInfo {
+  margin-top: 15px;
+  display: inline-block;
+  *display: inline;
+  zoom: 1;
+  vertical-align: top;
+}
+.WraNewPro .newProContra .phoneList ul .tarProWidth a .pInfo h4 {
+  font-size: 16px;
+  color: #282828;
+}
+.WraNewPro .newProContra .phoneList ul .tarProWidth a .pInfo p {
+  font-size: 12px;
+  color: #b0b0b0;
+}
+.WraNewPro .newProContra .phoneList ul .tarProWidth a:hover {
+  background: #fff9f9;
+  border: 1px solid #b1b3ba;
+  margin: -1px 0 0 -1px;
+}
+.WraNewPro .newProContra .phoneList ul .tarProWidth a:hover .iconfont {
+  display: block;
+}
+.WraNewPro .newProContra .sourceList {
+  width: 100%;
+  display: none;
+}
+.WraNewPro .newProContra .sourceList ul {
+  font-size: 0;
+  border-left: 1px solid #efeeec;
+  margin-bottom: 80px;
+}
+.WraNewPro .newProContra .sourceList ul li.tarInfoWidth {
+  display: inline-block;
+  *display: inline;
+  zoom: 1;
+  vertical-align: top;
+  width: 16.6%;
+  border: 1px solid #efeeec;
+  border-left: none;
+  border-bottom: none;
+  height: 48px;
+}
+.WraNewPro .newProContra .sourceList ul li.tarInfoWidth a {
+  display: block;
+  width: 100%;
+  height: 48px;
+  position: relative;
+}
+.WraNewPro .newProContra .sourceList ul li.tarInfoWidth a .iconfont {
+  font-family: 'iconfont';
+  position: absolute;
+  top: 17px;
+  left: 15px;
+  font-size: 12px;
+  color: #f25e61;
+  display: none;
+}
+.WraNewPro .newProContra .sourceList ul li.tarInfoWidth a .phoneImg {
+  width: 32px;
+  height: 32px;
+  margin: 8px 10px 0 15px;
+  display: inline-block;
+  *display: inline;
+  zoom: 1;
+  vertical-align: top;
+}
+.WraNewPro .newProContra .sourceList ul li.tarInfoWidth a .phoneImg img {
+  width: 32px;
+  height: 32px;
+}
+.WraNewPro .newProContra .sourceList ul li.tarInfoWidth a .pInfo {
+  display: inline-block;
+  *display: inline;
+  zoom: 1;
+  vertical-align: top;
+}
+.WraNewPro .newProContra .sourceList ul li.tarInfoWidth a .pInfo p {
+  font-size: 16px;
+  color: #282828;
+}
+.WraNewPro .newProContra .sourceList ul li.tarInfoWidth a:hover {
+  background: #fff9f9;
+  border: 1px solid #b1b3ba;
+  margin: -1px 0 0 -1px;
+}
+.WraNewPro .newProContra .sourceList ul li.tarInfoWidth a:hover .iconfont {
+  display: block;
+  position: absolute;
+  top: 17px;
+  right: 15px;
+  font-size: 12px;
+  color: #f25e61;
+}
+.WraNewPro .newProContra .monitorScope span {
+  display: inline-block;
+  *display: inline;
+  zoom: 1;
+  vertical-align: top;
+  font-size: 14px;
+  color: #333;
+}
+.WraNewPro .newProContra .monitorScope .timeLine {
+  display: inline-block;
+  *display: inline;
+  zoom: 1;
+  vertical-align: top;
+}
+.WraNewPro .newProContra .chooTableStyle h4 {
+  line-height: 45px;
+  font-weight: normal;
+}
+.WraNewPro .newProContra .chooTableStyle li {
+  display: inline-block;
+  *display: inline;
+  zoom: 1;
+  vertical-align: top;
+  margin-right: 20px;
+}
+.WraNewPro .newProContra .chooTableStyle li a {
+  border: 1px solid #fff;
+}
+.WraNewPro .newProContra .chooTableStyle li a img {
+  border: 1px solid #fff;
+  width: 174px;
+  height: 174px;
+}
+.WraNewPro .newProContra .chooTableStyle li span {
+  border: 1px solid #efeeec;
+  width: 176px;
+  height: 176px;
+  text-align: center;
+  display: block;
+  cursor: pointer;
+}
+.WraNewPro .newProContra .chooTableStyle li span img {
+  border: 1px solid #fff;
+  width: 174px;
+  height: 174px;
+}
+.WraNewPro .newProContra .chooTableStyle li em {
+  width: 178px;
+  height: 30px;
+  line-height: 30px;
+  color: #898989;
+  font-size: 12px;
+  text-align: center;
+  display: block;
+}
+.WraNewPro .newProContra .chooTableStyle li span:hover {
+  border: 1px solid #b1b3ba;
+}
+.WraNewPro .newProContra .chooTableStyle li span:hover img {
+  border: 1px solid #b1b3ba;
+}
+.WraNewPro .newProContra .chooTableStyle li.on span {
+  border: 1px solid #b1b3ba;
+}
+.WraNewPro .newProContra .chooTableStyle li.on span img {
+  border: 1px solid #b1b3ba;
+}
+.WraNewPro .newProContra .chooTableStyle li:hover a img {
+  border: 1px solid #b1b3ba;
+}
+.WraNewPro .newProContra #echartLine {
+  min-width: 1045px;
+  min-height: 380px;
+}
+.WraNewPro .newProContra .monitorScope {
+  height: 55px;
+}
+.WraNewPro .newProContra .containerChart {
+  display: none;
+}
+.WraNewPro .newProContra .containerChart #containerChart {
+  display: none;
+  width: 1130px;
+  height: 390px;
+}
+.WraNewPro .newProContra .containerChart .btnAddNew {
+  width: 100%;
+  text-align: center;
+  position: relative;
+}
+.WraNewPro .btnCompare {
+  width: 100%;
+  text-align: center;
+  position: relative;
+}
+.WraNewPro .btnCompare a {
+  color: #fff;
+  width: 380px;
+  left: 50%;
+  position: absolute;
+  margin-left: -190px;
+  height: 50px;
+  background: #f25e61;
+  border-radius: 4px;
+  font-size: 24px;
+  display: block;
+  text-align: center;
+  line-height: 50px;
+}
+.containerChart .btnAddNew a {
+  color: #fff;
+  width: 380px;
+  left: 50%;
+  position: absolute;
+  margin-left: -190px;
+  height: 50px;
+  background: #f25e61;
+  border-radius: 4px;
+  font-size: 24px;
+  display: block;
+  text-align: center;
+  line-height: 50px;
+  display: none;
+}
+#addModulePopup {
+  background: #fff9f9;
+  border: 1px solid #b9bcc4;
+  width: 420px;
+  top: 73px;
+  left: 24px;
+}
+#addModulePopup .box {
+  background: #fff9f9;
+  padding: 18px 24px;
+  margin: 0;
+}
+#addModulePopup .box .fm-row {
+  width: 380px;
+  margin: 0;
+}
+#addModulePopup .box .fm-row label {
+  display: inline-block;
+}
+#addModulePopup .box .fm-row .fm-ipt {
+  display: inline-block;
+  margin: 0;
+}
+#addModulePopup .box .fm-row .fm-ipt input[type="text"] {
+  width: 200px;
+  margin: 0;
+}
+#addModulePopup .box .fm-row input[type=button] {
+  width: 82px;
+  height: 30px;
+  line-height: 30px;
+  text-align: center;
+  background: #f25e61;
+  color: #fff;
+  border-radius: 4px;
+  margin-left: 10px;
+  border: none;
+  curspr: pointer;
 }

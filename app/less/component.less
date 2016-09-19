@@ -1,3 +1,7 @@
+
+@widthThree:33.33%;
+@widthSix:16.6%;
+
 body{
   background:#f4f4f4;
   min-width:1000px;
@@ -6,6 +10,7 @@ body{
 }
 .container{
   position:relative;
+  padding-bottom:50px;
 }
 .moduleList{
   background:#fff;
@@ -27,6 +32,7 @@ body{
       height:44px;
       left:0;
       top:4px;
+      color:#737989;
     }
     a.active{
       background:url(../img/tab_bg.png) no-repeat left top;
@@ -57,19 +63,25 @@ body{
   right:25px;
   top:18px;
 }
-.componentList{
-  border-top:1px solid #e1e1e1;
-}
-#addWidgetBtn{
-  height:50px;
-  width:380px;
-  text-align:center;
-  line-height:50px;
-  color:#fff;
-  border-radius:4px;
-  background:#f25e61;
-  font-size:24px;
-  display:none;
+.btnbox {
+  width:640px;
+  margin:24px auto;
+  a {
+    height: 50px;
+    width: 300px;
+    display:inline-block;
+    text-align: center;
+    line-height: 50px;
+    color: #fff;
+    border-radius: 4px;
+    background: #f25e61;
+    font-size: 24px;
+    margin:0 9px;
+  }
+  #cancelPublish{
+    margin:0 auto;
+    display:block;
+  }
 }
 .widgetPopup{
   padding: 29px 15px 15px 15px;
@@ -91,16 +103,14 @@ body{
       margin:0 13px;
       font-size:14px;
       color:#7d8088;
-      width:30px;
       border-bottom:1px dotted #373737;
       text-align:center;
+      padding:0 6px;
     }
     a:hover{
       color:#373737;
     }
     a.active{
-      width: 50px;
-      height: 24px;
       border-radius: 12px;
       background: #f25e61;
       border: none;
@@ -169,152 +179,262 @@ body{
   }
 }
 /*end widget*/
-.componentList{
-  padding:24px;
-  .component{
-    margin-bottom:24px;
-    .header{
-      padding:24px 18px 0 18px;
-      background:#fff;
-      position:relative;
-      h1{
-        float:left;
-        font-size:22px;
-        color:#282828;
-        font-weight:normal;
+.componentListWrapper {
+  border-top: 1px solid #e1e1e1;
+  .publishTip{
+    height:42px;
+    line-height:42px;
+    background:#fff9f9 url(../img/icon_tip.png) no-repeat 17px center;
+    color:#f25e61;
+    padding:0 0 0 40px;
+    margin:24px 24px 0 24px;
+    border-radius:4px;
+    a{
+      font-weight:bold;
+      text-decoration:underline;
+      color:#f25e61;
+      margin-left:5px;
+    }
+  }
+  .componentList {
+    padding: 24px;
+    .component {
+      margin-bottom: 24px;
+      position: relative;
+      .header {
+        padding: 24px 18px 0 18px;
+        background: #fff;
+        position: relative;
+        h1 {
+          float: left;
+          font-size: 22px;
+          color: #282828;
+          font-weight: normal;
+        }
+        .configBtn {
+          height: 30px;
+          width: 30px;
+          float: right;
+          background: #f4f4f4;
+          border-radius: 4px;
+          text-align: center;
+          line-height: 30px;
+          color: #9f9fa1;
+        }
+        .dateBox {
+          height: 30px;
+          line-height: 30px;
+          position: absolute;
+          bottom: 0;
+          right: 64px;
+          border-radius: 4px;
+          background: url(../img/calendar.png) no-repeat 13px center;
+          padding: 0 0 0 36px;
+          margin-right: 0;
+          cursor: pointer;
+          border: 1px solid #fff;
+          border-bottom-left-radius: 0;
+          border-bottom-right-radius: 0;
+          border-bottom: none;
+          z-index: 2;
+          span {
+            float: left;
+          }
+          .arrow {
+            width: 30px;
+            height: 30px;
+            line-height: 30px;
+            text-align: center;
+            display: inline-block;
+            background: url(../img/icon_arrow.png) no-repeat center center;
+          }
+        }
+        .dateBox.active {
+          border: 1px solid #b9bcc4;
+          background-color: #fff9f9;
+          border-bottom: none;
+        }
       }
-      .configBtn{
-        height:30px;
-        width:30px;
-        float:right;
-        background:#f4f4f4;
-        border-radius:4px;
+    }
+    .first {
+      background: #fff;
+      padding: 48px 0 40px;
+      .inner {
+        width: 516px;
+        height: 209px;
+        margin: 0 auto;
+        p {
+          color: #333;
+          margin-bottom: 28px;
+        }
+        .sliderBox {
+          margin: 28px 0 60px 0;
+        }
+        .nextStep {
+          width: 382px;
+          height: 50px;
+          line-height: 50px;
+          text-align: center;
+          background: #f25e61;
+          color: #fff;
+          font-size: 24px;
+          display: block;
+          margin: 0 auto;
+          border-radius: 4px;
+        }
+      }
+    }
+    .second {
+      position: relative;
+      padding: 29px 18px;
+      background: #fff;
+      .phoneList {
+        border-left: 1px solid #efeeec;
+        border-top: 1px solid #efeeec;
+        .left {
+          float: left;
+          width: 50%;
+          position: relative;
+          .label {
+            position: absolute;
+            left: 29px;
+            top: 18px;
+            color: #999;
+          }
+          li {
+            border-right: 1px solid #efeeec;
+            border-bottom: 1px solid #efeeec;
+            a {
+              display: block;
+              padding: 18px 0 18px 83px;
+              span {
+                float: left;
+              }
+              .circle {
+                width: 6px;
+                height: 6px;
+                border: 1px solid #ccc;
+                border-radius: 6px;
+                margin: 2px 13px;
+              }
+              .releaseDate {
+                color: #b0b0b0;
+              }
+              img {
+                float: left;
+                margin: 0 20px;
+              }
+              .brandName {
+                margin: 20px 32px 0 0;
+                font-size: 16px;
+                color: #282828;
+
+              }
+              .selected {
+                float: right;
+                width: 17px;
+                height: 17px;
+                margin: 20px 32px 0 0;
+                background: url(../img/icon_selected.png) no-repeat left top;
+              }
+            }
+            a:hover {
+              background: #fff9f9;
+            }
+          }
+        }
+      }
+      .noData{
+        content:"无数据";
         text-align:center;
-        line-height:30px;
-        color:#9f9fa1;
       }
-      .dateBox{
-        height:30px;
-        line-height:30px;
-        position:absolute;
-        bottom:0;
-        right:64px;
-        border-radius:4px;
-        background:#f4f4f4 url(../img/calendar.png) no-repeat 13px center;
-        padding:0 0 0 36px;
-        margin-right:9px;
-        cursor:pointer;
-        span{float:left;}
-        .arrow{
-          width:30px;
+      .legend{
+        border-bottom:1px solid #b9bcc4;
+        height:35px;
+        a{
+          display:inline-block;
+          height:30px;
+          line-height:30px;
+          width:173px;
+          border:1px solid #e5e5e5;
+          border-bottom:none;
+          text-align:center;
+          color:#3f4044;
+          padding-top:0;
+          background:#fff;
+          position:relative;
+          i{
+            color:#9f9fa1;
+            display:none;
+            postion:absolute;
+            right:12px;
+            top:12px;
+            cursor:pointer;
+          }
+        }
+        a.active{
+          padding-top:3px;
+          background:#fff9f9;
+          border-color:#b9bcc4;
+          i{
+            color:#f25e61;
+          }
+        }
+        .addBtn,.delBtn{
+          width:44px;
           height:30px;
           line-height:30px;
           text-align:center;
-          display:inline-block;
-          background:url(../img/icon_arrow.png) no-repeat center center;
-        }
-      }
-    }
-  }
-  .first{
-    background:#fff;
-    padding:48px 0 40px;
-    .inner{
-      width:516px;
-      height:209px;
-      margin:0 auto;
-      p{
-        color:#333;
-        margin-bottom:28px;
-      }
-      .sliderBox{
-        margin:28px 0 60px 0;
-      }
-      .nextStep{
-        width:382px;
-        height:50px;
-        line-height:50px;
-        text-align:center;
-        background:#f25e61;
-        color:#fff;
-        font-size:24px;
-        display:block;
-        margin:0 auto;
-        border-radius:4px;
-      }
-    }
-  }
-  .second{
-    position:relative;
-    padding: 29px 18px;
-    background:#fff;
-    .phoneList{
-      border-left:1px solid #efeeec;
-      border-top:1px solid #efeeec;
-      .left{
-        float:left;
-        width:50%;
-        position:relative;
-        .label{
-          position:absolute;
-          left:29px;
-          top:18px;
-        }
-        li{
-          border-right:1px solid #efeeec;
-          border-bottom:1px solid #efeeec;
-          a{
+          color:#9f9fa1;
+          background:#f4f4f4;
+          .iconfont{
             display:block;
-            padding:18px 0 18px 83px;
-            span{
-              float:left;
-            }
-            .circle{
-              width:6px;
-              height:6px;
-              border:1px solid #ccc;
-              border-radius:6px;
-              margin:2px 13px;
-            }
-            img{
-              float:left;
-              margin:0 20px;
-            }
-            .brandName{
-              margin:20px 32px 0 0;
-              font-size:16px;
-              color:#282828;
-
-            }
-            .selected{
-              float:right;
-              width: 17px;
-              height:17px;
-              margin:20px 32px 0 0;
-              background:url(../img/icon_selected.png) no-repeat left top;
-            }
-          }
-          a:hover{
-            background:#fff9f9;
           }
         }
       }
-    }
-    .dateHoverBox{
-      width:414px;
-      height:157px;
-      padding:24px;
-      background:#f4f4f4;
-      position:absolute;
-      right:64px;
-      top:0;
-      display:none;
-      p{
-        color:#333;
-        margin-bottom:28px;
+      .chart{
+        height:400px;
+        margin:30px 90px;
       }
-      .sliderBox{
-        margin:28px 0 60px 0;
+      .chartLabel{
+        position:absolute;
+        left:135px;
+        top:155px;
+        width:40px;
+        height:400px;
+        .middle{
+          margin-top:140px;
+        }
+        .bottom{
+          margin-top:135px;
+        }
+      }
+    }
+
+    .dateHoverBox {
+      width: 414px;
+      height: 110px;
+      padding: 24px;
+      background: #fff9f9;
+      border: 1px solid #b9bcc4;
+      position: absolute;
+      right: 64px;
+      top: 53px;
+      display: none;
+      z-index: 1;
+      border-radius: 4px;
+      border-top-right-radius: 0;
+      p {
+        color: #333;
+      }
+      .sliderBox {
+        margin: 8px 0 19px 0;
+        font-size: 12px;
+        font-style: normal;
+      }
+      .sliderTip{
+        height:20px;
+        line-height:20px;
       }
       .confirmBtn{
         width:60px;
@@ -327,6 +447,140 @@ body{
         border-radius:4px;
         float:right;
         margin:16px 0;
+      }
+    }
+    .firstMultiAttr{
+      background: #fff;
+      padding: 0 0 40px 0;
+      .proContainer,.infoContainer{
+        padding:27px 24px;
+        .sBox {
+          margin-bottom:14px;
+          label {
+            line-height: 36px;
+            display: inline-block;
+            margin-right:10px;
+            font-size:14px;
+          }
+          .ui-select {
+            margin-right: 10px;
+          }
+          .addBtn {
+            width: 78px;
+            line-height: 34px;
+            text-align:center;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            color: #757b8b;
+            background:#f4f4f4;
+            display:inline-block;
+          }
+        }
+        .rBox{
+          .proWrapper {
+            width: 33%;
+            display:inline-block;
+            .pro {
+              cursor: pointer;
+              border: 1px solid #efeeec;
+              padding: 15px;
+              .phoneThumb {
+                width: 50px;
+                height: 50px;
+                float: left;
+                margin-right: 15px;
+              }
+              .info {
+                font-size: 14px;
+                float: left;
+                p {
+                  line-height: 27px;
+                  color: #282828;
+                  font-size: 16px;
+                }
+                .pubDate {
+                  font-size: 12px;
+                  color: #b0b0b0;
+                }
+              }
+              i {
+                color: #f25e61;
+                cursor: pointer;
+                float: right;
+                margin-top: 19px;
+              }
+            }
+            .pro:hover {
+              background: #fff9f9;
+            }
+          }
+        }
+      }
+      .infoContainer{
+        .rBox{
+          .proWrapper {
+            width: 16.6%;
+            .pro {
+              .info {
+                p {
+                  line-height: 16px;
+                }
+              }
+              i {
+                margin-top: 0;
+              }
+            }
+          }
+        }
+      }
+      .dateContainer{
+        padding:27px 24px;
+        label{
+          float:left;
+          margin-right:10px;
+        }
+        .sliderBox{
+          float:left;
+          width:500px;
+        }
+      }
+      .styleContainer{
+        padding:27px 24px;
+        label{
+          display:block;
+          margin-bottom:15px;
+        }
+        li{
+          float:left;
+          margin-right:20px;
+          img{
+            border:1px solid #efeeec;
+          }
+          p{
+            height:30px;
+            line-height:30px;
+            text-align:center;
+            color:#898989;
+          }
+        }
+        li:hover{
+          margin-right:18px;
+          img{
+            border:1px solid #b1b3ba;
+          }
+        }
+      }
+      .nextStep {
+        width: 382px;
+        height: 50px;
+        line-height: 50px;
+        text-align: center;
+        background: #f25e61;
+        color: #fff;
+        font-size: 24px;
+        display: block;
+        margin: 0 auto;
+        border-radius: 4px;
       }
     }
   }
@@ -353,6 +607,363 @@ body{
       font-size:14px;
       color:#3f4044;
       background: #f4f4f4;
+    }
+  }
+}
+/* 新品声量对比 begin */
+.WraNewPro { padding: 25px;
+  .newProContra {
+    background:#fff;
+    width: 100%;
+    /* 页面大标题 */
+    .newProTitle {
+      font-weight: normal;
+      height:80px;
+      line-height: 80px;
+      font-size: 22px;
+      color: #282828;
+      margin-left: 25px;
+    }
+    .proContraIn {
+      margin-left: 25px;
+      .chooTarProWra {
+        margin-bottom: 65px;
+      }
+      .chooTarProWra {
+        margin-bottom: 65px;
+      }
+      .monitorScope {
+        margin-bottom: 65px;
+      }
+    }
+    /* 选择目标商品 */
+    .chooTitle {
+      font-size: 14px;
+      color: #333;
+      display: inline-block; *display: inline; zoom:1; vertical-align: top;
+      line-height: 35px;
+    }
+    .chooTarPro {
+      margin-bottom: 14px;
+    }
+    .chooBrand {
+      width: 198px;
+      height: 36px;
+      color: #ccc;
+      font-size: 14px;
+      margin-right: 10px;
+      display: inline-block; *display: inline; zoom:1; vertical-align: top;
+      select {
+        width: 198px;
+        height: 36px;
+        border-radius: 3px;
+        border: 1px solid #dddddd;
+      }
+    }
+    .btnAdd {
+      width: 78px;
+      height: 36px;
+      border: 1px solid #d5d9dc;
+      background: #f4f4f4;
+      border-radius: 3px;
+      display: inline-block; *display: inline; zoom:1; vertical-align: top;
+      color: #757b8b;
+      font-size: 14px;
+      line-height: 35px;
+      text-align: center;
+    }
+    .phoneList {
+      width: 100%;
+      min-width: px;
+      display: none;
+      margin-bottom: 80px;
+      border-left: 1px solid #efeeec;
+      ul {
+        font-size: 0;
+        overflow: hidden;
+        .tarProWidth {
+          width: @widthThree;
+          height: 78px;
+          display: inline-block; *display: inline; zoom:1; vertical-align: top;
+          border: 1px solid #efeeec;
+          border-left: none;
+          height: 78px;
+          a {
+            background: #fff;
+            position: relative;
+            width: 100%;
+            display: block;
+            height: 78px;
+            .iconfont {
+              font-family: 'iconfont';
+              position: absolute;
+              top: 32px;
+              right: 15px;
+              font-size: 12px;
+              color: #f25e61;
+              display: none;
+            }
+            .phoneImg {
+              width: 50px;
+              height: 50px;
+              margin: 15px 10px 0 15px;
+              display: inline-block; *display: inline; zoom:1; vertical-align: top;
+              img {
+                width: 50px;
+                height: 50px;
+              }
+            }
+            .pInfo {
+              margin-top: 15px;
+              display: inline-block; *display: inline; zoom:1; vertical-align: top;
+              h4 {
+                font-size: 16px;
+                color: #282828;
+              }
+              p {
+                font-size: 12px;
+                color: #b0b0b0;
+              }
+            }
+          }
+          a:hover {
+            background: #fff9f9;
+            border: 1px solid #b1b3ba;
+            margin: -1px 0 0 -1px;
+            .iconfont {
+              display: block;
+            }
+          }
+        }
+      }
+
+    }
+    .sourceList {
+      width: 100%;
+      display: none;
+      ul {
+        font-size: 0;
+        border-left: 1px solid #efeeec;
+        margin-bottom: 80px;
+        li.tarInfoWidth {
+          display: inline-block; *display: inline; zoom:1; vertical-align: top;
+          width: 16.6%;
+          border: 1px solid #efeeec;
+          border-left: none;
+          border-bottom: none;
+          height: 48px;
+          a {
+            display: block;
+            width: 100%;
+            height: 48px;
+            position: relative;
+            .iconfont {
+              font-family: 'iconfont';
+              position: absolute;
+              top: 17px;
+              left: 15px;
+              font-size: 12px;
+              color: #f25e61;
+              display: none;
+            }
+            .phoneImg {
+              width: 32px;
+              height: 32px;
+              margin: 8px 10px 0 15px;
+              display: inline-block; *display: inline; zoom:1; vertical-align: top;
+              img {
+                width: 32px;
+                height: 32px;
+              }
+            }
+            .pInfo {
+              display: inline-block; *display: inline; zoom:1; vertical-align: top;
+              p {
+                font-size: 16px;
+                color: #282828;
+              }
+            }
+          }
+          a:hover {
+            background: #fff9f9;
+            border: 1px solid #b1b3ba;
+            margin: -1px 0 0 -1px;
+            .iconfont {
+              display: block;
+              position: absolute;
+              top: 17px;
+              right: 15px;
+              font-size: 12px;
+              color: #f25e61;
+            }
+          }
+        }
+      }
+    }
+    .monitorScope {
+      span {
+        display: inline-block; *display: inline; zoom:1; vertical-align: top;
+        font-size: 14px;
+        color: #333;
+      }
+      .timeLine {
+        display: inline-block; *display: inline; zoom:1; vertical-align: top;
+      }
+    }
+    .chooTableStyle {
+      h4 {
+        line-height: 45px;
+        font-weight: normal;
+      }
+      li {
+        display: inline-block; *display: inline; zoom:1; vertical-align: top;
+        margin-right: 20px;
+        a {
+          border: 1px solid #fff;
+          img {
+            border: 1px solid #fff;
+            width: 174px;
+            height: 174px;
+          }
+        }
+        span {
+          border: 1px solid #efeeec;
+          width: 176px;
+          height: 176px;
+          text-align: center;
+          display: block;
+          cursor: pointer;
+          img {
+            border: 1px solid #fff;
+            width: 174px;
+            height: 174px;
+          }
+        }
+        em {
+          width: 178px;
+          height: 30px;
+          line-height: 30px;
+          color: #898989;
+          font-size: 12px;
+          text-align: center;
+          display: block;
+        }
+        span:hover {
+          border: 1px solid #b1b3ba;
+          img {
+            border: 1px solid #b1b3ba;
+          }
+        }
+      }
+      li.on span {
+        border: 1px solid #b1b3ba;
+      }
+      li.on span img {
+        border: 1px solid #b1b3ba;
+      }
+      li:hover {
+        a {
+          img {
+            border: 1px solid #b1b3ba;
+          }
+        }
+      }
+    }
+    /* 折线图 */
+    #echartLine {
+      min-width: 1045px;
+      min-height: 380px;
+
+    }
+    .monitorScope {
+      height: 55px;
+    }
+
+    .containerChart {
+      display: none;
+    }
+    .containerChart #containerChart {
+      display: none;
+      width: 1130px;
+      height: 390px;
+    }
+    .containerChart .btnAddNew {
+      width: 100%;
+      text-align: center;
+      position: relative;
+    }
+  }
+  .btnCompare {
+    width: 100%;
+    text-align: center;
+    position: relative;
+    a {
+      color: #fff;
+      width: 380px;
+      left: 50%;
+      position: absolute;
+      margin-left: -190px;
+      height: 50px;
+      background: #f25e61;
+      border-radius: 4px;
+      font-size: 24px;
+      display: block;
+      text-align: center;
+      line-height: 50px;
+    }
+  }
+}
+.containerChart .btnAddNew a {
+  color: #fff;
+  width: 380px;
+  left: 50%;
+  position: absolute;
+  margin-left: -190px;
+  height: 50px;
+  background: #f25e61;
+  border-radius: 4px;
+  font-size: 24px;
+  display: block;
+  text-align: center;
+  line-height: 50px;
+  display: none;
+}
+#addModulePopup {
+  background: #fff9f9;
+  border: 1px solid #b9bcc4;
+  width: 420px;
+  top: 73px;
+  left: 24px;
+  .box {
+    background: #fff9f9;
+    padding: 18px 24px;
+    margin: 0;
+    .fm-row {
+      width: 380px;
+      margin: 0;
+      label {
+        display: inline-block;
+      }
+      .fm-ipt {
+        display: inline-block;
+        margin: 0;
+        input[type="text"] {
+          width: 200px;
+          margin: 0;
+        }
+      }
+      input[type=button] {
+        width: 82px;
+        height: 30px;
+        line-height: 30px;
+        text-align: center;
+        background: #f25e61;
+        color: #fff;
+        border-radius: 4px;
+        margin-left: 10px;
+        border: none;
+        curspr: pointer;
+      }
     }
   }
 }

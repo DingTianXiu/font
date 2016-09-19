@@ -2,11 +2,11 @@
 	// START OF SELECT
 	var Select = function(element, options) {
 		this.$select = $(element);
-		this.$element = $('<div class="ui-ht-widget ui-select">');
+		this.$element = $('<div class="ui-widget ui-select">');
 		this.$element.insertAfter(this.$select).append(this.$select);
 		this.options = $.extend({}, $.fn.select.defaults, options);
 		this.$button = $('<div class="ui-select-button" tabindex="0">');
-		this.$button.addClass((this.$select.attr('class') || '').replace('ht-select', ''));
+		this.$button.addClass((this.$select.attr('class') || '').replace('ui-select', ''));
 		this.$text = $('<span>').addClass('ui-select-text');
 		var $icon = $('<span>').addClass('ui-select-icon');
 		this.$button.append(this.$text, $icon);
@@ -495,6 +495,10 @@
 			el : options.iframe ? parent.document.body : 'body',
 			identify : $.now()
 		};
+		if(!$.cookie('acf_ticket')){
+			AJAX.error(options,{status:'401'});
+			return;
+		}
 		opts = $.extend(opts, options, {
 			error : function(jqXHR, tStatus, errorThrown) {
 				AJAX.removeMask(opts);
@@ -515,7 +519,7 @@
 		AJAX.addMask(opts);
 		return $.ajax(opts);
 	};
-	window.ROOT = '/app';
+
 	var AJAX = {
 		error : function(options, jqXHR, tStatus, errorThrown, args) {
 			options.error && options.error.apply(this, args);
@@ -545,13 +549,7 @@
 			if (data.code == 200) {
 				options.success && options.success.apply(this, args);
 			}else if(data.code == '401') {
-				console.log(data.code);
-				if(options.iframe) {
-					window.parent.location.href = window.ROOT + '/login.html';
-					return;
-				}else{
-					location.href = window.ROOT + '/login.html';
-				}
+				AJAX.error(options,{status:'401'});
 			} else {
 				options.fail && options.fail.apply(this, args);
 				if (!options.hideError) {
@@ -631,5 +629,357 @@
 		}
 		return params;
 	};
-	
+/**
+ *@param beforeDateNum(number)
+ *@param afterDateNum(number)
+ **/
+	var DatePicker = function(element,options){
+		this.init(element,options);
+	};
+	DatePicker.prototype = {
+		constructor : DatePicker,
+		init : function(element,options){
+			this.beforeDateNum = options.beforeDateNum ? options.beforeDateNum : 28;
+			this.afterDateNum = options.afterDateNum ? options.afterDateNum : 30;
+
+			this.$element = $(element);
+			this.$dateBox = $("<div class='clearfix'></div>").appendTo(element);
+			this.$dateBtn = $("<span></span>").appendTo(this.$dateBox);
+			this.$dateBox.append("<span class='arrow'></span>");
+			this.$dateHoverBox = $("<div class='dateHoverBox'></div>").insertAfter(element);
+			this.$dateHoverBox.append("<p>设置监测时间范围：</p>");
+			this.$sliderBox = $("<div class='sliderBox'></div>").appendTo(this.$dateHoverBox);
+			this.$sliderTip = $("<div class='sliderTip'></div>").appendTo(this.$dateHoverBox);
+			this.$confirmBtn = $("<a href='#' class='confirmBtn'>确定</a>").appendTo(this.$dateHoverBox);
+			this.filterDateNum(this.$dateBtn);
+			this.bindEvent();
+
+			this.onSaveDate = function(){};
+			if(options.onSaveDate){
+				if(typeof options.onSaveDate == "function"){
+					this.onSaveDate = options.onSaveDate;
+				}
+			}
+		},
+		bindEvent : function(){
+			var that = this;
+			this.$dateBox.on("click",function(){
+				that.openHoverBox();
+			});
+			this.$confirmBtn.on('click',function(){
+				that.onSaveDate(that.beforeDateNum,that.afterDateNum);
+				var beforeText = this.beforeDateNum > 0 ? ("前 "+ this.beforeDateNum) : ("后 " + this.beforeDateNum*-1);
+				var afterText = this.afterDateNum > 0  ? ("前 "+ this.afterDateNum) : ("后 " + this.afterDateNum*-1);
+				that.$dateBtn.html("<span>今天"+ beforeText +" 至"+ afterText +"天</span>");
+				that._close();
+			});
+			$("body").on("click",function(e){
+				var $el = $(e.target);
+				if($el.parents(".dateHoverBox").length == 0 && !($el[0].className == 'dateHoverBox') && $el.parents(".dateBox").length == 0){
+					that._close();
+				}
+			}); 
+		},
+
+		openHoverBox : function(){
+			$(".dateBox").removeClass("active");
+			$(".dateHoverBox").hide();
+			this.$element.addClass("active");
+			this.$dateHoverBox.show();
+
+			this._initSlider(this.$sliderBox);
+		},
+		filterDateNum : function($ele){
+			var beforeText = this.beforeDateNum > 0 ? ("前"+this.beforeDateNum) : ("后" + this.beforeDateNum * -1);
+			var afterText = this.afterDateNum > 0 ? ("后" + this.afterDateNum) : ("前" + this.afterDateNum * -1);
+			$ele.text("今天"+ beforeText +"天 至"+ afterText +"天");
+		},
+		_initSlider : function($ele){
+			var that = this;
+			this.filterDateNum($ele.next(".sliderTip"));
+			$ele.slider({
+				range: true,
+				min: -90,
+				max: 30,
+				values: [that.beforeDateNum*-1 , that.afterDateNum],
+				slide: function( event, ui ) {
+					that.beforeDateNum = ui.values[ 0 ] * -1;
+					that.afterDateNum = ui.values[ 1 ];
+					that.filterDateNum($ele.next(".sliderTip"));
+				}
+			});
+		},
+		_close : function(){
+			this.$element.removeClass("active");
+			this.$dateHoverBox.hide();
+		}
+	};
+	$.fn.datePicker = function(option, value) {
+		var methodReturn;
+		var $set = this.each(function() {
+			var $this = $(this);
+			var data = $this.data('datePicker');
+			var options = typeof option === 'object' && option;
+			if (!data) {
+				$this.data('datePicker', (data = new DatePicker(this, options)));
+			}
+			if (typeof option === 'string') {
+				methodReturn = data[option](value);
+			}
+		});
+		return (methodReturn === undefined) ? $set : methodReturn;
+	};
+	$.fn.datePicker.constructor = DatePicker;
+	/**
+	 添加手机品牌、型号列表
+	 @param label(string)
+	 @param data(array)
+	 **/
+	var SelectorPlusPro = function(element,options){
+		this.label = options.label ? options.label : "请选择目标产品：";
+		this.data = options.data;
+		this.selectedData = [];
+		if(options.phoneModel){
+			for(var i = 0; i < options.phoneModel.length;i++){
+				this.selectedData.push({
+					"id" : options.phoneModel[i].id,
+					"brandName": options.phoneModel[i].brandName,
+					"modelName" : options.phoneModel[i].modelName,
+					"releaseDate" : options.phoneModel[i].releaseDate,
+					"logoUrl" : options.phoneModel[i].picUrl
+				});
+			}
+		}
+		console.log(options);
+		console.log(this.selectedData);
+		this._init(element,options);
+	};
+	SelectorPlusPro.prototype = {
+		constructor : SelectorPlusPro,
+		_init : function(element,options){
+			this.$element = $(element);
+			this.$sBox = $("<div class='sBox'></div>").appendTo(this.$element);
+			this.$label = $("<label>"+ this.label +"</label>").appendTo(this.$sBox);
+			this.$brands = $("<select class='brands'></select>").appendTo(this.$sBox);
+			this.$models = $("<select class='models'></select>").appendTo(this.$sBox);
+			this.$addBtn = $("<a href='javascript:;' class='addBtn'><i class='icon iconfont icon-iconadd'></i></a>").appendTo(this.$sBox);
+			this.$rBox = $("<div class='rBox'></div>").appendTo(this.$element);
+
+
+			this._renderCondition();
+			this._bindEvent();
+		},
+		_renderCondition : function(){
+			var arr = [],
+				modelsObj = {},
+				that = this;
+			if(!this.data){
+				this.$brands.select('data',[{text:"请选择",value:-1}]);
+				this.$models.select('data',[{text:"请选择",value:-1}]);
+			}else {
+				for (var i = 0; i < this.data.brands.length; i++) {
+					var item = this.data.brands[i];
+					arr.push({
+						text: item.brandName,
+						value: item.brandCode
+					});
+					modelsObj[item.brandCode] = [];
+					for (var j = 0; j < item.models.length; j++) {
+						modelsObj[item.brandCode].push({
+							text: item.models[j].modelName,
+							value: item.models[j].modelCode
+						})
+					}
+				}
+				this.$brands.select('data', arr).select("trigger");
+				this.$brands.on("change",function () {
+					var val = $(this).val();
+					that.$models.select("destroy").select('data', modelsObj[val]);
+
+				});
+				this.$brands.trigger("change");
+			}
+			for(var i = 0;i < this.selectedData.length;i++) {
+				console.log(this.selectedData[i]);
+				var item = this.selectedData[i];
+				this.$proWrapper = $("<div class='proWrapper'></div>").appendTo(this.$rBox);
+				this.$pro = $("<div class='pro clearfix'><img src='" + item.logoUrl +"' class='phoneThumb'/></div>").appendTo(this.$proWrapper);
+				this.$proInfo = $("<div class='info'><p>"+ item.brandName +" - "+ item.modelName +"</p><p class='pubDate'>"+ item.releaseDate +"</p></div>").appendTo(this.$pro);
+				this.$proDelBtn = $("<i class='icon iconfont icon-icondel' modelCode='"+ item.id +"'></i>").appendTo(this.$pro);
+			}
+		},
+		_addBrandsTpl : function(){
+			var brandCode = this.$brands.val();
+			var brandsIndex = this.$brands[0].selectedIndex;
+			var modelsIndex = this.$models[0].selectedIndex;
+			var item = this.data.brands[brandsIndex].models[modelsIndex];
+			var isExist = false;
+			for(var i = 0; i < this.selectedData.length;i++){
+				if(item.modelCode == this.selectedData[i]["id"]){
+					isExist = true;
+					break;
+				}
+			}
+			if(isExist){
+				$.msg(this.data.brands[brandsIndex].brandName + " - " + item.modelName + "已存在，请勿重复添加");
+				return;
+			}
+			this.$proWrapper = $("<div class='proWrapper'></div>").appendTo(this.$rBox);
+			this.$pro = $("<div class='pro clearfix'><img src='" + item.logoUrl +"' class='phoneThumb'/></div>").appendTo(this.$proWrapper);
+			this.$proInfo = $("<div class='info'><p>"+ this.data.brands[brandsIndex].brandName +" - "+ item.modelName +"</p><p class='pubDate'>"+ item.pubDate +"</p></div>").appendTo(this.$pro);
+			this.$proDelBtn = $("<i class='icon iconfont icon-icondel' modelCode='"+ item.modelCode +"'></i>").appendTo(this.$pro);
+			this.selectedData.push({
+				"id" : item.modelCode,
+				"brandName": this.data.brands[brandsIndex].brandName,
+				"modelName" : item.modelName,
+				"releaseDate" : item.pubDate
+			});
+		},
+		_delSource : function(modelCode){
+			for(var i = 0 ; i < this.selectedData.length;i++){
+				if(modelCode == this.selectedData[i].id){
+					this.selectedData.splice(i,1);
+					break;
+				}
+			}
+		},
+		getData : function(){
+			return this.selectedData;
+		},
+		_bindEvent : function(){
+			var that = this;
+			this.$addBtn.on("click",function(){
+				that._addBrandsTpl();
+			});
+			this.$rBox.delegate(".icon-icondel",'click',function(){
+				$(this).parents(".proWrapper").remove();
+				var modelCode = $(this).attr("modelCode");
+				that._delSource(modelCode);
+			});
+		}
+	};
+	$.fn.selectorPlusPro = function(option, value) {
+		var methodReturn;
+		var $set = this.each(function() {
+			var $this = $(this);
+			var data = $this.data('selectorPlusPro');
+			var options = typeof option === 'object' && option;
+			if (!data) {
+				$this.data('selectorPlusPro', (data = new SelectorPlusPro(this, options)));
+			}
+			if (typeof option === 'string') {
+				methodReturn = data[option](value);
+			}
+		});
+		return (methodReturn === undefined) ? $set : methodReturn;
+	};
+	$.fn.selectorPlusPro.constructor = SelectorPlusPro;
+	/**
+	 添加信源列表
+	 @param label(string)
+	 @param data(array)
+	 **/
+	var SelectorPlusSource = function(element,options){
+		this.label = options.label ? options.label : "请选择信息来源：";
+		this.data = options.data;
+		this.selectedData = [];
+		this._init(element,options);
+	};
+	SelectorPlusSource.prototype = {
+		constructor : SelectorPlusSource,
+		_init : function(element,options){
+			this.$element = $(element);
+			this.$sBox = $("<div class='sBox'></div>").appendTo(this.$element);
+			this.$label = $("<label>"+ this.label +"</label>").appendTo(this.$sBox);
+			this.$source = $("<select class='source'></select>").appendTo(this.$sBox);
+			this.$addBtn = $("<a href='javascript:;' class='addBtn'><i class='icon iconfont icon-iconadd'></i></a>").appendTo(this.$sBox);
+			this.$rBox = $("<div class='rBox'></div>").appendTo(this.$element);
+
+
+			this._renderCondition();
+			this._bindEvent();
+		},
+		_renderCondition : function(){
+			if(!this.data){
+				this.$source.select('data',[{text:"请选择",value:-1}]);
+			}else {
+				var arr = [],
+					modelsObj = {};
+				for (var i = 0; i < this.data.length; i++) {
+					var item = this.data[i];
+					arr.push({
+						text: item.srcName,
+						value: item.srcKey
+					})
+				}
+				this.$source.select('data', arr);
+			}
+		},
+		_addSourceTpl : function(){
+			var sourceId = this.$source.val();
+			var sourceIndex = this.$source[0].selectedIndex;
+			var isExist = false;
+			for(var i = 0; i < this.selectedData.length;i++){
+				if(sourceId == this.selectedData[i]["srcKey"]){
+					isExist = true;
+					break;
+				}
+			}
+			if(isExist){
+				$.msg(this.data[sourceIndex].srcName + "已存在，请勿重复添加");
+				return;
+			}
+			this.$proWrapper = $("<div class='proWrapper'></div>").appendTo(this.$rBox);
+			this.$pro = $("<div class='pro clearfix'>").appendTo(this.$proWrapper);
+			this.$proInfo = $("<div class='info clearfix'><p>"+ this.data[sourceIndex].srcName +"</p></div>").appendTo(this.$pro);
+
+			this.$proDelBtn = $("<i class='icon iconfont icon-icondel' data-id="+ this.data[sourceIndex].srcKey +"></i>").appendTo(this.$pro);
+			this.selectedData.push({
+				"srcKey" : this.data[sourceIndex].srcKey,
+				"srcName" : this.data[sourceIndex].srcName
+			});
+		},
+		_delSource : function(srcKey){
+			for(var i = 0 ; i < this.selectedData.length;i++){
+				if(srcKey == this.selectedData[i].srcKey){
+					this.selectedData.splice(i,1);
+					break;
+				}
+			}
+		},
+		getData :　function(){
+			return this.selectedData;
+		},
+
+		_bindEvent : function(){
+			var that = this;
+			this.$addBtn.on("click",function(){
+				that._addSourceTpl();
+			});
+			this.$rBox.delegate(".icon-icondel",'click',function(){
+				$(this).parents(".proWrapper").remove();
+				var srcKey = $(this).attr("data-id");
+				that._delSource(srcKey);
+			});
+		}
+	};
+	$.fn.selectorPlusSource = function(option, value) {
+		var methodReturn;
+		var $set = this.each(function() {
+			var $this = $(this);
+			var data = $this.data('selectorPlusSource');
+			var options = typeof option === 'object' && option;
+			if (!data) {
+				$this.data('selectorPlusSource', (data = new SelectorPlusSource(this, options)));
+			}
+			if (typeof option === 'string') {
+				methodReturn = data[option](value);
+			}
+		});
+		return (methodReturn === undefined) ? $set : methodReturn;
+	};
+	$.fn.selectorPlusSource.constructor = SelectorPlusSource;
 })(window.jQuery);
+
+
+

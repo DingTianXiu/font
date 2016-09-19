@@ -1,6 +1,6 @@
 $(function () {
     var _isDev = true;
-    var _location = "localhost";
+    var _location = window.location.host;
 	
     //$('[name="sysCode"]').val("dms");
     $('[name="sysCode"]').val("oss-yishang");
@@ -25,7 +25,7 @@ $(function () {
             success: function (r) {
                 localStorage.setItem("userInfo",JSON.stringify(r.data));
                 if(r.data){
-                    window.location.href = "/app/index.html";
+                    window.location.href = window.ROOT + "/index.html";
                 }
             }
         });

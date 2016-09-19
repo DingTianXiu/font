@@ -13,93 +13,269 @@
 <body>
 	<div class="container">
 		<ul class="moduleList">
-			<li><a href="#" class="addModuleBtn">新建模块</a></li>
+
 		</ul>
-		<a href="#" class="moduleData">当前模块引用数据</a>
-		<div class="componentList"></div>
+		<a href="javascript:;" class="moduleData">当前模块引用数据</a>
+
+		<div class="componentListWrapper">
+			<div class="publishTip hide">
+				该模板已发布
+				<a href="javajscript:;">撤销发布</a>
+			</div>
+			<div class="componentList"></div>
+		</div>
 		<div class="btnbox">
-			<a href="#" id="addWidgetBtn">添加新构件</a>
+
 		</div>
 	</div>
+	<div id="addModulePopup" class="form hide">
+		<div class="box">
+			<div class="fm-row">
+				<label class="fm-lb fm-lb-s" for="newModuleName">新模块名：</label>
+				<div class="fm-ipt">
+					<input type="text" id="newModuleName"/>
+				</div>
+				<div class="fm-ipt">
+					<input type="button" value="完成" id="saveModule"/>
+				</div>
+			</div>
+		</div>
+	</div>
+	
 	<script type="text/x-handlebars-template" id="newPhoneQuery0">
 		<div class='header clearfix'>
 			<h1>{{title}}</h1>
-			<a href='#' class='icon iconfont configBtn'>&#xe60b;</a>
+			<a href="javascript:;" class='icon iconfont icon-iconset configBtn'></a>
 		</div>
 		<div class='first'>
 			<div class="inner">
 				<p>设置监测时间范围：</p>
 				<div class='sliderBox'></div>
-				<a href='#' class='nextStep'>生成监测</a>
+				<a href="javascript:;" class='nextStep'>生成监测</a>
 			</div>
 		</div>
 	</script>
 	<script type="text/x-handlebars-template" id="newPhoneQuery1">
 		<div class='header clearfix'>
 			<h1>{{title}}</h1>
-			<a href='#' class='icon iconfont configBtn'>&#xe60b;</a>
-			<div class='dateBox clearfix'>
-				<span>今天前 {{condition.beforeDateNum}} 天 至后 {{condition.afterDateNum}}天</span>
-				<span class='arrow'></span>
-			</div>
+			<a href="javascript:;" class='icon iconfont icon-iconset configBtn'></a>
+			<div class="dateBox"></div>
 		</div>
 		<div class='second'>
-				<div class='dateHoverBox'>
-				<p>设置监测时间范围：</p>
-				<div class='sliderBox'></div>
-				<a href='#' class='confirmBtn'>确定</a>
-			</div>
-			{{#with result}}
-			<div class='phoneList clearfix'>
-				<ul class="left">
-					<div class="label">已发布</div>
-					{{#each released}}
-						<li>
-							<a href="#" class="clearfix">
+			{{#if result}}
+				{{#with result}}
+				<div class='phoneList clearfix'>
+					<ul class="left">
+						<div class="label">已发布</div>
+						{{#each released}}
+							<li index="{{@index}}" type="released" brandCode = "{{this.id}}">
+								<a href="javascript:;" class="clearfix">
+									<span class="circle"></span>
+									<span class="releaseDate">{{this.releaseDate}}</span>
+									{{#if this.picUrl}}
+									<img src="{{this.picUrl}}" width="44" height="50"/>
+									{{else}}
+									<img src="../img/5.jpg" width="44" height="50"/>
+									{{/if}}
+									<span class="brandName">{{this.brandName}} {{this.modelName}}</span>
+									<span class="checkBoxIcon {{this.selected}}"></span>
+								</a>
+							</li>
+						{{/each}}
+					</ul>
+					<ul class="left">
+						<div class="label">即将发布</div>
+						{{#each releasing}}
+						<li index="{{@index}}" type="releasing" brandCode = "{{this.id}}">
+							<a href="javascript:;" class="clearfix">
 								<span class="circle"></span>
 								<span class="releaseDate">{{this.releaseDate}}</span>
-								<img src="../img/{{this.picUrl}}"/>
-								<span class="brandName">{{this.brandName}}</span>
-								<span class="selected"></span>
+								<img src="{{this.picUrl}}"/>
+								<span class="brandName">{{this.brandName}} {{this.modelName}}</span>
+								<span class="checkBoxIcon"></span>
 							</a>
 						</li>
-					{{/each}}
-
-				</ul>
-				<ul class="left">
-					<div class="label">即将发布</div>
-					{{#each releasing}}
-					<li>
-						<a href="#" class="clearfix">
-							<span class="circle"></span>
-							<span class="releaseDate">{{this.releaseDate}}</span>
-							<img src="../img/{{this.picUrl}}"/>
-							<span class="brandName">{{this.brandName}}</span>
-							<span class=""></span>
-						</a>
-					</li>
-					{{/each}}
-				</ul>
-			</div>
-			{{/with}}
+						{{/each}}
+					</ul>
+				</div>
+				{{/with}}
+			{{else}}
+				<div class="noData">无数据</div>
+			{{/if}}
 		</div>
 		<div class='related'>
 			<h1>关联构件：</h1>
 			{{#each related}}
-				<a href="#" type="{{this.key}}">{{this.name}}</a>
+			<a href="javascript:;" class="relatedBtn" type="{{this.baseCptKey}}" baseCptId="{{this.baseCptId}}">{{this.baseCptName}}</a>
 			{{/each}}
 		 </div>
+	</script>
+	<script type="text/x-handlebars-template" id="addPhoneCompent">
+		<div class="WraNewPro">
+			<div class="newProContra">
+				<h3 class="newProTitle">{{title}}</h3>
+				<div class="proContraIn">
+					<div class="chooTarProWra tarPro">
+						<div class="chooTarPro">
+							<span class="chooTitle">{{titleTarProd}}：</span>
+							<div class="chooBrand">
+								<select name="phoneBrand" class="phoneBrand">
+									<option value="">{{chooBrand}}</option>
+									{{#each brands}}
+									<option value="{{this.brandCode}}" name="{{this.brandName}}">{{this.brandName}}</option>
+									{{/each}}
+								</select>
+							</div>
+							<div class="chooBrand">
+								<select name="phoneModel" class="phoneModel">
+									<option value="">{{chooType}}</option>
+									{{#if models}}
+										{{#each models}}
+										<option value="{{this.brandCode}}" value2="{{this.pubDate}}" value3="{{this.logoUrl}}" name="{{this.modelName}}">{{this.modelName}}</option>
+										{{/each}}
+									{{/if}}
+								</select>
+							</div>
+							<a href="javascript:;" class="btnAdd iconfont">&#xe602;</a>
+						</div>
+						<div class="phoneList">
+							<ul>
+								{{#if phoneList}}
+									{{#each phoneList}}
+										<li class="tarProWidth">
+											<a href="javascript:;">
+												<div class="phoneImg">
+												<img src="{{this.logoUrl}}" alt="">
+												</div>
+												<div class="pInfo">
+													<h4></h4>
+													<p>{{this.pubDate}}</p>
+												</div>
+												<span class="iconfont btnDelect">&#xe604;</span>
+											</a>
+										</li>
+									{{/each}}
+								{{/if}}
+							</ul>
+						</div>
+					</div>
+					<div class="chooTarProWra infoSource">
+						<div class="chooTarPro">
+							<span class="chooTitle">选择信息来源：</span>
+							<div class="chooBrand">
+								<select name="" class="inSourc">
+									<option value="">信息来源</option>
+									{{#each repInfoSou}}
+									<option value="{{this.srcKey}}">{{this.srcName}}</option>
+									{{/each}}
+								</select>
+							</div>
+							<a href="javascript:;" class="btnAdd iconfont">&#xe602;</a>
+						</div>
+						<div class="sourceList">
+							<ul>
+								{{#if sourceList}}
+									{{#each sourceList}}
+										<li class="tarInfoWidth">
+											<a href="javascript:;">
+												<div class="phoneImg">
+													<img src="{{this.pic}}" alt="">
+												</div>
+											<div class="pInfo"><p>{{this.sourceInfo}}</p></div>
+											<span class="iconfont">&#xe604;</span>
+											</a>
+										</li>
+									{{/each}}
+								{{/if}}
+							</ul>
+						</div>
+					</div>
+					 <div class="monitorScope">
+						<span>设置检测时间范围：</span>
+						<div class="timeLine"></div>
+					</div>
+					<div class="chooTableStyle">
+						<h4>选择可视化样式</h4>
+						<ul>
+							<li>
+								<span><img src="http://kalemao.img-cn-hangzhou.aliyuncs.com/idc/7501472116101694" alt=""></span>
+								<em>我是图标一</em>
+							</li>
+						</ul>
+					</div>
+				</div>
+			</div>
+			<div class="btnCompare"><a href="javascript:;">生成对比</a></div>
+			<div class="containerChart">
+				<div id="containerChart"></div>
+				<div class="btnAddNew"><a href="javascript:;">添加新构件</a></div>
+			</div>
+		</div>
+	</script>
+	<script type="text/x-handlebars-template" id="proUserAnalysis0">
+		<div class='header clearfix'>
+			<h1>{{title}}</h1>
+			<a href="javascript:;" class='icon iconfont icon-iconset configBtn'></a>
+		</div>
+		<div class='firstMultiAttr'>
+			<div class='proContainer'></div>
+			<div class='infoContainer'></div>
+			<div class='dateContainer clearfix'>
+				<label>分析时间范围：</label>
+				<div class='sliderBox'></div>
+			</div>
+			<div class='styleContainer'>
+				<label>选择可视化样式：</label>
+				<ul class="clearfix">
+					<li>
+						<img src='../img/1.jpg' width="174" height="174"/>
+						<p>柱状图一</p>
+					</li>
+				</ul>
+			</div>
+			<a href="javascript:;" class='nextStep'>生成分析</a>
+		</div>
+	</script>
+	<script type="text/x-handlebars-template" id="proUserAnalysis1">
+		<div class='header clearfix'>
+			<h1>{{title}}</h1>
+			<a href="javascript:;" class='icon iconfont icon-iconset configBtn'></a>
+			<div class="dateBox"></div>
+		</div>
+		<div class='second'>
+			{{#if result}}
+			<ul class="chartLabel">
+				<li class="top">正面</li>
+				<li class="middle">中性</li>
+				<li class="bottom">负面</li>
+			</ul>
+			<div class="chart" ></div>
+			{{else}}
+			<div class="noData">无数据</div>
+			{{/if}}
+		</div>
+		<div class='related'>
+			<h1>关联构件：</h1>
+			{{#each related}}
+			<a href="javascript:;" class="relatedBtn" type="{{this.baseCptKey}}" baseCptId="{{this.baseCptId}}">{{this.baseCptName}}</a>
+			{{/each}}
+		</div>
+		</div>
 	</script>
 	<script type="text/javascript" src="/bower_components/jquery/dist/jquery.min.js"></script>
 	<script type="text/javascript" src="/bower_components/jquery-ui/jquery-ui.min.js"></script>
 	<script type="text/javascript" src="/bower_components/handlebars/handlebars.min.js"></script>
 	<script type="text/javascript" src="/bower_components/jquery.cookie/jquery.cookie.js"></script>
+	<script type="text/javascript" src="/bower_components/echarts/dist/echarts.min.js"></script>
+	<script type="text/javascript" src="../js/echarts/echarts.min.js"></script>
 	<script type="text/javascript" src="../js/config.js"></script>
 	<script type="text/javascript" src="../js/ui.js"></script>
+	<script type="text/javascript" src="../js/editComponent_ui.js"></script>
 	<script type="text/javascript" src="../js/widgetPicker.js"></script>
 	<script type="text/javascript" src="../js/widget/newPhoneQuery.js"></script>
-	<script type="text/javascript" src="../js/editComponent_ui.js"></script>
+	<script type="text/javascript" src="../js/widget/ProUserAnalysis.js"></script>
 	<script type="text/javascript" src="../js/widget/newAffectionAnalysed.js"></script>
 	<script type="text/javascript" src="../js/schemeDetail.js"></script>
+
 </body>
 </html>

@@ -9,16 +9,16 @@
         bindEvent : function (id,type) {
             $("#useComponent").on("click",function () {
                 location.href="scheme.html?baseCptId="+id+"&instCptKey="+type
-                console.log("scheme.html?baseCptId="+id+"&instCptKey="+type);
             })
-                },
+        },
         init : function () {
             var that = this;
             var id = $.getQueryParams().id;
+            console.log(id);
             $.ajaxJSON({
                 name: '构建详情',
                 url: URL.GET_COMPONENT_BASE_DETAIL,
-                data: {"id" : id},
+                data: {"cptId" : id},
                 success: function (r) {
                     var data = r.data;
                     console.log(data);
