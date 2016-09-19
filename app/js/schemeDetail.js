@@ -269,12 +269,23 @@
 					baseCptId: param.baseCptId,
 					moduleId: that.currentModuleId,
 					cptInstId: param.cptInstId,
-					name: "新品发布声量情感分析构件"
+					conCptInstId : param.conCptInstId ? param.conCptInstId : null,
+					name: "新品发布声量情感分析构件",
+					//同步关联属性
+					onUpdateAttr : function(data){
+						that.updateSyncData(data);
+					},
+					//创建关联构件
+					onRelatedWidget : function(data){
+						console.log(data);
+						that.createWidget(data,0);
+					}
 				})
 				that.setBtnStatus();
 			}
 		},
 		updateSyncData :　function(data){
+			console.log(data);
 			if(data.length ==0) return;
 			for(var i = 0;i < data.length;i++){
 				//if()

@@ -43,7 +43,9 @@
                     var dom = "<div class='editContainer'>" +
                         "<div class='titleContainer'>" +
                         "<span class='componentName'>"+name+"</span>" +
+                        "<div class='rightContainer'>" +
                         "<a class=''>&#xe612;</a>" +
+                        "</div>"+
                         "</div>"+
                         "<div class='optionContainer'>" + "</div>" +
                         "<div class='generateBtn'><button>生成对比</button></div>" +
@@ -195,7 +197,7 @@
             var dom = "<div class='relateCompanentContainer'><span>关联构建:</span><ul class='relateCompanentList'></ul></div>";
             $(echartsContainer_dom).after(dom);
             $.each(data,function (i) {
-                var relateComponentList_dom = "<li>"+data[i].baseCptName+"</li>";
+                var relateComponentList_dom = "<li class='creatRelateComponentBtn' type="+data[i].baseCptKey+" baseCptId="+data[i].baseCptId+">"+data[i].baseCptName+"</li>";
                 var relateComponent_dom = $(editContainer_dom).find($(".relateCompanentList"));
                 $(relateComponent_dom).append(relateComponentList_dom);
             });
