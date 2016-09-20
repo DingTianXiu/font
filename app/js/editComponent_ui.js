@@ -3,19 +3,12 @@
  */
 
 (function ($) {
-    var EditComponent = function (element,options) {
+    var EditComponent = function (element,options,title) {
         var that = EditComponent.prototype;
-        that.$element = $(element);
-        that.step = options.step;
-        if(options && typeof options == "string"){
-            that.name = options;
-        }else{
-            that.name = options.name;
+        if(!options.step){
+            options.step = 0;
         }
-        if(options && options.data){
-            that.data = options.data;
-        }
-        that._init(that.$element,that.name,that.step);
+        that._init(element,title,options.step);
         return{
             addSelectProduct : EditComponent.prototype._addSelectProduct,
             addSelectResource : EditComponent.prototype._addSelectResource,
@@ -44,7 +37,8 @@
                         "<div class='titleContainer'>" +
                         "<span class='componentName'>"+name+"</span>" +
                         "<div class='rightContainer'>" +
-                        "<a class=''>&#xe612;</a>" +
+                        "<div class='dateBox'></div>" +
+                        "<a class='set'>&#xe612;</a>" +
                         "</div>"+
                         "</div>"+
                         "<div class='optionContainer'>" + "</div>" +
@@ -58,7 +52,7 @@
                     "<span class='componentName'>"+name+"</span>" +
                     "<div class='rightContainer'>" +
                     "<div class='dateBox'></div>" +
-                    "<a class=''>&#xe612;</a>" +
+                    "<a class='set'>&#xe612;</a>" +
                     "</div>"+
                     "</div>"+
                     "</div>";
@@ -162,6 +156,7 @@
         },
 
         _addTab : function (ele,data) {
+            var that = this;
             if($(".optionContainer").length>0){
                 $(".optionContainer").remove();
                 $(".generateBtn").remove();
@@ -186,7 +181,7 @@
         },
 
         _addEcharts : function (ele,options) {
-            var dom = "<div class='echartsContainer' id="+options.cptInstId+" style='height:300px'></div>";
+            var dom = "<div class='echartsContainer' id="+'echarts'+options.cptInstId+" style='height:300px'></div>";
             var editContainer_dom = $(ele).find($(".editContainer"));
             $(editContainer_dom).append(dom);
         },

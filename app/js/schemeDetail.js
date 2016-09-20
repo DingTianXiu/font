@@ -55,7 +55,8 @@
 		_renderModule : function(){
 			var template = "";
 			for(var i = 0; i < this.moduleData.length;i++){
-				template += '<li><a href="javascript:;" id="'+ this.moduleData[i]["modId"] +'" class="moduleListItem '+ (i == 0 ? 'active' : '') +'">'+ this.moduleData[i]["modName"] +'</a></li>';
+				template += '<li><a href="javascript:;" id="'+ this.moduleData[i]["modId"] +'" class="moduleListItem '+ (i == 0 ? 'active' : '') +'">'+ this.moduleData[i]["modName"];
+				template +=  '<i class="icon iconfont icon-iconmodify"></i></a></li>';
 			}
 			template += '<li><a href="javascript:;" class="moduleListItem addModuleBtn">新建模块</a></li>';
 			$(".moduleList").html(template);
@@ -81,6 +82,7 @@
 								"cptKey" : r.data[i].cptKey,
 								"cptName" : r.data[i].cptName
 							});
+							that.componentInstChain[r.data[i].cptInstId] = r.data[i].cptKey;
 						}
 						that._renderComponent();
 					}else{
@@ -103,63 +105,66 @@
 			 }
 		},
 		bindEvent : function(){
-				var that = this;
-				//添加新构件
-				$(".btnbox").delegate("#addWidgetBtn","click",function(){
-					openComponentDialog();
-				});
+			var that = this;
+			//添加新构件
+			$(".btnbox").delegate("#addWidgetBtn","click",function(){
+				openComponentDialog();
+			});
 
-				//切换模块
-				$(".moduleList").delegate("a","click",function(){
-					if($(this).hasClass("addModuleBtn")){
-						$("#addModulePopup").removeClass("hide");
-					}else {
-						var modId = parseInt($(this).attr("id"),10)
-						that.switchModule(modId);
-						$(".moduleList a").removeClass("active");
-						$(this).addClass("active");
-					}
-				});
-				//保存模块
-				$("#saveModule").on("click",function(){
-					that.createModule();
-				});
-				$("body").on("click",function(e){
-					var $el = $(e.target);
-					if($el.parents("#addModulePopup").length == 0 && ($el[0].id != 'addModulePopup') && ($el[0].className.indexOf('moduleListItem') == -1)){
-						$("#addModulePopup").addClass("hide");
-					}
-				});
-				//预览
-				$('.btnbox').delegate("#preview","click",function(){
-					that.preview(true);
-				});
-				//继续编辑
-				$('.btnbox').delegate("#goToEdit","click",function(){
-					that.preview(false)
-				});
-				//撤销发布
-				$('.btnbox').delegate("#cancelPublish","click",function(){
-					that.publish(1);
-				});
-				//$("#cancelPublish").on("click",function(){
-				//	that.publish(0);
-				//});
-				$(".publishTip a").on("click",function(){
-					that.publish(1);
-				});
-				//发布
-				$('.btnbox').delegate("#publish","click",function(){
-					that.publish(0);
-				});
-				//
-			},
-			preview : function(flag){
-				this.moduleChain[this.currentModuleId] = flag ? -1 : 0;
-				this.setBtnStatus();
-				$("#addSchemeBtn",parent.document)[flag ? "hide" : "show"]();
-				$(".addModuleBtn").parent()[flag ? "hide" : "show"]();
-				$(".related")[flag ? "hide" : "show"]();
+			//切换模块
+			$(".moduleList").delegate("a","click",function(){
+				if($(this).hasClass("addModuleBtn")){
+					that.openModuleDialog();
+				}else {
+					var modId = parseInt($(this).attr("id"),10);
+					that.switchModule(modId);
+					$(".moduleList a").removeClass("active");
+					$(this).addClass("active");
+				}
+			});
+			$(".moduleList").delegate("i","click",function(){
+				that.openModuleDialog($(this).parents(a).text());
+			});
+			//保存模块
+			$("#saveModule").on("click",function(){
+				that.createModule();
+			});
+			$("body").on("click",function(e){
+				var $el = $(e.target);
+				if($el.parents("#addModulePopup").length == 0 && ($el[0].id != 'addModulePopup') && ($el[0].className.indexOf('moduleListItem') == -1)){
+					$("#addModulePopup").addClass("hide");
+				}
+			});
+			//预览
+			$('.btnbox').delegate("#preview","click",function(){
+				that.preview(true);
+			});
+			//继续编辑
+			$('.btnbox').delegate("#goToEdit","click",function(){
+				that.preview(false)
+			});
+			//撤销发布
+			$('.btnbox').delegate("#cancelPublish","click",function(){
+				that.publish(1);
+			});
+			//$("#cancelPublish").on("click",function(){
+			//	that.publish(0);
+			//});
+			$(".publishTip a").on("click",function(){
+				that.publish(1);
+			});
+			//发布
+			$('.btnbox').delegate("#publish","click",function(){
+				that.publish(0);
+			});
+			//
+		},
+		preview : function(flag){
+			this.moduleChain[this.currentModuleId] = flag ? -1 : 0;
+			this.setBtnStatus();
+			$("#addSchemeBtn",parent.document)[flag ? "hide" : "show"]();
+			$(".addModuleBtn").parent()[flag ? "hide" : "show"]();
+			$(".related")[flag ? "hide" : "show"]();
 		},
 		publish : function(status){
 			/**
@@ -193,14 +198,33 @@
 				this._getComponentList();
 			}
 		},
+		openModuleDialog : function(){
+			$("#addModulePopup").removeClass("hide");
+			if(arguments.length == 0){
+				$("#newModuleName").val("");
+				this.isEditModule = false;
+			}else{
+				$("#newModuleName").val(arguments[0]);
+				this.isEditModule = true;
+			}
+		},
 		createModule : function(){
 			var that = this;
 			var newModuleName = $("#newModuleName").val();
-			var param = {
-				sltId : parent.window.currentSchemeId,
-				modName : newModuleName,
-				userId : this.userInfo.userId
-			};
+			if(this.isEditModule) {
+				//编辑模块名称
+				var param = {
+					sltId: parent.window.currentSchemeId,
+					modName: newModuleName,
+					userId: this.userInfo.userId
+				};
+			}else{
+				//新建模块
+				var param = {
+					modId : this.currentModuleId,
+					modName : newModuleName
+				}
+			}
 			$.ajaxJSON({
 				name : "新增模块",
 				url: URL.CREATE_MODULE,
@@ -264,7 +288,7 @@
 					}
 				});
 			}else if(param.cptKey == "phoneReleaseVolumeEmotionAnalyzeCpt"){
-				$(ele).newAffectionAnalysed($(ele),{
+				$(ele).newAffectionAnalysed({
 					step: index,
 					baseCptId: param.baseCptId,
 					moduleId: that.currentModuleId,
@@ -277,19 +301,22 @@
 					},
 					//创建关联构件
 					onRelatedWidget : function(data){
-						console.log(data);
 						that.createWidget(data,0);
 					}
-				})
+				});
 				that.setBtnStatus();
 			}
 		},
 		updateSyncData :　function(data){
-			console.log(data);
-			if(data.length ==0) return;
+            if(data.length == 0) return;
 			for(var i = 0;i < data.length;i++){
-				//if()
-				$("#" + data[i]).proUserAnalysis("getData");
+				var cptKey = this.componentInstChain[data[i]];
+				//根据cptKey判断同步哪个构件实例
+				if(cptKey == "customerInterestAnalyzeCpt") {
+					$("#" + data[i]).proUserAnalysis("getData");
+				}else if(cptKey == "phoneReleaseVolumeEmotionAnalyzeCpt"){
+                    $("#" + data[i]).newAffectionAnalysed("getData");
+                }
 			}
 		},
 		setBtnStatus : function(){
@@ -326,6 +353,8 @@
 			this.componentChain = {};
 			//当前选中模板的发布状态
 			this.moduleChain = {};
+			//构件实例Id与实例类型的映射关系
+			this.componentInstChain = {};
 			this.bindEvent();
 			if(localStorage.userInfo){
 				this.userInfo = JSON.parse(localStorage.userInfo);
