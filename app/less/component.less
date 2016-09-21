@@ -18,7 +18,7 @@ body{
   height:47px;
   li{
     display:inline-block;
-    width:120px;
+    min-width:120px;
     height:44px;
     line-height:44px;
     text-align:center;
@@ -28,17 +28,30 @@ body{
     position:relative;
     a{
       position:absolute;
-      width:120px;
+      width:90px;
       height:44px;
       left:0;
       top:4px;
       color:#737989;
+      text-align:right;
+      padding-right:35px;
     }
     a.active{
-      background:url(../img/tab_bg.png) no-repeat left top;
+       background:url(../img/tab_bg.png) no-repeat right top;
       color:#f25e61;
     }
-    .addModuleBtn{
+    i{
+      display:none;
+      position: absolute;
+      width: 16px;
+      height: 16px;
+      right: 14px;
+      font-size: 16px;
+      top: 3px;
+      color: #a29f9f;
+      cursor: pointer;
+    }
+    a.addModuleBtn,a.addModuleBtn:hover{
       height:44px;
       display:inline-block;
       background:url(../img/icon_add_module.png) no-repeat 10px center;
@@ -47,7 +60,11 @@ body{
       color:#737989;
     }
   }
-
+  li:hover{
+    i{
+      display:inline-block;
+    }
+  }
 }
 .moduleData{
   height:34px;
@@ -934,6 +951,7 @@ body{
   width: 420px;
   top: 73px;
   left: 24px;
+  z-index:2;
   .box {
     background: #fff9f9;
     padding: 18px 24px;

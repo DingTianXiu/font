@@ -37,7 +37,7 @@
                         "<div class='titleContainer'>" +
                         "<span class='componentName'>"+name+"</span>" +
                         "<div class='rightContainer'>" +
-                        "<div class='dateBox'></div>" +
+                        "<div class='dateBox_in'></div>" +
                         "<a class='set'>&#xe612;</a>" +
                         "</div>"+
                         "</div>"+
@@ -136,7 +136,7 @@
 
         _addSelectTime : function () {
             if($(".addTime").length == 0){
-                var dom = "<div id='addTime'></div>"
+                var dom = "<div class='sliderBox'><span>设置监测时间范围</span><div id='addTime'></div></div>"
                 $(".optionContainer").append(dom);
             }
         },
@@ -149,7 +149,7 @@
                     "</div>";
                 $(".optionContainer").append(dom);
                 $.each(styleList_data,function (i) {
-                    var styleList_dom = "<li>"+"<img id="+styleList_data.cptStyId+" class='styleImg' "+"src="+styleList_data[i].url+">"+"</li>";
+                    var styleList_dom = "<li>"+"<img id="+styleList_data.cptStyId+" class='styleImg' "+"src="+styleList_data[i].url+"><span>折线图</span>"+"</li>";
                     $(".styleList").append(styleList_dom);
                 });
             }

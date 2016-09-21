@@ -3,6 +3,7 @@ var URL = {
     GET_USER_INFO : "/Yishang/user/detail",
     SOLUTION_LIST : "/Yishang/solution/list",
     CREATE_SCHEME : "/Yishang/solution/insert",
+    UPDATE_SCHEME : "/Yishang/solution/update",
     MODULE_LIST : "/Yishang/module/list",
     CREATE_MODULE : "/Yishang/module/insert",
     UPDATE_MODULE : "/Yishang/module/update",

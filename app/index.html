@@ -30,7 +30,7 @@
 							<li class="email"></li>
 							<li>
 								<a href="views/personalCenter.html" target='mainIframe'>账号信息</a>
-								<a href="javascript:;" id="logOut">退出</a>
+								<a href="javascript:;" id="logout">退出</a>
 							</li>
 						</ul>
 					</div>
@@ -51,7 +51,24 @@
 		</div>
 		<div class="main"><iframe id="mainIframe" name="mainIframe" width="100%" height="500" src="views/scheme.html"></iframe></div>
 	</div>
-
+	<div class="editSchemeName hide">修改方案名</div>
+		<div id="edit-scheme-popup" class="form hide">
+		<div class="box">
+			<div class="fm-row">
+				<div>
+					<label class="fm-lb fm-lb-s">方案名称</label>
+					<div class="fm-ipt">
+						<input name="schemeName" name="sltName" type="text" placeholder="输入方案名称">
+					</div>
+				</div>
+				<div class="btn-grp">
+					<button name="confirm-btn" class="btn">
+						提交
+					</button>
+				</div>
+			</div>
+		</div>
+	</div>
 	<div id="add-scheme-popup" class="form hide">
 		<div class="title">华为</div>
 		<div class="box">

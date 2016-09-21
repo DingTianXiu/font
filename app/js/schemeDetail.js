@@ -26,7 +26,8 @@
 				isActive;
 			for(var i = 0; i < schemeData.length;i++){
 				isActive = parent.window.currentSchemeId==schemeData[i]["sltId"] ? 'class="active"' : '';
-				template += '<li><a '+ isActive +' href="views/scheme.html?id='+ schemeData[i]["sltId"] +'" target="mainIframe"><i class="icon iconfont icon-iconproject'+ (i+1) +'"></i><p>'+ schemeData[i]["sltName"] +'</p></a></li>';
+				template += '<li><a '+ isActive +' href="views/scheme.html?id='+ schemeData[i]["sltId"] +'" target="mainIframe"><i class="icon iconfont icon-iconproject'+ (i+1) +'"></i><p>'+ schemeData[i]["sltName"] +'</p></a>';
+				//template +=  '<i class="editSchemeName">修改方案名</i></li>';
 			}
 			$(".menu",parent.document).html(template);
 		},
@@ -53,10 +54,11 @@
 			});
 		},
 		_renderModule : function(){
+			console.log(this.moduleData);
 			var template = "";
 			for(var i = 0; i < this.moduleData.length;i++){
-				template += '<li><a href="javascript:;" id="'+ this.moduleData[i]["modId"] +'" class="moduleListItem '+ (i == 0 ? 'active' : '') +'">'+ this.moduleData[i]["modName"];
-				template +=  '<i class="icon iconfont icon-iconmodify"></i></a></li>';
+				template += '<li><a href="javascript:;" id="'+ this.moduleData[i]["modId"] +'" class="moduleListItem '+ (i == 0 ? 'active' : '') +'">'+ this.moduleData[i]["modName"] + '</a>';
+				template +=  '<i class="icon iconfont icon-iconmodify editModuleName"></i></li>';
 			}
 			template += '<li><a href="javascript:;" class="moduleListItem addModuleBtn">新建模块</a></li>';
 			$(".moduleList").html(template);
@@ -114,7 +116,7 @@
 			//切换模块
 			$(".moduleList").delegate("a","click",function(){
 				if($(this).hasClass("addModuleBtn")){
-					that.openModuleDialog();
+					that.openModuleDialog($(this));
 				}else {
 					var modId = parseInt($(this).attr("id"),10);
 					that.switchModule(modId);
@@ -123,7 +125,7 @@
 				}
 			});
 			$(".moduleList").delegate("i","click",function(){
-				that.openModuleDialog($(this).parents(a).text());
+				that.openModuleDialog($(this));
 			});
 			//保存模块
 			$("#saveModule").on("click",function(){
@@ -131,7 +133,7 @@
 			});
 			$("body").on("click",function(e){
 				var $el = $(e.target);
-				if($el.parents("#addModulePopup").length == 0 && ($el[0].id != 'addModulePopup') && ($el[0].className.indexOf('moduleListItem') == -1)){
+				if($el.parents("#addModulePopup").length == 0 && ($el[0].id != 'addModulePopup') && ($el[0].className.indexOf('moduleListItem') == -1) && ($el[0].className.indexOf('editModuleName') == -1)){
 					$("#addModulePopup").addClass("hide");
 				}
 			});
@@ -198,13 +200,18 @@
 				this._getComponentList();
 			}
 		},
-		openModuleDialog : function(){
-			$("#addModulePopup").removeClass("hide");
-			if(arguments.length == 0){
+		openModuleDialog : function($ele){
+			if(this.moduleData.length > 8){
+				$.msg({modal:true,msg:"一个方案最多只能有8个模块"});
+				return;
+			}
+			var offset = $(arguments[0]).parents("li").offset();
+			$("#addModulePopup").removeClass("hide").css("left",offset.left+"px");
+			if($ele[0].tagName.toLowerCase() == "a"){
 				$("#newModuleName").val("");
 				this.isEditModule = false;
-			}else{
-				$("#newModuleName").val(arguments[0]);
+			}else if($ele[0].tagName.toLowerCase() == "i"){
+				$("#newModuleName").val($ele.prev("a").text()).attr("modId",$ele.prev("a").attr("id"));
 				this.isEditModule = true;
 			}
 		},
@@ -214,26 +221,37 @@
 			if(this.isEditModule) {
 				//编辑模块名称
 				var param = {
+					modId : $("#newModuleName").attr("modId"),
+					modName : newModuleName
+				}
+				var url = URL.UPDATE_MODULE;
+			}else{
+				//新建模块
+				var param = {
 					sltId: parent.window.currentSchemeId,
 					modName: newModuleName,
 					userId: this.userInfo.userId
 				};
-			}else{
-				//新建模块
-				var param = {
-					modId : this.currentModuleId,
-					modName : newModuleName
-				}
+				var url = URL.CREATE_MODULE;
 			}
 			$.ajaxJSON({
-				name : "新增模块",
-				url: URL.CREATE_MODULE,
+				name : "新增模块/修改模块名",
+				url: url,
 				data: param,
 				type : 'post',
 				iframe : true,
 				success: function (r) {
 					if(r.data){
-						that.moduleData.push(r.data);
+						if(that.isEditModule) {
+							for(var i = 0; i < that.moduleData.length;i++){
+								if(that.moduleData[i].modId == r.data.modId){
+									that.moduleData[i].modName = r.data.modName;
+									break;
+								}
+							}
+						}else{
+							that.moduleData.push(r.data);
+						}
 						that._renderModule();
 						$("#addModulePopup").addClass("hide");
 					}
@@ -295,6 +313,10 @@
 					cptInstId: param.cptInstId,
 					conCptInstId : param.conCptInstId ? param.conCptInstId : null,
 					name: "新品发布声量情感分析构件",
+                    onComplete: function (data) {
+                        that.componentChain[that.currentModuleId].push(data);
+                        that.setBtnStatus();
+                    },
 					//同步关联属性
 					onUpdateAttr : function(data){
 						that.updateSyncData(data);

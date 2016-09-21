@@ -39,6 +39,29 @@
 				});
 			}
 		},
+		updateSchemeName : function(){
+			var that = this;
+			if(this.validate()) {
+				var param = {};
+				param["sltId"] = this.currentEditScheme.sltId;
+				param["sltName"] = $("#edit-scheme-popup input:text").val();
+				$.ajaxJSON({
+					name: '修改方案名称',
+					url: URL.UPDATE_SCHEME,
+					data: param,
+					success: function (r) {
+						for (var i = 0; i < schemeData.length; i++) {
+							if (schemeData[i].sltId == r.data.id) {
+								schemeData[i].sltName = r.data.sltName;
+								break;
+							}
+						}
+						$("#edit-scheme-popup").dialog("close");
+						that._renderPage();
+					}
+				});
+			}
+		},
 		_renderPage : function(){
 			var template = "",
 				schemeData = window.schemeData,
@@ -77,44 +100,48 @@
 					$('#add-scheme-popup').addClass("hide");
 				}
 			});
-			$(".prevBtn").on("click",function(){
-				var menuTop = parseInt($(".menu").css("top"));
-				var menuBoxHeight = $(".menuBox").height() + 2;
-				var menuHeight = $(".menu").height();
-				var itemHeight = $(".side a")[0].clientHeight;
-
-				if(menuTop >= 0){
-					$(".prevBtn").hide();
-					return;
-				}else {
-					if(menuTop*-1 - menuBoxHeight <= 0) {
-						var h = 0;
-					}else{
-						var h = (menuTop + menuBoxHeight) + "px";
-					}
+			$(".side").delegate("a","mouseover",function(){
+				var offset = $(this).parents("li").offset();
+				if(offset) {
+					$(".editSchemeName").removeClass("hide").css("top", (offset.top + 36) + "px");
 				}
-				$(".menu").animate({top:h},'fast');
-				$(".nextBtn").show();
+				that.currentEditScheme = {
+					"sltId" : $(this).parents("li").find("a").attr("href").replace("views/scheme.html?id=",""),
+					"sltName" :$(this).parents("li").find("p").text()
+				};
 			});
-			$(".nextBtn").on("click",function(){
-				var menuTop = parseInt($(".menu").css("top"));
-				var menuBoxHeight = $(".menuBox").height() + 2;
-				var menuHeight = $(".menu").height();
-				var itemHeight = $(".side a")[0].clientHeight;
+			$(".side").delegate("a","mouseleave",function(){
+				$(".editSchemeName").addClass("hide");
+			});
+			$(".editSchemeName").on("mouseover",function(){
+				$(".editSchemeName").removeClass("hide");
+			});
+			$(".editSchemeName").on("mouseleave",function(){
+				$(".editSchemeName").addClass("hide");
+			});
+			$(".editSchemeName").on("click",function(){
+				//$("#edit-scheme-popup").removeClass("hide");
+				$("#edit-scheme-popup").dialog("open");
+				$("#edit-scheme-popup input:text").val(that.currentEditScheme.sltName);
+			});
+			$("#edit-scheme-popup .btn").on("click",function(){
+				that.updateSchemeName();
+			});
+			$('#logout').on('click', function() {
+				that.logout();
+			});
+		},
+		logout : function(){
+			localStorage.removeItem('userInfo');
 
-				if(menuTop*-1 + menuBoxHeight - menuHeight >= 0){
-					$(".nextBtn").hide();
-					return;
-				}else {
-					if(menuHeight - (menuTop*-1 + menuBoxHeight) <= menuBoxHeight) {
-						var h = (menuBoxHeight - menuHeight) + "px";
-					}else{
-						var h = (menuTop - menuBoxHeight) + "px";
-					}
-				}
-				$(".menu").animate({top:h},'fast');
-				$(".prevBtn").show();
-			});
+			var _host = window.parent.location.host;
+			var _logHost = 'sso.dev.adt100.net'; // 开发
+			if (_host.indexOf('dev') == -1) { //
+				_logHost = 'sso007.adt100.com'
+			}
+			window.location.href = "http://" + _logHost + "/logout?service=http://" + _host + window.ROOT;
+
+			$.cookie("acf_ticket",null, { path: '/' });
 		},
 		setLayout : function(){
 			var h = document.documentElement.clientHeight - $(".head").height();
@@ -138,6 +165,11 @@
 			$(window).resize(function(){
 				that.setLayout();
 			});
+			$("#edit-scheme-popup").dialog({
+				autoOpen:false,
+				modal:true,
+				title : "修改方案名称"
+			})
 		}
 	}.init();
 

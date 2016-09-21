@@ -26,6 +26,11 @@
         }else{
             that.step = 0;
         }
+        if(options.onComplete){
+            if(typeof options.onComplete == "function"){
+                that._onComplete = options.onComplete;
+            }
+        }
         //同步关联属性
         if(options.onUpdateAttr){
             if(typeof options.onUpdateAttr == "function"){
@@ -46,23 +51,21 @@
 
         _createComponentEdit : function () {
             var that = this;
-            var addComponent = that.$element.editComponent(that.$element,that.data.condition,that.data.title);
-            addComponent.addSelectProduct();
+            that.addComponent = that.$element.editComponent(that.$element,that.data.condition,that.data.title);
+            that.addComponent.addSelectProduct();
             that._getPhoneList();
-            addComponent.addSelectResource();
+            that.addComponent.addSelectResource();
             that._getSourceList();
-            addComponent.addSelectTime();
+            that.addComponent.addSelectTime();
             that._initSlider($("#addTime"));
             that._getStyleList();
-            if(typeof options == "object"){
-                if(that.data.condition&&that.data.condition.phoneModel.length>0){
-                    addComponent.addProductList(that.data.condition.phoneModel);
-                }
-                // if(options.data.resource_data){
-                //     addComponent.addResourceList(options.data.resource_data);
-                // }
+            if(that.data.condition.phoneModel&&that.data.condition.phoneModel.length>0){
+                that.addComponent.addProductList(that.data.condition.phoneModel);
             }
-            return that.addComponent = addComponent
+            if(that.data.condition.infoSource&&that.data.condition.infoSource.length>0){
+                that.addComponent.addResourceList(that.data.condition.infoSource);
+            }
+            that._bindEvent(that.addComponent);
         },
 
         _createComponent : function () {
@@ -113,6 +116,10 @@
                 that.addComponent = that.$element.editComponent(that.$element,option,that.data.title);
                 that._getComponentAttr(that.addComponent);
             }
+            if(that.$element.find(".dateBox").length==0){
+                console.log(1);
+                that.$element.find(".dateBox_in").addClass("dateBox");
+            }
             that.$element.find(".dateBox").datePicker({
                 afterDateNum : that.data.condition.compareDateScope.afterDateNum,
                 beforeDataNum : that.data.condition.compareDateScope.beforeDataNum,
@@ -137,13 +144,12 @@
                     $.each(data.data.phoneModel.value,function (i) {
                         that.data.condition.phoneModel.push(data.data.phoneModel.value[i]);
                     });
-                    var editor= that._createComponentEdit();
-                    that._bindEvent(editor);
+                    that._createComponentEdit();
                 }
             })
         },
 
-        _getData : function(editor){
+        _getData : function(){
             var that = this;
             that.$element.attr("id",that.data.condition.cptInstId);
             $.ajaxJSON({
@@ -161,82 +167,15 @@
                     that.data.result = data.data;
                     that.data.condition.compareDateScope.afterDateNum = data.data.afterDateNum;
                     that.data.condition.compareDateScope.beforeDataNum = data.data.beforeDataNum;
-                    editor.addEcharts(that.$element,that.data.condition);
+                    that.addComponent.addEcharts(that.$element,that.data.condition);
 
-                    var dom = document.getElementById("echarts"+that.data.condition.cptInstId);
-                    var myChart = echarts.init(dom);
-                    var selectData_sum = [],
-                        selectData_positive = [],
-                        selectData_negative = [];
-                    var phoneId = that.data.condition.phoneModel[0].id;
-                    var selectData = data.data.volumeData[phoneId];
-                    if(selectData){
-                        selectData_sum.push(selectData.sum);
-                        selectData_positive.push(selectData.positive);
-                        selectData_negative.push(selectData.negative);
-                    }
-                    var afterDateNum = data.data.afterDateNum,
-                        beforeDataNum = -data.data.beforeDataNum;
-                    var dateList = [];
-                    for(var i=beforeDataNum;i<afterDateNum;i++){
-                        dateList.push(i);
-                    }
-                    var option = {
-                        title: {
-                            text: ''
-                        },
-                        tooltip: {
-                            trigger: 'axis'
-                        },
-                        grid: {
-                            left: '3%',
-                            right: '4%',
-                            bottom: '3%',
-                            containLabel: true
-                        },
-                        xAxis: {
-                            type: 'category',
-                            boundaryGap: false,
-                            data: dateList
-                        },
-                        yAxis: {
-                            type: 'value'
-                        },
-                        color: ["#f25e61","#7ecefd"],
-                        series: [
-                            {
-                                name:'声量总量',
-                                type:'line',
-                                // stack: '总量',
-                                data: selectData_sum[0]
-                            },
-                            {
-                                name:'正面总量',
-                                type:'line',
-                                // stack: '总量',
-                                data: selectData_positive[0]
-                            },
-                            {
-                                name:'负面总量',
-                                type:'line',
-                                // stack: '总量',
-                                data: selectData_negative[0]
-                            }
-                        ]
-                    };
-                    that.myChart = myChart;
-                    that.option = option;
-
-                    if (option && typeof option === "object") {
-                        myChart.setOption(option, true);
-                        that._getRelatedComponent(editor);
-                        that._bindEvent(editor)
-                    }
+                    that._renderResult();
+                    that._onComplete(this.data);
                 }
             });
         },
 
-        _updata : function (editor) {
+        _updata : function () {
             var that = this;
             var option = {
                 "baseCptId" : that.data.condition.baseCptId,  //基础构件ID
@@ -263,83 +202,88 @@
                         return
                     }
                     that.data.result = data.data.cptData;
-                    that.data.condition.compareDateScope.afterDateNum = data.data.cptData.afterDateNum;
-                    that.data.condition.compareDateScope.beforeDataNum = data.data.cptData.beforeDataNum;
-                    editor.addEcharts(that.$element,that.data.condition);
-                    var dom = document.getElementById("echarts"+that.data.condition.cptInstId);
-                    var myChart = echarts.init(dom);
-                    var selectData_sum = [],
-                        selectData_positive = [],
-                        selectData_negative = [];
-                    var phoneId = that.data.condition.phoneModel[0].id;
-                    var selectData = data.data.cptData.volumeData[phoneId];
-                    if(selectData){
-                        selectData_sum.push(selectData.sum);
-                        selectData_positive.push(selectData.positive);
-                        selectData_negative.push(selectData.negative);
-                    }
-                    var afterDateNum = data.data.cptData.afterDateNum,
-                        beforeDataNum = -data.data.cptData.beforeDataNum;
-                    var dateList = [];
-                    for(var i=beforeDataNum;i<afterDateNum;i++){
-                        dateList.push(i);
-                    }
-                    var option = {
-                        title: {
-                            text: ''
-                        },
-                        tooltip: {
-                            trigger: 'axis'
-                        },
-                        grid: {
-                            left: '3%',
-                            right: '4%',
-                            bottom: '3%',
-                            containLabel: true
-                        },
-                        xAxis: {
-                            type: 'category',
-                            boundaryGap: false,
-                            data: dateList
-                        },
-                        yAxis: {
-                            type: 'value'
-                        },
-                        color: ["#f25e61","#7ecefd"],
-                        series: [
-                            {
-                                name:'声量总量',
-                                type:'line',
-                                // stack: '总量',
-                                data: selectData_sum[0]
-                            },
-                            {
-                                name:'正面总量',
-                                type:'line',
-                                // stack: '总量',
-                                data: selectData_positive[0]
-                            },
-                            {
-                                name:'负面总量',
-                                type:'line',
-                                // stack: '总量',
-                                data: selectData_negative[0]
-                            }
-                        ]
-                    };
-                    that.myChart = myChart;
-                    that.option = option;
-                    if (option && typeof option === "object") {
-                        myChart.setOption(option);
-                        that._getRelatedComponent(editor);
-                        that._bindEvent(editor)
-                    }
+                    that.data.condition.compareDateScope.afterDateNum = data.data.cptData.afterDateNum?data.data.cptData.afterDateNum:null;
+                    that.data.condition.compareDateScope.beforeDataNum = data.data.cptData.beforeDataNum?data.data.cptData.beforeDataNum:null;
+                    that.addComponent.addEcharts(that.$element,that.data.condition);
+                    that._renderResult();
+                    that._onUpdateAttr(data.data.syncCptInstIdList);
                 }
             });
-            that._bindEvent(editor)
         },
 
-        _getComponentAttr : function (editor) {
+        _renderResult : function () {
+            var that = this;
+            var dom = document.getElementById("echarts"+that.data.condition.cptInstId);
+            var myChart = echarts.init(dom);
+            var selectData_sum = [],
+                selectData_positive = [],
+                selectData_negative = [];
+            var phoneId = that.data.condition.phoneModel[0].id;
+            var selectData = that.data.result.volumeData[phoneId];
+            if(selectData){
+                selectData_sum.push(selectData.sum);
+                selectData_positive.push(selectData.positive);
+                selectData_negative.push(selectData.negative);
+            }
+            var afterDateNum = that.data.result.afterDateNum,
+                beforeDataNum = -that.data.result.beforeDataNum;
+            var dateList = [];
+            for(var i=beforeDataNum;i<afterDateNum;i++){
+                dateList.push(i);
+            }
+            var option = {
+                title: {
+                    text: ''
+                },
+                tooltip: {
+                    trigger: 'axis'
+                },
+                grid: {
+                    left: '3%',
+                    right: '4%',
+                    bottom: '3%',
+                    containLabel: true
+                },
+                xAxis: {
+                    type: 'category',
+                    boundaryGap: false,
+                    data: dateList
+                },
+                yAxis: {
+                    type: 'value'
+                },
+                color: ["#f25e61","#7ecefd"],
+                series: [
+                    {
+                        name:'声量总量',
+                        type:'line',
+                        // stack: '总量',
+                        data: selectData_sum[0]
+                    },
+                    {
+                        name:'正面总量',
+                        type:'line',
+                        // stack: '总量',
+                        data: selectData_positive[0]
+                    },
+                    {
+                        name:'负面总量',
+                        type:'line',
+                        // stack: '总量',
+                        data: selectData_negative[0]
+                    }
+                ]
+            };
+            that.myChart = myChart;
+            that.option = option;
+            if (option && typeof option === "object") {
+                myChart.setOption(option);
+                that._getRelatedComponent();
+                that._bindEvent();
+            }
+        },
+
+        _getComponentAttr : function () {
             var that = this;
             $.ajaxJSON({
                 name: "获取构件实例属性",
@@ -350,10 +294,10 @@
                 success : function (data) {
                     that.data.condition.phoneModel = data.data.phoneModel.value;
                     that.data.condition.infoSource = data.data.infoSource.value;
-                    editor.addTab(that.$element,that.data.condition.phoneModel);
+                    that.addComponent.addTab(that.$element,that.data.condition.phoneModel);
                     that.$element.find($(".tab").find($(".phoneModel:first-child"))).addClass("tabSelected");
-                    that._getData(editor);
-                    that._bindEvent(editor)
+                    that._getData();
+                    that._bindEvent()
                 }
             });
         },
@@ -457,12 +401,15 @@
                 success: function (i) {
                     if(i.data.length>0){
                         that.addComponent.addSelectStyle(i.data);
+                    }else {
+                        var data = [{"cptStyId":"","url":"../img/1.jpg"}];
+                        that.addComponent.addSelectStyle(data);
                     }
                 }
             })
         },
 
-        _getRelatedComponent : function (editor) {
+        _getRelatedComponent : function () {
             var that = this;
             $.ajaxJSON({
                 name : "关联构建",
@@ -474,14 +421,14 @@
                 iframe : true,
                 success: function (i) {
                     if(i.data.length>0){
-                        editor.addRelateComponent(that.$element,i.data);
-                        that._bindEvent(editor);
+                        that.addComponent.addRelateComponent(that.$element,i.data);
+                        that._bindEvent();
                     }
                 }
             })
         },
 
-        _addProduct : function (editor) {
+        _addProduct : function () {
             var that = this;
             var id = $(".model").val(),
                 brandCode = $(".brand").val();
@@ -518,7 +465,7 @@
             });
         },
 
-        _addResource : function (editor) {
+        _addResource : function () {
             var that = this;
             var srcKey = $("#resource").val();
             $.each(that.resourceData,function (i) {
@@ -533,8 +480,8 @@
                     that.data.condition.infoSource.push(resource);
                 }
             });
-            editor.addResourceList(that.data.condition.infoSource);
-            that._bindEvent(editor);
+            that.addComponent.addResourceList(that.data.condition.infoSource);
+            that._bindEvent();
         },
 
         _deleteComponent : function () {
@@ -556,7 +503,7 @@
             })
         },
 
-        _bindEvent : function (editor) {
+        _bindEvent : function () {
             var that = this;
 
             $("#addProductBtn").unbind("click");
@@ -567,27 +514,27 @@
             that.$element.find(".set").unbind("click");
 
             $("#addProductBtn").on("click",function () {
-                that._addProduct(editor);
-                editor.addProductList(that.data.condition.phoneModel);
-                that._bindEvent(editor);
+                that._addProduct();
+                that.addComponent.addProductList(that.data.condition.phoneModel);
+                that._bindEvent();
             });
 
             $(".deleteProductBtn").on("click",function () {
                 var index = $(this).parents("li").attr("index");
                 that.data.condition.phoneModel.splice(index,1);
-                editor.addProductList(that.data.condition.phoneModel);
-                that._bindEvent(editor);
+                that.addComponent.addProductList(that.data.condition.phoneModel);
+                that._bindEvent();
             });
 
             $("#addResourceBtn").on("click",function () {
-               that._addResource(editor);
+               that._addResource();
             });
 
             $(".deleteResourceBtn").on("click",function () {
                 var index = $(this).parents("li").attr("index");
                 that.data.condition.infoSource.splice(index,1);
-                editor.addResourceList(that.data.condition.infoSource);
-                that._bindEvent(editor);
+                that.addComponent.addResourceList(that.data.condition.infoSource);
+                that._bindEvent();
             });
 
             $(".styleImg").on("click",function () {
@@ -659,7 +606,7 @@
                     alert("型号手机不能为空");
                     return
                 }
-                editor.addDelectedIco(that.$element);
+                that.addComponent.addDelectedIco(that.$element);
                 if(that.$element.find(".deleteBtn").length>0){
                     that.$element.find(".deleteBtn").on("click",function () {
                         var index = $($(this).parent()).attr("index");
@@ -667,29 +614,29 @@
                         that.$element.find($(".tabContainer")).remove();
                         that.$element.find($(".echartsContainer")).remove();
                         that.$element.find($(".relateCompanentContainer")).remove();
-                        editor.addTab(that.$element,that.data.condition.phoneModel);
+                        that.addComponent.addTab(that.$element,that.data.condition.phoneModel);
                         that.$element.find($(".tab").find($(".phoneModel:first-child"))).addClass("tabSelected");
-                        that._updata(editor);
-                        that._bindEvent(editor);
+                        that._updata();
+                        that._bindEvent();
                     })
                 }
             });
 
             that.$element.find(".addShow").on("click",function () {
-                editor.addProduct(that.$element);
+                that.addComponent.addProduct(that.$element);
                 that._getPhoneList();
                 that.$element.find(".addBtn_updata").on("click",function () {
-                    that._addProduct(editor);
+                    that._addProduct();
                     if(that.data.condition.phoneModel.length == that.$element.find(".phoneModel").length){
                         return
                     }
                     that.$element.find($(".tabContainer")).remove();
                     that.$element.find($(".echartsContainer")).remove();
                     that.$element.find($(".relateCompanentContainer")).remove();
-                    editor.addTab(that.$element,that.data.condition.phoneModel);
+                    that.addComponent.addTab(that.$element,that.data.condition.phoneModel);
                     that.$element.find($(".tab").find($(".phoneModel:first-child"))).addClass("tabSelected");
-                    that._updata(editor);
-                    that._bindEvent(editor);
+                    that._updata();
+                    that._bindEvent();
                     })
             });
 
@@ -713,12 +660,12 @@
                 if(that.data.condition.conCptInstId){
                     that._getRelateComponentData();
                 }else{
-                    var editor= that._createComponentEdit();
+                    that._createComponentEdit();
                 }
             }else{
                 this._createComponent();
             }
-            this._bindEvent(editor);
+            this._bindEvent();
         },
 
         getData : function () {
@@ -727,7 +674,6 @@
             that.$element.find(".echartsContainer").remove();
             that.$element.find(".relateCompanentContainer").remove();
             that._getComponentAttr(that.addComponent);
-            that._bindEvent(that.addComponent);
         }
     };
     $.fn.newAffectionAnalysed = function(option, value) {

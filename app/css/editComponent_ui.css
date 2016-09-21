@@ -80,13 +80,14 @@ body {
   color: #9f9fa1;
 }
 .editContainer .optionContainer {
+  padding: 0 25px 37px;
   background-color: #fff;
 }
 .editContainer .optionContainer ul li {
-  height: 48px;
+  width: 200px;
   display: inline-block;
   margin-right: 14px;
-  line-height: 48px;
+  margin-top: 20px;
   font-size: 14px;
 }
 .editContainer .optionContainer ul li .select {
@@ -111,9 +112,19 @@ body {
 .editContainer .optionContainer ul li button:hover {
   color: #757b8b;
 }
+.editContainer .optionContainer ul li:first-child {
+  width: auto;
+}
+.editContainer .optionContainer ul li:last-child {
+  width: auto;
+}
+.editContainer .optionContainer .productList {
+  display: inline-block;
+  margin-top: 15px;
+}
 .editContainer .optionContainer .productList li {
   height: 78px;
-  width: 392px;
+  width: 392px !important;
 }
 .editContainer .optionContainer .productList li span {
   height: 78px;
@@ -122,8 +133,12 @@ body {
 .editContainer .optionContainer .productList li img {
   width: 50px;
 }
+.editContainer .optionContainer .resourceList {
+  display: inline-block;
+  margin-top: 15px;
+}
 .editContainer .optionContainer .resourceList li {
-  width: 194px;
+  width: 194px !important;
   height: 48px;
 }
 .editContainer .optionContainer .resourceList li span {
@@ -134,6 +149,7 @@ body {
   width: 26px;
 }
 .editContainer .optionContainer .selectedList {
+  margin-top: 15px;
   margin-bottom: 60px;
   border-left: 1px solid #d5d9dc;
   border-top: 1px solid #d5d9dc;
@@ -196,6 +212,9 @@ body {
 .editContainer .optionContainer .selectedList li .deleteBtn:hover {
   color: #f25e61;
 }
+.editContainer .optionContainer .styleListContainer {
+  margin-top: 80px;
+}
 .editContainer .optionContainer .styleListContainer p {
   font-size: 14px;
 }
@@ -205,6 +224,7 @@ body {
   height: 178px;
   margin-top: 15px;
   border: 1px solid #efeeec;
+  text-align: center;
 }
 .editContainer .optionContainer .styleListContainer .styleList li img {
   width: 178px;
@@ -218,6 +238,18 @@ body {
 }
 .editContainer .optionContainer .styleListContainer .styleList .selectStyle {
   border: 1px solid #b1b3ba;
+}
+.editContainer .optionContainer .sliderBox {
+  margin-top: 15px;
+}
+.editContainer .optionContainer .sliderBox span {
+  display: inline-block;
+  margin-right: 14px;
+  font-size: 14px;
+}
+.editContainer .optionContainer .sliderBox #addTime {
+  display: inline-block;
+  width: 500px;
 }
 .editContainer .tabContainer {
   padding: 0 23px;
