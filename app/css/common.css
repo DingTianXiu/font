@@ -176,7 +176,8 @@ body {
 }
 .head ul li .showBox .personalDisplay {
   position: absolute;
-  left: -310%;
+  /*left: -310%;*/
+  right: -105px;
   top: 40px;
   width: 336px;
   height: 160px;
@@ -254,6 +255,7 @@ body {
 .side .menuBox {
   position: relative;
   overflow: auto;
+  overflow-x: hidden;
 }
 .side .menuBox .prevBtn {
   position: absolute;
@@ -288,6 +290,7 @@ body {
 .side .menuBox .menu li a {
   display: block;
   height: 55px;
+  width: 55px;
   padding: 20px;
   text-align: center;
   color: #7d8088;
@@ -309,6 +312,10 @@ body {
 .side .menuBox .menu li a.active {
   color: #f25e61;
   background: #373737;
+}
+.side .menuBox .menu li i {
+  width: 99px;
+  height: 24px;
 }
 .side .menuBox::-webkit-scrollbar {
   width: 5px;
@@ -392,6 +399,20 @@ body {
   min-height: 500px;
   margin-top: 25px;
 }
+.editSchemeName {
+  width: 99px;
+  height: 24px;
+  line-height: 24px;
+  text-indent: 25px;
+  display: block;
+  position: absolute;
+  background: url(../img/icon_editSchemeName.png) no-repeat left top;
+  text-align: center;
+  left: 80px;
+  top: 45px;
+  cursor: pointer;
+  z-index: 1;
+}
 .hide {
   display: none;
 }
@@ -452,7 +473,7 @@ body {
   color: #737989;
   font-size: 14px;
 }
-.form .box .fm-row #confirm-btn {
+.form .box .fm-row .btn {
   height: 50px;
   line-height: 50px;
   background: #f25e61;
@@ -466,4 +487,19 @@ body {
 }
 #add-scheme-popup {
   top: 25px;
+}
+#edit-scheme-popup {
+  left: 0;
+}
+#edit-scheme-popup .box {
+  margin: 0;
+}
+#edit-scheme-popup .box .fm-row {
+  width: 252px;
+}
+#edit-scheme-popup .box .fm-row input {
+  width: 100%;
+}
+#edit-scheme-popup .box .fm-row .btn {
+  width: 100%;
 }

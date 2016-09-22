@@ -1,46 +1,46 @@
 /**
- * Created by dtx on 16/9/8.
+ * Created by dtx on 16/9/22.
  */
 
-(function ($) {
-    var options = {
-            "name" : "手机新品声量情感分析",
-            "step" : 0,
-            "baseCptId" : 3,
-            "moduleId" : 17,
-            "compareDateScope" : {
-                "beforeDateNum" : 20,
-                "afterDateNum" : 29
-            },
-            "data" : {
-                "product_data" : [{"id":1,"brandName":"锤子","modelName":"TTTT","picUrl":"../img/5.jpg","releaseDate":"2016-10-28"},{"id":2,"brandName":"三星","modelName":"TTTT","picUrl":"../img/5.jpg","releaseDate":"2016-10-28"},{"id":3,"brandName":"苹果","modelName":"TTTT","picUrl":"../img/5.jpg","releaseDate":"2016-10-28"}],
-                "resource_data" : [{"srcName":"新闻","srcKey":"news"},{"srcName":"论坛","srcKey":"bbs"}],
-                "styleList_data" : [{"url":"../img/2.jpg","cptStyId":1},{"url":"../img/2.jpg","cptStyId":2}]
-            }
-        };
-    $("#btn").on("click",function () {
-        var ele = $("#div");
-        ele.newAffectionAnalysed(ele,options);
-    });
 
-    $.ajaxJSON({
-        name : "信息来源",
-        url: URL.GET_SOURCE_DATA,
-        data: {},
-        type : 'post',
-        iframe : true,
-        success: function (i) {
-            console.log(i);
-            // if(i.data){
-            //     _this.data.brands = i.data.brands;
-            //     //_this._getData();
-            //     _this._sourceInfo();
-            // }
-            //},
-            //error: function(){
-            //	alert('系统错误')
-        }
-    })
+var layout = d3.layout.cloud()
+    .size([500, 500])
+    .words([
+        "Hello", "world", "normally", "you", "want", "more", "words","Hello", "world", "normally", "you", "want", "more", "words","Hello", "world", "normally", "you", "want", "more", "words","Hello", "world", "normally", "you", "want", "more", "words","Hello", "world", "normally", "you", "want", "more", "words",
+        "than", "this"].map(function(d) {
+        return {text: d, size: 10 + Math.random() * 90, test: "haha"};
+    }))
+    .padding(5)
+    .rotate(function() { return ~~(Math.random() * 2) * 90; })
+    .font("Impact")
+    .fontSize(function(d) { return d.size; })
+    .text(function (d) {return d.text})
+    .padding(10)
+    .on("end", draw);
 
+layout.start();
 
-})(jQuery);
+function draw(words) {
+    var fill = d3.scale.category20();
+    d3.select("body").append("svg")
+        .attr("width", layout.size()[0])
+        .attr("height", layout.size()[1])
+        .append("g")
+        .attr("transform", "translate(" + layout.size()[0] / 2 + "," + layout.size()[1] / 2 + ")")
+        .selectAll("text")
+        .data(words)
+        .enter().append("text")
+        .style("font-size", function(d) { return d.size + "px"; })
+        .style("font-family", "Impact")
+        .style("fill", function(d, i) { return fill(i); })
+        .attr("text-anchor", "middle")
+        .attr("transform", function(d) {
+            return "translate(" + [d.x, d.y] + ")rotate(" + d.rotate + ")";
+        })
+        .text(function(d) { return d.text; })
+        .on("click",function () {
+            d3.selectAll("text").style("outline","none");
+            d3.select(this)
+            .style("background","red");
+        });
+}

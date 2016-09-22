@@ -225,6 +225,7 @@ body {
   margin-top: 15px;
   border: 1px solid #efeeec;
   text-align: center;
+  cursor: pointer;
 }
 .editContainer .optionContainer .styleListContainer .styleList li img {
   width: 178px;
@@ -270,6 +271,7 @@ body {
   text-align: center;
   line-height: 28px;
   position: relative;
+  cursor: pointer;
 }
 .editContainer .tabContainer ul li span {
   font-size: 12px;
@@ -406,6 +408,7 @@ body {
   text-align: center;
   color: #3f4044;
   line-height: 38px;
+  cursor: pointer;
 }
 .editContainer .relateCompanentContainer .relateCompanentList li:last-child {
   margin-right: 0;

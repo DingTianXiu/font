@@ -201,19 +201,19 @@
 			}
 		},
 		openModuleDialog : function($ele){
-			if(this.moduleData.length > 8){
-				$.msg({modal:true,msg:"一个方案最多只能有8个模块"});
-				return;
-			}
-			var offset = $(arguments[0]).parents("li").offset();
-			$("#addModulePopup").removeClass("hide").css("left",offset.left+"px");
 			if($ele[0].tagName.toLowerCase() == "a"){
 				$("#newModuleName").val("");
 				this.isEditModule = false;
+				if(this.moduleData.length > 8){
+					$.msg({modal:true,msg:"一个方案最多只能有8个模块"});
+					return;
+				}
 			}else if($ele[0].tagName.toLowerCase() == "i"){
 				$("#newModuleName").val($ele.prev("a").text()).attr("modId",$ele.prev("a").attr("id"));
 				this.isEditModule = true;
 			}
+			var offset = $(arguments[0]).parents("li").offset();
+			$("#addModulePopup").removeClass("hide").css("left",offset.left+"px");
 		},
 		createModule : function(){
 			var that = this;
@@ -312,7 +312,6 @@
 					moduleId: that.currentModuleId,
 					cptInstId: param.cptInstId,
 					conCptInstId : param.conCptInstId ? param.conCptInstId : null,
-					name: "新品发布声量情感分析构件",
                     onComplete: function (data) {
                         that.componentChain[that.currentModuleId].push(data);
                         that.setBtnStatus();
@@ -326,7 +325,26 @@
 						that.createWidget(data,0);
 					}
 				});
-				that.setBtnStatus();
+			}else if(param.cptKey == "customerFocusAnalyzeCpt"){
+				$(ele).newAttentionAnalysed({
+					step: index,
+					baseCptId: param.baseCptId,
+					moduleId: that.currentModuleId,
+					cptInstId: param.cptInstId,
+					conCptInstId : param.conCptInstId ? param.conCptInstId : null,
+					onComplete: function (data) {
+						that.componentChain[that.currentModuleId].push(data);
+						that.setBtnStatus();
+					},
+					//同步关联属性
+					onUpdateAttr : function(data){
+						that.updateSyncData(data);
+					},
+					//创建关联构件
+					onRelatedWidget : function(data){
+						that.createWidget(data,0);
+					}
+				});
 			}
 		},
 		updateSyncData :　function(data){
@@ -338,7 +356,9 @@
 					$("#" + data[i]).proUserAnalysis("getData");
 				}else if(cptKey == "phoneReleaseVolumeEmotionAnalyzeCpt"){
                     $("#" + data[i]).newAffectionAnalysed("getData");
-                }
+                }else if(cptKey == "customerFocusAnalyzeCpt"){
+					$("#" + data[i]).newAttentionAnalysed("getData");
+				}
 			}
 		},
 		setBtnStatus : function(){

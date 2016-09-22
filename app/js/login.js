@@ -16,7 +16,6 @@ $(function () {
     //placeholder for ie9
     jQuery('input[placeholder]').placeholder();
     var getUserInfo = function(){
-        console.log($.cookie('acf_ticket'));
         $.ajaxJSON({
             name: '获取用户信息',
             url: URL.GET_USER_INFO,

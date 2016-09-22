@@ -678,7 +678,7 @@
 				if($el.parents(".dateHoverBox").length == 0 && !($el[0].className == 'dateHoverBox') && $el.parents(".dateBox").length == 0){
 					that._close();
 				}
-			}); 
+			});
 		},
 
 		openHoverBox : function(){

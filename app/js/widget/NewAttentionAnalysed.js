@@ -1,13 +1,12 @@
 /**
- * Created by dtx on 16/8/25.
+ * Created by dtx on 16/9/22.
  */
-
 (function ($) {
-    var NewAffectionAnalysed = function (element,options) {
+    var NewAttentionAnalysed = function (element,options) {
         var that  = this;
         that.$element = $(element);
         that.data = {
-            "title" : "手机新品声量情感分析",
+            "title" : "产品用户关注点分析构件",
             "condition" : {
                 "baseCptId" : options.baseCptId,  //基础构件ID
                 "moduleId" : options.moduleId,    //模块ID
@@ -45,9 +44,9 @@
         }
         that._init();
     };
-    NewAffectionAnalysed.prototype = {
+    NewAttentionAnalysed.prototype = {
 
-        Constructor : NewAffectionAnalysed,
+        Constructor : NewAttentionAnalysed,
 
         _init : function () {
             var that = this;
@@ -176,6 +175,7 @@
                 type : 'post',
                 iframe : true,
                 success: function (data) {
+                    console.log(data);
                     if(!data){
                         that.$element.find(".echartsContainer").html("");
                         return
@@ -232,69 +232,54 @@
         /*渲染构件*/
         _renderResult : function () {
             var that = this;
-            var dom = document.getElementById("echarts"+that.data.condition.cptInstId);
-            var myChart = echarts.init(dom);
-            var selectData_sum = [],
-                selectData_positive = [],
-                selectData_negative = [];
             var phoneId = that.data.condition.phoneModel[0].id;
-            var selectData = that.data.result&&that.data.result.volumeData[phoneId]?that.data.result.volumeData[phoneId]:null;
-            if(selectData){
-                selectData_sum.push(selectData.sum);
-                selectData_positive.push(selectData.positive);
-                selectData_negative.push(selectData.negative);
+            var selectData = that.data.result&&that.data.result[phoneId]?that.data.result[phoneId]:null,
+                foucsWordList = [];
+            if(selectData&&selectData.length>0){
+                $.each(selectData,function (i) {
+                    foucsWordList.push(selectData[i].focusWord);
+                })
             }
-            var afterDateNum = that.data.result&&that.data.result.afterDateNum?that.data.result.afterDateNum:28,
-                beforeDataNum = that.data.result&&that.data.result.beforeDataNum?-that.data.result.beforeDataNum:-30;
-            var dateList = [];
-            for(var i=beforeDataNum;i<afterDateNum;i++){
-                dateList.push(i);
+
+            var layout = d3.layout.cloud()
+                .size([800, 300])
+                .words(foucsWordList.map(function(d) {
+                    return {text: d, size: 10 + Math.random() * 90, test: "haha"};
+                }))
+                .padding(5)
+                .rotate(function() { return ~~(Math.random() * 2) * 90; })
+                .font("Impact")
+                .fontSize(function(d) { return d.size; })
+                .text(function (d) {return d.text})
+                .on("end", draw);
+
+            layout.start();
+
+            function draw(words) {
+                var fill = d3.scale.category20();
+                d3.select("#echarts"+that.data.condition.cptInstId).append("svg")
+                    .attr("width", layout.size()[0])
+                    .attr("height", layout.size()[1])
+                    .append("g")
+                    .attr("transform", "translate(" + layout.size()[0] / 2 + "," + layout.size()[1] / 2 + ")")
+                    .selectAll("text")
+                    .data(words)
+                    .enter().append("text")
+                    .style("font-size", function(d) { return d.size + "px"; })
+                    .style("font-family", "Impact")
+                    .style("fill", function(d, i) { return fill(i); })
+                    .attr("text-anchor", "middle")
+                    .attr("transform", function(d) {
+                        return "translate(" + [d.x, d.y] + ")rotate(" + d.rotate + ")";
+                    })
+                    .text(function(d) { return d.text; })
+                    .on("click",function () {
+                        d3.selectAll("text").style("outline","none");
+                        d3.select(this)
+                            .style("outline","solid");
+                    });
             }
-            var option = {
-                title: {
-                    text: ''
-                },
-                tooltip: {
-                    trigger: 'axis'
-                },
-                grid: {
-                    left: '3%',
-                    right: '4%',
-                    bottom: '3%',
-                    containLabel: true
-                },
-                xAxis: {
-                    type: 'category',
-                    boundaryGap: false,
-                    data: dateList
-                },
-                yAxis: {
-                    type: 'value'
-                },
-                color: ["#f25e61","#7ecefd"],
-                series: [
-                    {
-                        name:'声量总量',
-                        type:'line',
-                        // stack: '总量',
-                        data: selectData_sum[0]
-                    },
-                    {
-                        name:'正面总量',
-                        type:'line',
-                        // stack: '总量',
-                        data: selectData_positive[0]
-                    },
-                    {
-                        name:'负面总量',
-                        type:'line',
-                        // stack: '总量',
-                        data: selectData_negative[0]
-                    }
-                ]
-            };
-            that.myChart = myChart;
-            that.option = option;
+
             if (option && typeof option === "object") {
                 myChart.setOption(option);
                 if(that.$element.find('.relateCompanentContainer').length==0){
@@ -343,46 +328,46 @@
         _getPhoneList : function () {
             var that = this;
             $.ajaxJSON({
-                    name: "手机列表",
-                    url: URL.GET_PHONE_LIST,
-                    data: {
-                        industry: "mobile"
-                    },
-                    type: 'post',
-                    iframe: true,
-                    success: function (data) {
-                        var arr = [],
-                            modelsObj = {};
-                        this.data = data.data;
-                        that.modelData = data.data.brands;
-                        if (!this.data) {
-                            that.$element.find($(".brand")).select('data', [{text: "请选择", value: -1}]);
-                            that.$element.find($(".model")).select('data', [{text: "请选择", value: -1}]);
-                        } else {
-                            for (var i = 0; i < this.data.brands.length; i++) {
-                                var item = this.data.brands[i];
-                                arr.push({
-                                    text: item.brandName,
-                                    value: item.brandCode
-                                });
-                                modelsObj[item.brandCode] = [];
-                                for (var j = 0; j < item.models.length; j++) {
-                                    modelsObj[item.brandCode].push({
-                                        text: item.models[j].modelName,
-                                        value: item.models[j].modelCode
-                                    })
-                                }
-                            }
-                            that.$element.find($(".brand")).select('data', arr).select("trigger");
-                            that.$element.find($(".brand")).on("change", function () {
-                                var val = $(this).val();
-                                that.$element.find($(".model")).select("destroy").select('data', modelsObj[val]);
-
+                name: "手机列表",
+                url: URL.GET_PHONE_LIST,
+                data: {
+                    industry: "mobile"
+                },
+                type: 'post',
+                iframe: true,
+                success: function (data) {
+                    var arr = [],
+                        modelsObj = {};
+                    this.data = data.data;
+                    that.modelData = data.data.brands;
+                    if (!this.data) {
+                        that.$element.find($(".brand")).select('data', [{text: "请选择", value: -1}]);
+                        that.$element.find($(".model")).select('data', [{text: "请选择", value: -1}]);
+                    } else {
+                        for (var i = 0; i < this.data.brands.length; i++) {
+                            var item = this.data.brands[i];
+                            arr.push({
+                                text: item.brandName,
+                                value: item.brandCode
                             });
-                            that.$element.find($(".brand")).trigger("change");
+                            modelsObj[item.brandCode] = [];
+                            for (var j = 0; j < item.models.length; j++) {
+                                modelsObj[item.brandCode].push({
+                                    text: item.models[j].modelName,
+                                    value: item.models[j].modelCode
+                                })
+                            }
                         }
+                        that.$element.find($(".brand")).select('data', arr).select("trigger");
+                        that.$element.find($(".brand")).on("change", function () {
+                            var val = $(this).val();
+                            that.$element.find($(".model")).select("destroy").select('data', modelsObj[val]);
+
+                        });
+                        that.$element.find($(".brand")).trigger("change");
                     }
-                })
+                }
+            })
         },
 
         /*获取信息来源列表*/
@@ -397,9 +382,9 @@
                 success: function (data) {
                     that.resourceData = data.data;
                     var list = data.data,
-                    departments = [],
-                    len = list.length,
-                    i=0;
+                        departments = [],
+                        len = list.length,
+                        i=0;
                     for(;i<len;i++){
                         departments.push(
                             {
@@ -547,7 +532,7 @@
             })
         },
 
-        _bindEvent : function () {
+        _bindEvent : function ()  {
             var that = this;
 
             /*清除绑定监听*/
@@ -575,7 +560,7 @@
 
             /*添加信息来源事件监听*/
             $("#addResourceBtn").on("click",function () {
-               that._addResource();
+                that._addResource();
             });
 
             /*删除信息来源事件监听*/
@@ -666,6 +651,7 @@
                         that.data.condition.phoneModel.splice(index,1);
                         that.$element.find($(".tabContainer")).remove();
                         that.$element.find($(".echartsContainer")).remove();
+                        that.addComponent.addTab(that.$element,that.data.condition.phoneModel);
                         that.$element.find($(".tab").find($(".phoneModel:first-child"))).addClass("tabSelected");
                         that._updata();
                         that._bindEvent();
@@ -684,10 +670,11 @@
                     }
                     that.$element.find($(".tabContainer")).remove();
                     that.$element.find($(".echartsContainer")).remove();
+                    that.addComponent.addTab(that.$element,that.data.condition.phoneModel);
                     that.$element.find($(".tab").find($(".phoneModel:first-child"))).addClass("tabSelected");
                     that._updata();
                     that._bindEvent();
-                    })
+                })
             });
 
             /*创建关联构件*/
@@ -715,14 +702,14 @@
             that._getComponentAttr(that.addComponent);
         }
     };
-    $.fn.newAffectionAnalysed = function(option, value) {
+    $.fn.newAttentionAnalysed = function(option, value) {
         var methodReturn;
         var $set = this.each(function() {
             var $this = $(this);
-            var data = $this.data('newAffectionAnalysed');
+            var data = $this.data('newAttentionAnalysed');
             var options = typeof option === 'object' && option;
             if (!data) {
-                $this.data('newAffectionAnalysed', (data = new NewAffectionAnalysed(this, options)));
+                $this.data('newAttentionAnalysed', (data = new NewAttentionAnalysed(this, options)));
             }
             if (typeof option === 'string') {
                 methodReturn = data[option](value);
@@ -730,5 +717,5 @@
         });
         return (methodReturn === undefined) ? $set : methodReturn;
     };
-    $.fn.newAffectionAnalysed.Constructor = NewAffectionAnalysed;
+    $.fn.newAttentionAnalysed.Constructor = NewAttentionAnalysed;
 })(jQuery);

@@ -133,15 +133,10 @@
 		},
 		logout : function(){
 			localStorage.removeItem('userInfo');
+			$.cookie("acf_ticket",null);
+			window.location.href = logoutUrl;
 
-			var _host = window.parent.location.host;
-			var _logHost = 'sso.dev.adt100.net'; // 开发
-			if (_host.indexOf('dev') == -1) { //
-				_logHost = 'sso007.adt100.com'
-			}
-			window.location.href = "http://" + _logHost + "/logout?service=http://" + _host + window.ROOT;
 
-			$.cookie("acf_ticket",null, { path: '/' });
 		},
 		setLayout : function(){
 			var h = document.documentElement.clientHeight - $(".head").height();

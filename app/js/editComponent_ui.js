@@ -156,16 +156,15 @@
         },
 
         _addTab : function (ele,data) {
-            var that = this;
             if($(".optionContainer").length>0){
                 $(".optionContainer").remove();
                 $(".generateBtn").remove();
             }
-            var editContainer_dom =  $(ele).find($(".editContainer"));
+            var editContainer_dom =  $(ele).find($(".titleContainer"));
             var dom = "<div class='tabContainer'><ul class='tab'></ul><div class='addShowBtnContainer'><button class='addShow'>&#xe602;</button></div><button class='delShow'>&#xe615;</button><div class='timeSelect'><button>按时查看</button><button class='btnSelected'>按日查看</button></div></div>"
-            $(editContainer_dom).append(dom);
+            $(editContainer_dom).after(dom);
             $.each(data,function (i) {
-                var tabUl_dom = $(editContainer_dom).find($(".tab"));
+                var tabUl_dom = $(ele).find($(".tab"));
                 var tab_dom = "<li index="+i+" class='phoneModel'><span class='phoneName'>"+data[i].modelName+"</span></li>";
                 $(tabUl_dom).append(tab_dom);
             })
@@ -182,8 +181,8 @@
 
         _addEcharts : function (ele,options) {
             var dom = "<div class='echartsContainer' id="+'echarts'+options.cptInstId+" style='height:300px'></div>";
-            var editContainer_dom = $(ele).find($(".editContainer"));
-            $(editContainer_dom).append(dom);
+            var editContainer_dom = $(ele).find($(".tabContainer"));
+            $(editContainer_dom).after(dom);
         },
 
         _addRelateComponent : function (ele,data) {
