@@ -250,6 +250,7 @@
             this.$legend.html(tpl);
             this.$addBtn = $("<a href='javascript:;' class='addBtn'><i class='icon iconfont icon-iconadd'></i></a>").appendTo(this.$legend);
             this.delBtn = $("<a href='javascript:;' class='delBtn'><i class='icon iconfont icon-icondel'></i></a>").appendTo(this.$legend);
+            this.$hrLline = $("<hr class='hrLine'>").appendTo(this.$legend);
             if(!this.data.result) return;
             var defaultModelCode = this.$legend.find(".legendBtn").eq(0).attr("modelCode");
             this._renderChart(that.data.result[defaultModelCode]);

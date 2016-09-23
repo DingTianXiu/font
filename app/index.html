@@ -52,9 +52,10 @@
 		<div class="main"><iframe id="mainIframe" name="mainIframe" width="100%" height="500" src="views/scheme.html"></iframe></div>
 	</div>
 	<div class="editSchemeName hide">修改方案名</div>
-		<div id="edit-scheme-popup" class="form hide">
+	<div id="edit-scheme-popup" class="form hide">
 		<div class="box">
 			<div class="fm-row">
+				<div class="errorTip"></div>
 				<div>
 					<label class="fm-lb fm-lb-s">方案名称</label>
 					<div class="fm-ipt">
@@ -74,6 +75,7 @@
 		<div class="box">
 			<h1>新建方案</h1>
 			<div class="fm-row">
+				<div class="errorTip"></div>
 				<div>
 					<label class="fm-lb fm-lb-s">方案名称</label>
 					<div class="fm-ipt">
@@ -83,7 +85,7 @@
 				<div>
 					<label class="fm-lb fm-lb-s">附属模块名称</label>
 					<div class="fm-ipt">
-						<input class="moduleName" name="moduleName" type="text" placeholder="输入模块名称">
+						<input class="moduleName" id="moduleName" name="moduleName" type="text" placeholder="输入模块名称">
 						<a href="#" id="addModuleBtn">新建模块</a>
 					</div>
 				</div>

@@ -380,7 +380,7 @@
   border-color: #d4d4d4;
 }
 .ui-select-button:hover .ui-select-icon {
-  background-position: left top;
+  background-position: right 0;
 }
 .ui-select-button:focus,
 .ui-widget-open .ui-select-button {
@@ -412,7 +412,7 @@
   content: "";
   vertical-align: top;
   display: block;
-  background: url(../img/select_icon.png) no-repeat right top;
+  background: url(../img/select_icon.png) no-repeat 0 0px;
   width: 15px;
   height: 15px;
 }

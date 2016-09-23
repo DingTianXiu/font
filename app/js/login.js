@@ -8,7 +8,7 @@ $(function () {
     $("#passwordTemp").removeAttr('disabled');
 
     $("form").submit(function (e) {
-        var v=$.md5($("#passwordTemp").val());
+        var v = $.md5($("#passwordTemp").val());
         $("#password").val(v);
         return true;
     });
@@ -61,5 +61,5 @@ $(function () {
     };
 
     window['sso'] = new xd_sso(options);
-    
+    // new newPhoAddComp();
 });

@@ -99,12 +99,12 @@
 			var item,
 				that = this;
 			$(".componentList").html("");
-			 for(var i = 0; i < this.componentChain[this.currentModuleId].length;i++){
+			for(var i = 0; i < this.componentChain[this.currentModuleId].length;i++){
 				item = this.componentChain[this.currentModuleId][i];
 				if(item) {
 					that.createWidget(item, 1);
 				}
-			 }
+			}
 		},
 		bindEvent : function(){
 			var that = this;
@@ -215,48 +215,70 @@
 			var offset = $(arguments[0]).parents("li").offset();
 			$("#addModulePopup").removeClass("hide").css("left",offset.left+"px");
 		},
-		createModule : function(){
-			var that = this;
-			var newModuleName = $("#newModuleName").val();
-			if(this.isEditModule) {
-				//编辑模块名称
-				var param = {
-					modId : $("#newModuleName").attr("modId"),
-					modName : newModuleName
-				}
-				var url = URL.UPDATE_MODULE;
-			}else{
-				//新建模块
-				var param = {
-					sltId: parent.window.currentSchemeId,
-					modName: newModuleName,
-					userId: this.userInfo.userId
-				};
-				var url = URL.CREATE_MODULE;
-			}
-			$.ajaxJSON({
-				name : "新增模块/修改模块名",
-				url: url,
-				data: param,
-				type : 'post',
-				iframe : true,
-				success: function (r) {
-					if(r.data){
-						if(that.isEditModule) {
-							for(var i = 0; i < that.moduleData.length;i++){
-								if(that.moduleData[i].modId == r.data.modId){
-									that.moduleData[i].modName = r.data.modName;
-									break;
-								}
-							}
-						}else{
-							that.moduleData.push(r.data);
-						}
-						that._renderModule();
-						$("#addModulePopup").addClass("hide");
-					}
+		validate : function(id){
+			var isValid = true;
+			$(id + " input").each(function(){
+				if($(this).val() == ""){
+					$(id + " .errorTip").text("不能为空");
+					$(this).addClass("error");
+					isValid =  false;
+					return false;
+				}else if($(this).val().length > 8){
+					$(id + " .errorTip").text($(this).parent().prev().text()  + "长度不能超过8个字符");
+					$(this).addClass("error");
+					isValid =  false;
+					return false;
+				}else{
+					$(id + " .errorTip").text("");
+					$(this).removeClass("error");
 				}
 			});
+			return isValid;
+		},
+		createModule : function(){
+			var that = this;
+			if(this.validate("#addModulePopup")) {
+				var newModuleName = $("#newModuleName").val();
+				if (this.isEditModule) {
+					//编辑模块名称
+					var param = {
+						modId: $("#newModuleName").attr("modId"),
+						modName: newModuleName
+					}
+					var url = URL.UPDATE_MODULE;
+				} else {
+					//新建模块
+					var param = {
+						sltId: parent.window.currentSchemeId,
+						modName: newModuleName,
+						userId: this.userInfo.userId
+					};
+					var url = URL.CREATE_MODULE;
+				}
+				$.ajaxJSON({
+					name: "新增模块/修改模块名",
+					url: url,
+					data: param,
+					type: 'post',
+					iframe: true,
+					success: function (r) {
+						if (r.data) {
+							if (that.isEditModule) {
+								for (var i = 0; i < that.moduleData.length; i++) {
+									if (that.moduleData[i].modId == r.data.modId) {
+										that.moduleData[i].modName = r.data.modName;
+										break;
+									}
+								}
+							} else {
+								that.moduleData.push(r.data);
+							}
+							that._renderModule();
+							$("#addModulePopup").addClass("hide");
+						}
+					}
+				});
+			}
 		},
 		createWidget : function(param,step){
 			var that = this;
@@ -284,6 +306,32 @@
 						that.createWidget(data,0);
 					}
 				});
+			}else if(param.cptKey == "phoneReleaseVolumeCompareCpt"){
+				$(ele).newPhoAddComp({
+					step: index,
+					baseCptId: param.baseCptId,
+					moduleId: that.currentModuleId,
+					cptInstId: param.cptInstId,
+					conCptInstId : param.conCptInstId ? param.conCptInstId : null,
+					onComplete: function (data) {
+						that.componentChain[that.currentModuleId].push(data);
+						that.setBtnStatus();
+					},
+					//同步关联属性
+					onUpdateAttr : function(data){
+						that.updateSyncData(data);
+					},
+					//创建关联构件
+					onRelatedWidget : function(data){
+						console.log(data);
+						that.createWidget(data,0);
+					}
+				});
+				// new newPhoAddComp();
+			// // }else{
+			// // 	$.msg("敬请期待1...");
+			// // 	$(".btnbox a").show();
+
 			}else if(param.cptKey == "customerInterestAnalyzeCpt"){
 				$(ele).proUserAnalysis({
 					step: index,

@@ -364,22 +364,28 @@ body{
       .noData{
         content:"无数据";
         text-align:center;
+        height: 400px;
+        line-height: 400px;
       }
       .legend{
-        border-bottom:1px solid #b9bcc4;
-        height:35px;
+        min-height:35px;
+        .hrLine { 
+        border: none;
+        border-top: 1px solid #e5e5e5;
+        margin-top: -1px;
+        }
         a{
           display:inline-block;
-          height:30px;
-          line-height:30px;
+          height:33px;
+          line-height:33px;
           width:173px;
           border:1px solid #e5e5e5;
-          border-bottom:none;
           text-align:center;
           color:#3f4044;
           padding-top:0;
           background:#fff;
           position:relative;
+          margin-left: -1px;
           i{
             color:#9f9fa1;
             display:none;
@@ -390,7 +396,6 @@ body{
           }
         }
         a.active{
-          padding-top:3px;
           background:#fff9f9;
           border-color:#b9bcc4;
           i{
@@ -399,8 +404,8 @@ body{
         }
         .addBtn,.delBtn{
           width:44px;
-          height:30px;
-          line-height:30px;
+          height:33px;
+          line-height:33px;
           text-align:center;
           color:#9f9fa1;
           background:#f4f4f4;
@@ -410,6 +415,10 @@ body{
         }
       }
       .chart{
+        height:400px;
+        margin:30px 90px;
+      }
+      .lineChart{
         height:400px;
         margin:30px 90px;
       }
@@ -469,7 +478,19 @@ body{
     .firstMultiAttr{
       background: #fff;
       padding: 0 0 40px 0;
-      .proContainer,.infoContainer{
+      a.btnCompare {
+          color: #fff;
+          width: 380px;
+          height: 50px;
+          background: #f25e61;
+          border-radius: 4px;
+          margin: 0 auto;
+          font-size: 24px;
+          display: block;
+          text-align: center;
+          line-height: 50px;
+      }
+      .proContainer,.infoContainer,.infoSource{
         padding:27px 24px;
         .sBox {
           margin-bottom:14px;
@@ -501,6 +522,7 @@ body{
               cursor: pointer;
               border: 1px solid #efeeec;
               padding: 15px;
+              margin:-2px 0 0 -1px;
               .phoneThumb {
                 width: 50px;
                 height: 50px;
@@ -533,10 +555,11 @@ body{
           }
         }
       }
-      .infoContainer{
+      .infoContainer,.infoSource{
         .rBox{
           .proWrapper {
             width: 16.6%;
+            display: inline-block;
             .pro {
               .info {
                 p {
@@ -620,7 +643,7 @@ body{
       text-align:center;
       border:1px solid #d5d9dc;
       border-radius:4px;
-      margin-right:10px;
+      margin: 0 10px 10px 0;
       font-size:14px;
       color:#3f4044;
       background: #f4f4f4;
@@ -628,7 +651,9 @@ body{
   }
 }
 /* 新品声量对比 begin */
-.WraNewPro { padding: 25px;
+.WraNewPro {
+  display:none;
+  padding: 25px;
   .newProContra {
     background:#fff;
     width: 100%;
@@ -643,6 +668,7 @@ body{
     }
     .proContraIn {
       margin-left: 25px;
+      background: #fff;
       .chooTarProWra {
         margin-bottom: 65px;
       }
@@ -750,6 +776,10 @@ body{
             .iconfont {
               display: block;
             }
+          }
+          .noData {
+            font-size:15px; 
+            text-align:center;
           }
         }
       }
@@ -897,10 +927,8 @@ body{
     }
 
     .containerChart {
-      display: none;
     }
     .containerChart #containerChart {
-      display: none;
       width: 1130px;
       height: 390px;
     }
@@ -910,25 +938,7 @@ body{
       position: relative;
     }
   }
-  .btnCompare {
-    width: 100%;
-    text-align: center;
-    position: relative;
-    a {
-      color: #fff;
-      width: 380px;
-      left: 50%;
-      position: absolute;
-      margin-left: -190px;
-      height: 50px;
-      background: #f25e61;
-      border-radius: 4px;
-      font-size: 24px;
-      display: block;
-      text-align: center;
-      line-height: 50px;
-    }
-  }
+  
 }
 .containerChart .btnAddNew a {
   color: #fff;
@@ -943,7 +953,6 @@ body{
   display: block;
   text-align: center;
   line-height: 50px;
-  display: none;
 }
 #addModulePopup {
   background: #fff9f9;

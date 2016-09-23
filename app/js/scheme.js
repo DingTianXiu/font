@@ -2,12 +2,29 @@
 	schemeData = [];
 	currentSchemeId = 0;
 	scheme = {
-		validate : function(){
-			return true;
+		validate : function(id){
+			var isValid = true;
+			$(id + " input").each(function(){
+				if($(this).val() == ""){
+					$(id + " .errorTip").text("不能为空");
+					$(this).addClass("error");
+					isValid =  false;
+					return false;
+				}else if($(this).val().length > 8){
+					$(id + " .errorTip").text($(this).parent().prev().text()  + "长度不能超过8个字符");
+					$(this).addClass("error");
+					isValid =  false;
+					return false;
+				}else{
+					$(id + " .errorTip").text("");
+					$(this).removeClass("error");
+				}
+			});
+			return isValid;
 		},
 		addScheme : function(){
 			var that = this;
-			if(this.validate()){
+			if(this.validate("#add-scheme-popup")){
 				var param = {};
 				param["userId"] = this.userInfo.userId;
 				$("#add-scheme-popup input:text").each(function(i){
@@ -41,7 +58,7 @@
 		},
 		updateSchemeName : function(){
 			var that = this;
-			if(this.validate()) {
+			if(this.validate("#edit-scheme-popup")) {
 				var param = {};
 				param["sltId"] = this.currentEditScheme.sltId;
 				param["sltName"] = $("#edit-scheme-popup input:text").val();
@@ -76,6 +93,13 @@
 			document.getElementById("mainIframe").contentWindow.schemeDetail.getModuleList();
 		},
 		addModuleItem : function(){
+			if($("input.moduleName").length >= 8){
+				$.msg({
+					modal:true,
+					msg : "单个方案最多支持8个模块"
+				});
+				return;
+			}
 			$("#addModuleBtn").parent().parent().append('<div class="fm-ipt"><input class="moduleName" type="text"></div>');
 		},
 		bindEvent : function(){
@@ -98,6 +122,24 @@
 				currentSchemeId = $(this).attr("href").split("=")[1];
 				if($("#add-scheme-popup").is(":visible") && $(this).attr("id") != "addSchemeBtn"){
 					$('#add-scheme-popup').addClass("hide");
+				}
+			});
+																	
+			$(".prevBtn").on("click",function(){
+				var menuTop = parseInt($(".menu").css("top"));
+				var menuBoxHeight = $(".menuBox").height() + 2;
+				var menuHeight = $(".menu").height();
+				var itemHeight = $(".side a")[0].clientHeight;
+
+				if(menuTop >= 0){
+					$(".prevBtn").hide();
+					return;
+				}else {
+					if(menuTop*-1 - menuBoxHeight <= 0) {
+						var h = 0;
+					}else{
+						var h = (menuTop + menuBoxHeight) + "px";
+					}
 				}
 			});
 			$(".side").delegate("a","mouseover",function(){

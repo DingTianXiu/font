@@ -20,6 +20,8 @@
 		this.refresh();
 		this.addEvents();
 	};
+
+
 	Select.prototype = {
 		constructor : Select,
 		destroy : function() {

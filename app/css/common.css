@@ -278,11 +278,6 @@ body {
   cursor: pointer;
   z-index: 2;
 }
-.side .menuBox .menu {
-  position: absolute;
-  left: 0;
-  top: 0;
-}
 .side .menuBox .menu li {
   height: 97px;
   text-align: center;
@@ -466,6 +461,9 @@ body {
   text-indent: 9px;
   font-size: 14px;
 }
+.form .box .fm-row .fm-ipt input.error {
+  border-color: #ff0000;
+}
 .form .box .fm-row .fm-ipt #addModuleBtn {
   background: url(../img/icon_add_module.png) no-repeat 10px center;
   padding: 10px 10px 10px 39px;
@@ -484,6 +482,10 @@ body {
   border-radius: 4px;
   width: 380px;
   cursor: pointer;
+}
+.form .box .errorTip {
+  text-align: left;
+  color: #ff0000;
 }
 #add-scheme-popup {
   top: 25px;

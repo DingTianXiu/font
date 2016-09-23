@@ -497,6 +497,7 @@
             var srcKey = $("#resource").val();
             $.each(that.resourceData,function (i) {
                 if(that.resourceData[i].srcKey == srcKey){
+                    console.log(that.resourceData[i]);
                     var resource = {
                         "srcName" : that.resourceData[i].srcName,
                         "srcKey" : that.resourceData[i].srcKey
@@ -507,11 +508,11 @@
                         that.addComponent.addResourceList(that.data.condition.infoSource);
                         that._bindEvent();
                     }else{
-                        $.each(that.data.condition.infoSource,function (i) {
-                            if(that.data.condition.infoSource[i].id==resource.id){
+                        $.each(that.data.condition.infoSource,function (j) {
+                            if(that.data.condition.infoSource[j].id==that.resourceData[i].id){
                                 $.msg("该型号信息来源已存在");
                                 return false
-                            }else if(i==that.data.condition.infoSource.length-1){
+                            }else if(j==that.data.condition.infoSource.length-1){
                                 that.data.condition.infoSource.push(resource);
                                 that.addComponent.addResourceList(that.data.condition.infoSource);
                                 that._bindEvent();
