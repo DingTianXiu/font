@@ -184,7 +184,7 @@
                     that.data.result = data.data;
                     that.data.condition.compareDateScope.afterDateNum = data.data?data.data.afterDateNum:null;
                     that.data.condition.compareDateScope.beforeDataNum = data.data?data.data.beforeDataNum:null;
-                    that.addComponent.addEcharts(that.$element,that.data.condition);
+                    that.addComponent.addEcharts(that.$element,that.data.condition.cptInstId);
 
                     that._renderResult();
                     that._onComplete(this.data);
@@ -200,12 +200,7 @@
                 "moduleId" : that.data.condition.moduleId,    //模块ID
                 "cptInstId" : that.data.condition.cptInstId,   //新增构件实例ID
                 "conCptInstId" : that.data.condition.conCptInstId,
-                "compareDateScope" : {
-                    "beforeDateNum": that.data.condition.compareDateScope.beforeDateNum,
-                    "afterDateNum": that.data.condition.compareDateScope.afterDateNum
-                },
-                "phoneModel" : that.data.condition.phoneModel,
-                "infoSource" : that.data.condition.infoSource
+                "phoneModel" : that.data.condition.phoneModel
             };
             $.ajaxJSON({
                 name : "更新实例属性",
@@ -222,7 +217,7 @@
                     that.data.result = data.data.cptData;
                     that.data.condition.compareDateScope.afterDateNum = data.data.cptData.afterDateNum?data.data.cptData.afterDateNum:null;
                     that.data.condition.compareDateScope.beforeDataNum = data.data.cptData.beforeDataNum?data.data.cptData.beforeDataNum:null;
-                    that.addComponent.addEcharts(that.$element,that.data.condition);
+                    that.addComponent.addEcharts(that.$element,that.data.condition.cptInstId);
                     that._renderResult();
                     that._onUpdateAttr(data.data.syncCptInstIdList);
                 }
@@ -271,7 +266,7 @@
                 yAxis: {
                     type: 'value'
                 },
-                color: ["#f25e61","#7ecefd"],
+                color: ["#f25e61","#7ecefd","#ff9948","#eb547c","#247ba0","#70c1b3","#cae3a8","#e8d2a7","#ffa4a2"],
                 series: [
                     {
                         name:'声量总量',
@@ -664,8 +659,9 @@
                     that.$element.find(".deleteBtn").on("click",function () {
                         var index = $($(this).parent()).attr("index");
                         that.data.condition.phoneModel.splice(index,1);
-                        that.$element.find($(".tabContainer")).remove();
-                        that.$element.find($(".echartsContainer")).remove();
+                        that.$element.find(".tabContainer").remove();
+                        that.$element.find(".echartsContainer").remove();
+                        that.addComponent.addTab(that.$element, that.data.condition.phoneModel);
                         that.$element.find($(".tab").find($(".phoneModel:first-child"))).addClass("tabSelected");
                         that._updata();
                         that._bindEvent();
@@ -675,19 +671,24 @@
 
             /*在已生成构件添加手机型号事件监听*/
             that.$element.find(".addShow").on("click",function () {
-                that.addComponent.addProduct(that.$element);
-                that._getPhoneList();
-                that.$element.find(".addBtn_updata").on("click",function () {
-                    that._addProduct();
-                    if(that.data.condition.phoneModel.length == that.$element.find(".phoneModel").length){
-                        return
-                    }
-                    that.$element.find($(".tabContainer")).remove();
-                    that.$element.find($(".echartsContainer")).remove();
-                    that.$element.find($(".tab").find($(".phoneModel:first-child"))).addClass("tabSelected");
-                    that._updata();
-                    that._bindEvent();
+                if(that.$element.find(".selectProduct_updata").length==0) {
+                    that.addComponent.addProduct(that.$element);
+                    that._getPhoneList();
+                    that.$element.find(".addBtn_updata").on("click", function () {
+                        that._addProduct();
+                        if (that.data.condition.phoneModel.length == that.$element.find(".phoneModel").length) {
+                            return
+                        }
+                        that.$element.find($(".tabContainer")).remove();
+                        that.$element.find($(".echartsContainer")).remove();
+                        that.addComponent.addTab(that.$element, that.data.condition.phoneModel);
+                        that.$element.find($(".tab").find($(".phoneModel:first-child"))).addClass("tabSelected");
+                        that._updata();
+                        that._bindEvent();
                     })
+                }else{
+                    that.$element.find(".selectProduct_updata").remove();
+                }
             });
 
             /*创建关联构件*/
@@ -711,7 +712,6 @@
             var that = this;
             that.$element.find(".tabContainer").remove();
             that.$element.find(".echartsContainer").remove();
-            that.$element.find(".relateCompanentContainer").remove();
             that._getComponentAttr(that.addComponent);
         }
     };

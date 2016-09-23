@@ -381,6 +381,29 @@ body {
 }
 .editContainer .echartsContainer {
   background-color: #fff !important;
+  position: relative;
+}
+.editContainer .echartsContainer svg {
+  position: absolute;
+  left: 100px;
+  top: 25px;
+}
+.editContainer .echartsContainer svg text {
+  cursor: pointer;
+}
+.editContainer .echartsContainer .tipsContainer {
+  width: 170px;
+  position: absolute;
+  right: 100px;
+  top: 100px;
+  padding: 10px;
+  background-color: rgba(0, 0, 0, 0.7);
+  border-radius: 4px;
+}
+.editContainer .echartsContainer .tipsContainer li {
+  height: 20px;
+  font-size: 14px;
+  color: #fff;
 }
 .editContainer .relateCompanentContainer {
   padding: 15px 0 0;

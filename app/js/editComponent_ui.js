@@ -20,7 +20,8 @@
             addEcharts : EditComponent.prototype._addEcharts,
             addRelateComponent : EditComponent.prototype._addRelateComponent,
             addDelectedIco : EditComponent.prototype._addDelectedIco,
-            addProduct : EditComponent.prototype._addProduct
+            addProduct : EditComponent.prototype._addProduct,
+            addTips : EditComponent.prototype. _addTips
         }
     };
     EditComponent.prototype = {
@@ -179,10 +180,19 @@
             }
         },
 
-        _addEcharts : function (ele,options) {
-            var dom = "<div class='echartsContainer' id="+'echarts'+options.cptInstId+" style='height:300px'></div>";
-            var editContainer_dom = $(ele).find($(".tabContainer"));
+        _addEcharts : function (ele,id) {
+            var dom = "<div class='echartsContainer' id="+"echarts"+id+" style='height:350px'></div>";
+            var editContainer_dom = $(ele).find(".tabContainer");
             $(editContainer_dom).after(dom);
+        },
+
+        _addTips : function (ele,data) {
+            var dom_tipsContainer = "<ul class='tipsContainer'><li>"+data.focusWord+"</li></ul>";
+            $(ele).find(".echartsContainer").append(dom_tipsContainer);
+            $.each(data.srcList,function (i) {
+                var dom_tip = "<li>"+data.srcList[i].srcName+":"+data.srcList[i].volumn+"</li>"
+                $(ele).find(".tipsContainer").append(dom_tip);
+            })
         },
 
         _addRelateComponent : function (ele,data) {
@@ -198,7 +208,7 @@
         },
 
         _addProduct : function (element) {
-            if($(element).find(".selectProduct_updata").length==0){
+            if($(element).find(".selectProduct_updata").length==0) {
                 var dom = "<ul class='selectProduct_updata'>" +
                     "<li>选择目标产品:</li>" +
                     "<li>" +

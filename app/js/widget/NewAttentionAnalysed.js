@@ -129,6 +129,7 @@
                     "step" : "1"
                 };
                 that.addComponent = that.$element.editComponent(that.$element,option,that.data.title);
+                that.index = 0;
                 that._getComponentAttr(that.addComponent);
             }
             if(that.$element.find(".dateBox").length==0){
@@ -184,7 +185,7 @@
                     that.data.result = data.data;
                     that.data.condition.compareDateScope.afterDateNum = data.data?data.data.afterDateNum:null;
                     that.data.condition.compareDateScope.beforeDataNum = data.data?data.data.beforeDataNum:null;
-                    that.addComponent.addEcharts(that.$element,that.data.condition);
+                    that.addComponent.addEcharts(that.$element,that.data.condition.baseCptId);
 
                     that._renderResult();
                     that._onComplete(this.data);
@@ -200,12 +201,7 @@
                 "moduleId" : that.data.condition.moduleId,    //模块ID
                 "cptInstId" : that.data.condition.cptInstId,   //新增构件实例ID
                 "conCptInstId" : that.data.condition.conCptInstId,
-                "compareDateScope" : {
-                    "beforeDateNum": that.data.condition.compareDateScope.beforeDateNum,
-                    "afterDateNum": that.data.condition.compareDateScope.afterDateNum
-                },
-                "phoneModel" : that.data.condition.phoneModel,
-                "infoSource" : that.data.condition.infoSource
+                "phoneModel" : that.data.condition.phoneModel
             };
             $.ajaxJSON({
                 name : "更新实例属性",
@@ -220,9 +216,7 @@
                         return
                     }
                     that.data.result = data.data.cptData;
-                    that.data.condition.compareDateScope.afterDateNum = data.data.cptData.afterDateNum?data.data.cptData.afterDateNum:null;
-                    that.data.condition.compareDateScope.beforeDataNum = data.data.cptData.beforeDataNum?data.data.cptData.beforeDataNum:null;
-                    that.addComponent.addEcharts(that.$element,that.data.condition);
+                    that.addComponent.addEcharts(that.$element,that.data.condition.baseCptId);
                     that._renderResult();
                     that._onUpdateAttr(data.data.syncCptInstIdList);
                 }
@@ -232,22 +226,33 @@
         /*渲染构件*/
         _renderResult : function () {
             var that = this;
-            var phoneId = that.data.condition.phoneModel[0].id;
-            var selectData = that.data.result&&that.data.result[phoneId]?that.data.result[phoneId]:null,
-                foucsWordList = [];
+            if(!that.index){
+                that.index = 0;
+            }
+            var phoneId = that.data.condition.phoneModel[that.index].id;
+            var selectData = that.data.result&&that.data.result[phoneId]?that.data.result[phoneId]:null;
+            that.foucsWordList = [];
             if(selectData&&selectData.length>0){
                 $.each(selectData,function (i) {
-                    foucsWordList.push(selectData[i].focusWord);
+                    that.foucsWordList.push(selectData[i].focusWord);
                 })
             }
+            that._renderEcharts();
+            if(that.$element.find('.relateCompanentContainer').length==0){
+                that._getRelatedComponent();
+            }
+            that._bindEvent();
+        },
 
+        _renderEcharts : function () {
+            var that = this;
             var layout = d3.layout.cloud()
                 .size([800, 300])
-                .words(foucsWordList.map(function(d) {
+                .words(that.foucsWordList.map(function(d) {
                     return {text: d, size: 10 + Math.random() * 90, test: "haha"};
                 }))
-                .padding(5)
-                .rotate(function() { return ~~(Math.random() * 2) * 90; })
+                .padding(0)
+                .rotate(function() { return ~~(Math.random() * 2) * 60; })
                 .font("Impact")
                 .fontSize(function(d) { return d.size; })
                 .text(function (d) {return d.text})
@@ -257,7 +262,7 @@
 
             function draw(words) {
                 var fill = d3.scale.category20();
-                d3.select("#echarts"+that.data.condition.cptInstId).append("svg")
+                d3.select("#echarts"+that.data.condition.baseCptId).append("svg")
                     .attr("width", layout.size()[0])
                     .attr("height", layout.size()[1])
                     .append("g")
@@ -273,19 +278,31 @@
                         return "translate(" + [d.x, d.y] + ")rotate(" + d.rotate + ")";
                     })
                     .text(function(d) { return d.text; })
+                    .on("mouseover",function () {
+                        var rgb = d3.select(this).style("fill").slice(4,-1);
+                        var rgba = "rgba("+rgb+",0.8)";
+                        d3.select(this).style("fill",rgba);
+                    })
+                    .on("mouseout",function () {
+                        var rgba = d3.select(this).style("fill").slice(4,-6);
+                        var rgb =  "rgb"+rgba+")";
+                        d3.select(this).style("fill",rgb);
+                    })
                     .on("click",function () {
                         d3.selectAll("text").style("outline","none");
-                        d3.select(this)
-                            .style("outline","solid");
+                        d3.select(this).style("outline","solid");
+                        if(that.$element.find(".tipsContainer").length>0){
+                            that.$element.find(".tipsContainer").remove()
+                        }
+                        var phoneId = that.data.condition.phoneModel[that.index].id;
+                        var selectData = that.data.result[phoneId];
+                        for(var i=0;i<selectData.length;i++){
+                            if(selectData[i].focusWord == $(this).html()){
+                                that.addComponent.addTips(that.$element, selectData[i]);
+                                return false
+                            }
+                        }
                     });
-            }
-
-            if (option && typeof option === "object") {
-                myChart.setOption(option);
-                if(that.$element.find('.relateCompanentContainer').length==0){
-                    that._getRelatedComponent();
-                }
-                that._bindEvent();
             }
         },
 
@@ -599,58 +616,32 @@
                 $(this).addClass("tabSelected");
                 $(this).siblings().removeClass("tabSelected");
                 var index = $(this).attr("index");
-                var phoneId = that.data.condition.phoneModel[index].id;
-                var selectData = that.data.result.volumeData[phoneId];
-                var selectData_sum = [],
-                    selectData_positive = [],
-                    selectData_negative = [];
-                if(selectData){
-                    selectData_sum.push(selectData.sum);
-                    selectData_positive.push(selectData.positive);
-                    selectData_negative.push(selectData.negative);
-                }
-
                 if(index!=that.index){
                     that.index = index;
-                    that.option.series =  [
-                        {
-                            name:'声量总量',
-                            type:'line',
-                            // stack: '总量',
-                            data: selectData_sum[0]
-                        },
-                        {
-                            name:'正面总量',
-                            type:'line',
-                            // stack: '总量',
-                            data: selectData_positive[0]
-                        },
-                        {
-                            name:'负面总量',
-                            type:'line',
-                            // stack: '总量',
-                            data: selectData_negative[0]
-                        }
-                    ]
-                    if (that.option && typeof that.option === "object") {
-                        that.myChart.setOption(that.option);
+                    that.$element.find("svg").remove();
+                    if(that.$element.find(".tipsContainer").length>0){
+                        that.$element.find(".tipsContainer").remove();
                     }
+                    that._renderResult();
                 }
             });
 
             /*在已生成构件删除手机型号事件监听*/
             that.$element.find(".delShow").on("click",function () {
                 if(that.data.condition.phoneModel.length<=1){
-                    alert("型号手机不能为空");
+                    $.msg("型号手机不能为空");
                     return
                 }
                 that.addComponent.addDelectedIco(that.$element);
                 if(that.$element.find(".deleteBtn").length>0){
                     that.$element.find(".deleteBtn").on("click",function () {
                         var index = $($(this).parent()).attr("index");
+                        if(that.index==index){
+                            that.index = 0;
+                        }
                         that.data.condition.phoneModel.splice(index,1);
-                        that.$element.find($(".tabContainer")).remove();
-                        that.$element.find($(".echartsContainer")).remove();
+                        that.$element.find(".tabContainer").remove();
+                        that.$element.find(".echartsContainer").remove();
                         that.addComponent.addTab(that.$element,that.data.condition.phoneModel);
                         that.$element.find($(".tab").find($(".phoneModel:first-child"))).addClass("tabSelected");
                         that._updata();
@@ -661,20 +652,24 @@
 
             /*在已生成构件添加手机型号事件监听*/
             that.$element.find(".addShow").on("click",function () {
-                that.addComponent.addProduct(that.$element);
-                that._getPhoneList();
-                that.$element.find(".addBtn_updata").on("click",function () {
-                    that._addProduct();
-                    if(that.data.condition.phoneModel.length == that.$element.find(".phoneModel").length){
-                        return
-                    }
-                    that.$element.find($(".tabContainer")).remove();
-                    that.$element.find($(".echartsContainer")).remove();
-                    that.addComponent.addTab(that.$element,that.data.condition.phoneModel);
-                    that.$element.find($(".tab").find($(".phoneModel:first-child"))).addClass("tabSelected");
-                    that._updata();
-                    that._bindEvent();
-                })
+                if(that.$element.find(".selectProduct_updata").length==0){
+                    that.addComponent.addProduct(that.$element);
+                    that._getPhoneList();
+                    that.$element.find(".addBtn_updata").on("click",function () {
+                        that._addProduct();
+                        if(that.data.condition.phoneModel.length == that.$element.find(".phoneModel").length){
+                            return
+                        }
+                        that.$element.find($(".tabContainer")).remove();
+                        that.$element.find($(".echartsContainer")).remove();
+                        that.addComponent.addTab(that.$element,that.data.condition.phoneModel);
+                        that.$element.find($(".tab").find($(".phoneModel:first-child"))).addClass("tabSelected");
+                        that._updata();
+                        that._bindEvent();
+                    })
+                }else{
+                    that.$element.find(".selectProduct_updata").remove();
+                }
             });
 
             /*创建关联构件*/
@@ -698,7 +693,6 @@
             var that = this;
             that.$element.find(".tabContainer").remove();
             that.$element.find(".echartsContainer").remove();
-            that.$element.find(".relateCompanentContainer").remove();
             that._getComponentAttr(that.addComponent);
         }
     };
