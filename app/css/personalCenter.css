@@ -20,11 +20,11 @@ body .personal_head .userName {
 body .personal_center {
   padding: 35px 0 0 25px;
 }
-body .personal_center ul {
+body .personal_center .tab {
   float: left;
   margin-right: 145px;
 }
-body .personal_center ul li {
+body .personal_center .tab li {
   height: 40px;
   width: 248px;
   padding-left: 20px;
@@ -35,14 +35,14 @@ body .personal_center ul li {
   color: #bbbbbb;
   cursor: pointer;
 }
-body .personal_center ul li:first-child {
+body .personal_center .tab li:first-child {
   border-bottom: none;
   border-radius: 4px 4px 0px 0px;
 }
-body .personal_center ul li:last-child {
+body .personal_center .tab li:last-child {
   border-radius: 0px 0px 4px 4px;
 }
-body .personal_center ul .optionSelected {
+body .personal_center .tab .optionSelected {
   color: #333333;
 }
 body .personal_center .personal_center_right {
@@ -75,4 +75,64 @@ body .personal_center .personal_center_right table tr td:first-child {
 }
 body .personal_center .personal_center_right table tr td:last-child {
   width: auto;
+}
+body .personal_center .resetPasswordContainer {
+  float: left;
+  margin-left: 25px;
+}
+body .personal_center .resetPasswordContainer ul li {
+  width: auto;
+  height: auto;
+  border: none;
+  background: none;
+}
+body .personal_center .resetPasswordContainer ul li input {
+  width: 370px;
+  height: 50px;
+  margin-bottom: 10px;
+  border: none;
+  border-bottom: 1px solid #d0d0d1;
+  outline: none;
+  padding-left: 10px;
+  background: none;
+}
+body .personal_center .resetPasswordContainer ul li button {
+  display: none;
+  width: 380px;
+  height: 50px;
+  margin-top: 14px;
+  margin-bottom: 24px;
+  background-color: #7d8088;
+  border: none;
+  border-radius: 4px;
+  outline: none;
+  color: #fff;
+  font-size: 24px;
+}
+body .personal_center .resetPasswordContainer ul li span {
+  display: inline-block;
+  width: 380px;
+  height: 50px;
+  margin-top: 14px;
+  margin-bottom: 24px;
+  background-color: #d9d9da;
+  border: none;
+  border-radius: 4px;
+  outline: none;
+  color: #fff;
+  font-size: 24px;
+  text-align: center;
+  line-height: 50px;
+}
+body .personal_center .resetPasswordContainer ul li .err {
+  display: inline-block;
+  background-color: #fff1f1;
+  border: 1px solid #f0c2c3;
+  color: #f25e61;
+  font-size: 16px;
+}
+body .personal_center .resetPasswordContainer ul li:last-child {
+  font-size: 14px;
+  line-height: 22px;
+  color: #999999;
 }

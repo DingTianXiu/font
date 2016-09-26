@@ -135,15 +135,6 @@
             if(that.$element.find(".dateBox").length==0){
                 that.$element.find(".dateBox_in").addClass("dateBox");
             }
-            that.$element.find(".dateBox").datePicker({
-                afterDateNum : that.data.condition.compareDateScope.afterDateNum,
-                beforeDataNum : that.data.condition.compareDateScope.beforeDataNum,
-                onSaveDate : function(beforeDateNum,afterDateNum){
-                    that.data.condition.compareDateScope.beforeDataNum = beforeDateNum;
-                    that.data.condition.compareDateScope.afterDateNum = afterDateNum;
-                    that._updateAndGetData(beforeDateNum,afterDateNum);
-                }
-            });
         },
 
         /*获取关联构建属性,创建构件*/
@@ -176,16 +167,12 @@
                 type : 'post',
                 iframe : true,
                 success: function (data) {
-                    console.log(data);
                     if(!data){
                         that.$element.find(".echartsContainer").html("");
                         return
                     }
-
                     that.data.result = data.data;
-                    that.data.condition.compareDateScope.afterDateNum = data.data?data.data.afterDateNum:null;
-                    that.data.condition.compareDateScope.beforeDataNum = data.data?data.data.beforeDataNum:null;
-                    that.addComponent.addEcharts(that.$element,that.data.condition.baseCptId);
+                    that.addComponent.addEcharts(that.$element,that.data.condition.cptInstId);
 
                     that._renderResult();
                     that._onComplete(this.data);
@@ -194,15 +181,24 @@
         },
 
         /*更新构建数据*/
-        _updata : function () {
+        _updata : function (beforeDateNum,afterDateNum) {
             var that = this;
-            var option = {
-                "baseCptId" : that.data.condition.baseCptId,  //基础构件ID
-                "moduleId" : that.data.condition.moduleId,    //模块ID
-                "cptInstId" : that.data.condition.cptInstId,   //新增构件实例ID
-                "conCptInstId" : that.data.condition.conCptInstId,
-                "phoneModel" : that.data.condition.phoneModel
-            };
+            if(beforeDateNum||afterDateNum){
+                that.data.condition.compareDateScope.beforeDateNum = beforeDateNum;
+                that.data.condition.compareDateScope.afterDateNum = afterDateNum;
+                var option = {
+                    "cptInstId" : that.data.condition.cptInstId,   //新增构件实例ID
+                    "compareDateScope" : {
+                        "beforeDateNum" : beforeDateNum,
+                        "afterDateNum" : afterDateNum
+                    }
+                };
+            }else{
+                var option = {
+                    "cptInstId" : that.data.condition.cptInstId,   //新增构件实例ID
+                    "phoneModel" : that.data.condition.phoneModel
+                };
+            }
             $.ajaxJSON({
                 name : "更新实例属性",
                 url: URL.UPDATE_GET_DATA,
@@ -216,7 +212,7 @@
                         return
                     }
                     that.data.result = data.data.cptData;
-                    that.addComponent.addEcharts(that.$element,that.data.condition.baseCptId);
+                    that.addComponent.addEcharts(that.$element,that.data.condition.cptInstId);
                     that._renderResult();
                     that._onUpdateAttr(data.data.syncCptInstIdList);
                 }
@@ -226,6 +222,18 @@
         /*渲染构件*/
         _renderResult : function () {
             var that = this;
+
+            that.$element.find(".dateBox").datePicker({
+                afterDateNum : that.data.condition.compareDateScope.afterDateNum,
+                beforeDateNum : that.data.condition.compareDateScope.beforeDateNum,
+                onSaveDate : function(beforeDateNum,afterDateNum){
+                    that.data.condition.compareDateScope.beforeDateNum = beforeDateNum;
+                    that.data.condition.compareDateScope.afterDateNum = afterDateNum;
+                    that.$element.find(".echartsContainer").remove();
+                    that._updata(beforeDateNum,afterDateNum);
+                }
+            });
+
             if(!that.index){
                 that.index = 0;
             }
@@ -262,7 +270,7 @@
 
             function draw(words) {
                 var fill = d3.scale.category20();
-                d3.select("#echarts"+that.data.condition.baseCptId).append("svg")
+                d3.select("#echarts"+that.data.condition.cptInstId).append("svg")
                     .attr("width", layout.size()[0])
                     .attr("height", layout.size()[1])
                     .append("g")
@@ -318,6 +326,7 @@
                 success : function (data) {
                     that.data.condition.phoneModel = data.data.phoneModel.value;
                     that.data.condition.infoSource = data.data.infoSource.value;
+                    that.data.condition.compareDateScope = data.data.compareDateScope.value;
                     that.addComponent.addTab(that.$element,that.data.condition.phoneModel);
                     that.$element.find($(".tab").find($(".phoneModel:first-child"))).addClass("tabSelected");
                     that._getData();
@@ -597,7 +606,7 @@
             /*生成构件事件监听*/
             $(".generateBtn button").on("click",function () {
                 var queryOptions = {
-                    "baseCptId" : that.data.condition.baseCptId,  //基础构件ID
+                        "baseCptId" : that.data.condition.baseCptId,  //基础构件ID
                     "moduleId" : that.data.condition.moduleId,    //模块ID
                     "conCptInstId" : that.data.condition.conCptInstId,   //新增构件实例ID
                     "compareDateScope" : {

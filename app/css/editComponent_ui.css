@@ -394,7 +394,7 @@ body {
 .editContainer .echartsContainer .tipsContainer {
   width: 170px;
   position: absolute;
-  right: 100px;
+  left: 900px;
   top: 100px;
   padding: 10px;
   background-color: rgba(0, 0, 0, 0.7);

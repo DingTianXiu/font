@@ -12,7 +12,7 @@
         <span>个人中心</span>
     </div>
     <div class="personal_center">
-        <ul>
+        <ul class="tab">
             <li class="account">账号信息</li>
             <li class="resetPW">修改密码</li>
         </ul>
@@ -43,6 +43,16 @@
                     <td id="mobilePhone"></td>
                 </tr>
             </table>
+        </div>
+        <div class="resetPasswordContainer" style="display: none">
+            <ul>
+                <li><input id="currentPwd" type="password" placeholder="输入当前密码"></li>
+                <li><input id="newPwd" type="password" placeholder="设置新密码"></li>
+                <li><input id="repeatPwd" type="password" placeholder="再次确认新密码"></li>
+                <li><button id="submitBtn">修改</button></li>
+                <li><span id="messageTip">修改</span></li>
+                <li>说明：<br>1、密码长度需要8-16位，且同时包含大小写字母；</li>
+            </ul>
         </div>
     </div>
 </body>

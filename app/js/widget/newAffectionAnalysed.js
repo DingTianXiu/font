@@ -135,15 +135,6 @@
             if(that.$element.find(".dateBox").length==0){
                 that.$element.find(".dateBox_in").addClass("dateBox");
             }
-            that.$element.find(".dateBox").datePicker({
-                afterDateNum : that.data.condition.compareDateScope.afterDateNum,
-                beforeDataNum : that.data.condition.compareDateScope.beforeDataNum,
-                onSaveDate : function(beforeDateNum,afterDateNum){
-                    that.data.condition.compareDateScope.beforeDataNum = beforeDateNum;
-                    that.data.condition.compareDateScope.afterDateNum = afterDateNum;
-                    that._updateAndGetData(beforeDateNum,afterDateNum);
-                }
-            });
         },
 
         /*获取关联构建属性,创建构件*/
@@ -180,10 +171,7 @@
                         that.$element.find(".echartsContainer").html("");
                         return
                     }
-
                     that.data.result = data.data;
-                    that.data.condition.compareDateScope.afterDateNum = data.data?data.data.afterDateNum:null;
-                    that.data.condition.compareDateScope.beforeDataNum = data.data?data.data.beforeDataNum:null;
                     that.addComponent.addEcharts(that.$element,that.data.condition.cptInstId);
 
                     that._renderResult();
@@ -193,15 +181,24 @@
         },
 
         /*更新构建数据*/
-        _updata : function () {
+        _updata : function (beforeDateNum,afterDateNum) {
             var that = this;
-            var option = {
-                "baseCptId" : that.data.condition.baseCptId,  //基础构件ID
-                "moduleId" : that.data.condition.moduleId,    //模块ID
-                "cptInstId" : that.data.condition.cptInstId,   //新增构件实例ID
-                "conCptInstId" : that.data.condition.conCptInstId,
-                "phoneModel" : that.data.condition.phoneModel
-            };
+            if(beforeDateNum||afterDateNum){
+                that.data.condition.compareDateScope.beforeDateNum = beforeDateNum;
+                that.data.condition.compareDateScope.afterDateNum = afterDateNum;
+                var option = {
+                    "cptInstId" : that.data.condition.cptInstId,   //新增构件实例ID
+                    "compareDateScope" : {
+                        "beforeDateNum" : beforeDateNum,
+                        "afterDateNum" : afterDateNum
+                    }
+                };
+            }else{
+                var option = {
+                    "cptInstId" : that.data.condition.cptInstId,   //新增构件实例ID
+                    "phoneModel" : that.data.condition.phoneModel
+                };
+            }
             $.ajaxJSON({
                 name : "更新实例属性",
                 url: URL.UPDATE_GET_DATA,
@@ -215,8 +212,6 @@
                         return
                     }
                     that.data.result = data.data.cptData;
-                    that.data.condition.compareDateScope.afterDateNum = data.data.cptData.afterDateNum?data.data.cptData.afterDateNum:null;
-                    that.data.condition.compareDateScope.beforeDataNum = data.data.cptData.beforeDataNum?data.data.cptData.beforeDataNum:null;
                     that.addComponent.addEcharts(that.$element,that.data.condition.cptInstId);
                     that._renderResult();
                     that._onUpdateAttr(data.data.syncCptInstIdList);
@@ -227,6 +222,16 @@
         /*渲染构件*/
         _renderResult : function () {
             var that = this;
+            that.$element.find(".dateBox").datePicker({
+                beforeDateNum : that.data.condition.compareDateScope.beforeDateNum,
+                afterDateNum : that.data.condition.compareDateScope.afterDateNum,
+                onSaveDate : function(beforeDateNum,afterDateNum){
+                    that.data.condition.compareDateScope.beforeDateNum = beforeDateNum;
+                    that.data.condition.compareDateScope.afterDateNum = afterDateNum;
+                    that.$element.find(".echartsContainer").remove();
+                    that._updata(beforeDateNum,afterDateNum);
+                }
+            });
             var dom = document.getElementById("echarts"+that.data.condition.cptInstId);
             var myChart = echarts.init(dom);
             var selectData_sum = [],
@@ -240,9 +245,9 @@
                 selectData_negative.push(selectData.negative);
             }
             var afterDateNum = that.data.result&&that.data.result.afterDateNum?that.data.result.afterDateNum:28,
-                beforeDataNum = that.data.result&&that.data.result.beforeDataNum?-that.data.result.beforeDataNum:-30;
+                beforeDateNum = that.data.result&&that.data.result.beforeDateNum?-that.data.result.beforeDateNum:-30;
             var dateList = [];
-            for(var i=beforeDataNum;i<afterDateNum;i++){
+            for(var i=beforeDateNum;i<afterDateNum;i++){
                 dateList.push(i);
             }
             var option = {
@@ -311,6 +316,8 @@
                 success : function (data) {
                     that.data.condition.phoneModel = data.data.phoneModel.value;
                     that.data.condition.infoSource = data.data.infoSource.value;
+                    that.data.condition.compareDateScope.beforeDateNum = data.data.compareDateScope.value.beforeDateNum;
+                    that.data.condition.compareDateScope.afterDateNum = data.data.compareDateScope.value.afterDateNum;
                     that.addComponent.addTab(that.$element,that.data.condition.phoneModel);
                     that.$element.find($(".tab").find($(".phoneModel:first-child"))).addClass("tabSelected");
                     that._getData();
@@ -497,7 +504,6 @@
             var srcKey = $("#resource").val();
             $.each(that.resourceData,function (i) {
                 if(that.resourceData[i].srcKey == srcKey){
-                    console.log(that.resourceData[i]);
                     var resource = {
                         "srcName" : that.resourceData[i].srcName,
                         "srcKey" : that.resourceData[i].srcKey

@@ -37,7 +37,6 @@
             }
         };
         this._init(element,options);
-        // this.init();
 	};
 
 	// var phoSelect = function(element,options){
@@ -98,7 +97,7 @@
                 that._onRelatedWidget(param);
             });
             this.$element.on("click",".addBtn",function () {
-                that._addProduct();
+                that._addPhoneList();
             });
         },
         _renderResult : function(){
@@ -135,7 +134,7 @@
             // console.log(code);
             $ele.addClass("active");
             $ele.siblings().removeClass("active");
-            this._renderChart(this.data.result[code]);
+            this._renderChart(this.data.result.volumeData[code]);
         },
         _updateDate : function(beforeDateNum,afterDateNum){
             var that = this;
@@ -171,12 +170,12 @@
 				$btnDele = $(".phoneList .tarProWidth .btnDelect");
 			//手机品牌
 			$.ajaxJSON({
-				name : "手机品牌",
+				name : "手机品牌、型号",
 				url: URL.GET_PHONE_LIST,
 				data: {"industry" : "mobile"},
-				type : 'post',
+				type : 'get',
 				iframe : true,
-				success: function (i,msg) {
+				success: function (i) {
 					if(phoneModel) {
                         _this.$element.find(".proContraIn").selectorPlusPro({"data": i.data, "phoneModel": phoneModel});
                     }else{
@@ -225,8 +224,21 @@
                 }
             });
         },
+        _getInfoSource : function(){
+            var that = this;
+            $.ajaxJSON({
+                name : "信息来源",
+                url : URL.GET_SOURCE_DATA,
+                data : {},
+                type : 'get',
+                iframe : true,
+                success : function(i) {
+                    that.$element.find(".infoSource").selectorPlusSource({"data":i.data});
+                }
+            });
+        },
         /*step2添加手机型号*/
-        _addProduct : function () {
+        _addPhoneList : function () {
             var that = this;
             var id = $(".model").val(),
                 brandCode = $(".brand").val();
@@ -253,7 +265,7 @@
                                     if(that.data.condition.phoneModel[i].id==model.id){
                                         $.msg("该型号手机已存在");
                                         return false
-                                    }else if(i==that.data.condition.phoneModel.length-1){
+                                    }else if(i == that.data.condition.phoneModel.length-1){
                                         that.data.condition.phoneModel.push(model);
                                         that.addComponent.addProductList(that.data.condition.phoneModel);
                                         that._bindEvent();
@@ -271,13 +283,13 @@
             var infoSource = this.$element.find(".infoSource").selectorPlusSource("getData");
             if(phoneModel.length == 0){
                 $.msg("不选择品牌就想添加数据？哪有那么好的事情");
-                $('.ui-select-button').css('border','#f25e61');
-                return false;
+                $('.ui-select-button').css('border','1px solid #f25e61');
+                return;
             }
             if(infoSource.length == 0){
                 $.msg("信息来源不添加哪来的数据");
-                $('.ui-select-button').css('border','#f25e61');
-                return false;
+                $('.ui-select-button').css('border','1px solid #f25e61');
+                return;
             }
             params["phoneModel"] = [];
             for(var i = 0; i < phoneModel.length;i++) {
@@ -326,19 +338,6 @@
                 success: function (relData) {
                     that.data.related = relData.data;
                     that._getData();
-                }
-            });
-        },
-        _getInfoSource : function(){
-            var that = this;
-            $.ajaxJSON({
-                name : "信息来源",
-                url : URL.GET_SOURCE_DATA,
-                data : {},
-                type : 'get',
-                iframe : true,
-                success : function(i) {
-                    that.$element.find(".infoSource").selectorPlusSource({"data":i.data});
                 }
             });
         },
@@ -391,6 +390,8 @@
                         that._phoneInfo(r.data.phoneModel.value);
                     }
                 });
+            }else{
+                that._phoneInfo;
             };
             this._getInfoSource();
             this._initSlider(this.$element.find(".firstMultiAttr").find(".sliderBox"));
@@ -402,6 +403,7 @@
                 return;
             }
             var xList = [],
+                seriesList = [],
                 negativeList = [],
                 neutralList = [],
                 sumList = [];
@@ -426,14 +428,9 @@
             };
            
             var option = {
-                title: {
-                    text: ''
-                },
-                tooltip: {
-                    trigger: 'axis'
-                },
-                legend: {
-                    data:['邮件营销','联盟广告','视频广告','直接访问','搜索引擎','搜索引擎1']
+                color : ['#5f97fb','#87b1fc','#afcbfd'],
+                tooltip : {
+                    trigger: 'axis',
                 },
                 grid: {
                     left: '3%',
@@ -441,56 +438,24 @@
                     bottom: '3%',
                     containLabel: true
                 },
-                toolbox: {
-                    feature: {
-                        saveAsImage: {}
-                    }
-                },
-                xAxis: {
+                xAxis:  {
                     type: 'category',
-                    boundaryGap: false,
-                    data: ['08.20','08.21','08.22','08.23','08.24','08.25','08.26']
+                    data: xList,
+                    axisTick : {show:false}
                 },
                 yAxis: {
-                    type: 'value'
+                    type: 'value',
+                    splitLine:{
+                        show:true,
+                        lineStyle: {     
+                            color: ['#ddd'],
+                            width: 1,
+                            type: 'solid'
+                        }
+                    }
                 },
                 series: [
-                    {
-                        name:'邮件营销',
-                        type:'line',
-                        stack: '总量',
-                        data:[120, 132, 101, 134, 90, 230, 210]
-                    },
-                    {
-                        name:'联盟广告',
-                        type:'line',
-                        stack: '总量',
-                        data:[220, 182, 191, 234, 290, 330, 310]
-                    },
-                    {
-                        name:'视频广告',
-                        type:'line',
-                        stack: '总量',
-                        data:[150, 232, 201, 154, 190, 330, 410]
-                    },
-                    {
-                        name:'直接访问',
-                        type:'line',
-                        stack: '总量',
-                        data:[320, 332, 301, 334, 390, 330, 320]
-                    },
-                    {
-                        name:'搜索引擎',
-                        type:'line',
-                        stack: '总量',
-                        data:[820, 932, 901, 934, 1290, 1330, 1320]
-                    },
-                    {
-                        name:'搜索引擎1',
-                        type:'line',
-                        stack: '总量',
-                        data:[820, 93, 1, 934, 1290, 330, 120]
-                    }
+                   negativeList,neutralList,sumList
                 ]
             };
             var myChart = echarts.init(document.getElementById('containerChart1'));
@@ -511,15 +476,15 @@
 	$.fn.newPhoAddComp = function(option, value) {
 		var methodReturn;
 		var $set = this.each(function() {
-			 var $this = $(this);
-			 var data = $this.data('newPhoAddComp');
-			 var options = typeof option === 'object' && option;
-			 if (!data) {
+			var $this = $(this),
+			    data = $this.data('newPhoAddComp'),
+			    options = typeof option === 'object' && option;
+			if (!data) {
 				 $this.data('newPhoAddComp', (data = new newPhoAddComp(this, options)));
-			 }
-			 if (typeof option === 'string') {
+			}
+			if (typeof option === 'string') {
 				 methodReturn = data[option](value);
-			 }
+			}
 		});
 		return (methodReturn === undefined) ? $set : methodReturn;
 	};

@@ -670,8 +670,8 @@
 			});
 			this.$confirmBtn.on('click',function(){
 				that.onSaveDate(that.beforeDateNum,that.afterDateNum);
-				var beforeText = this.beforeDateNum > 0 ? ("前 "+ this.beforeDateNum) : ("后 " + this.beforeDateNum*-1);
-				var afterText = this.afterDateNum > 0  ? ("前 "+ this.afterDateNum) : ("后 " + this.afterDateNum*-1);
+				var beforeText = that.beforeDateNum > 0 ? ("前 "+ that.beforeDateNum) : ("后 " + that.beforeDateNum*-1);
+				var afterText = that.afterDateNum > 0  ? ("前 "+ that.afterDateNum) : ("后 " + that.afterDateNum*-1);
 				that.$dateBtn.html("<span>今天"+ beforeText +" 至"+ afterText +"天</span>");
 				that._close();
 			});
