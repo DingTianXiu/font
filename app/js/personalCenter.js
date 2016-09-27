@@ -178,6 +178,7 @@
         },
 
         resetPwd : function () {
+            var that = this;
             var pwdDetail = {
                 curPwd : $("#currentPwd").val(),
                 newPwd : $("#newPwd").val(),
@@ -193,6 +194,26 @@
                     $(".personal_center_right").css("display","none");
                     $(".resetPasswordContainer").css("display","none");
                     $(".resetSuccess").css("display","block");
+                },
+                fail : function (data) {
+                    console.log(data);
+                    if(data.msg == "密码不正确"){
+                        that.showErr();
+                        $("#messageTip").html("密码不正确").addClass("err");
+                        $("#currentPwd").css("borderBottom","2px solid #f25e61");
+                        $("#currentPwd").on("focus",function () {
+                            $(this).val("").css("borderBottom","1px solid #d0d0d1");
+                        });
+                        return that.currentPwd = false
+                    }else if(data.msg == "原密码长度必须在6-32位;"){
+                        that.showErr();
+                        $("#messageTip").html("原密码长度必须在6-32位;").addClass("err");
+                        $("#currentPwd").css("borderBottom","2px solid #f25e61");
+                        $("#currentPwd").on("focus",function () {
+                            $(this).val("").css("borderBottom","1px solid #d0d0d1");
+                        });
+                        return that.currentPwd = false
+                    }
                 }
             });
 
