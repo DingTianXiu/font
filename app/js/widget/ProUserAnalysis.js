@@ -14,7 +14,8 @@
                 "compareDateScope" : {
                     "beforeDateNum": options.beforeDateNum ? options.beforeDateNum : 28,
                     "afterDateNum": options.afterDateNum ? options.afterDateNum : 30
-                }
+                },
+                "phoneModel" : []
             },
             "result" : {},
             "related" : []
@@ -61,6 +62,24 @@
             });
             this.$element.delegate(".legendBtn","click",function(){
                 that._switchLegendBtn($(this));
+            });
+            this.$element.delegate(".addLegendBtn","click",function(){
+                that._openPhoneDialog();
+                that._getPhoneList();
+            });
+            this.$element.delegate(".delLegendBtn","click",function(){
+                that.$element.find(".legendBtn").find("i").show();
+            });
+            this.$element.delegate(".delLegendIcon","click",function(){
+               that._delPhoneModel($(this));
+            });
+            this.$element.delegate(".addBtn_updata","click",function () {
+                that._addProduct();
+                if(that.data.condition.phoneModel.length == that.$element.find(".phoneModel").length){
+                    return;
+                }
+                that.$element.find($(".legend").find($(".legendBtn:first-child"))).addClass("active");
+                that._updatePhoneModel();
             });
             this.$element.delegate(".relatedBtn","click",function(){
                 var param = {
@@ -135,6 +154,7 @@
                     iframe: true,
                     success: function (r) {
                         that._initBrand(r.data.phoneModel.value);
+                        that.data.condition.phoneModel = r.data.phoneModel.value;
                     }
                 });
             }else{
@@ -214,7 +234,7 @@
                         data: {baseCptId: that.data.condition.baseCptId},
                         iframe:true,
                         success: function (relData) {
-                            that.data.related = relData.data;
+                            that._filterRelData(that.data.condition.baseCptId,relData.data);
                             that._getData();
                         }
                     });
@@ -245,11 +265,11 @@
             var tpl = "";
             for(var i = 0; i < this.data.condition.phoneModel.length;i++){
                 var item = this.data.condition.phoneModel[i];
-                tpl += "<a href='javascript:;' class='legendBtn' modelCode='"+ item.id +"'>"+ item.brandName + " " + item.modelName +"<i>x</i></a>"
+                tpl += "<a href='javascript:;' class='legendBtn' modelCode='"+ item.id +"'>"+ item.brandName + " " + item.modelName +"<i class='icon iconfont icon-iconclouse delLegendIcon'></i></a>"
             }
             this.$legend.html(tpl);
-            this.$addBtn = $("<a href='javascript:;' class='addBtn'><i class='icon iconfont icon-iconadd'></i></a>").appendTo(this.$legend);
-            this.delBtn = $("<a href='javascript:;' class='delBtn'><i class='icon iconfont icon-icondel'></i></a>").appendTo(this.$legend);
+            this.$addBtn = $("<div class='addShowBtnContainer'><a href='javascript:;' class='addBtn addLegendBtn'><i class='icon iconfont icon-iconadd'></i></a></div>").appendTo(this.$legend);
+            this.delBtn = $("<a href='javascript:;' class='delBtn delLegendBtn'><i class='icon iconfont icon-icondel'></i></a>").appendTo(this.$legend);
             this.$hrLline = $("<hr class='hrLine'>").appendTo(this.$legend);
             if(!this.data.result) return;
             var defaultModelCode = this.$legend.find(".legendBtn").eq(0).attr("modelCode");
@@ -352,7 +372,7 @@
                 data: {baseCptId: that.data.condition.baseCptId},
                 iframe:true,
                 success: function (relData) {
-                    that.data.related = relData.data;
+                    that._filterRelData(that.data.condition.baseCptId,relData.data);
                     that._getData();
                 }
             });
@@ -388,6 +408,153 @@
         },
         _close : function(){
             this.$element.remove();
+        },
+        /*添加手机型号*/
+        _addProduct : function () {
+            var that = this;
+            var id = $(".model").val(),
+                brandCode = $(".brand").val();
+            $.each(that.modelData,function (i) {
+                if(that.modelData[i].brandCode == brandCode){
+                    var models = that.modelData[i].models,
+                        brandName = that.modelData[i].brandName;
+                    $.each(models,function (j) {
+                        if(models[j].modelCode == id){
+                            var model = {
+                                "id": models[j].modelCode,
+                                "brandName": brandName,
+                                "modelName": models[j].modelName,
+                                "picUrl": models[j].logoUrl,
+                                "releaseDate": models[j].pubDate
+                            };
+                            if(!that.data.condition.phoneModel){
+                                that.data.condition.phoneModel = [];
+                                that.data.condition.phoneModel.push(model);
+                                //that.addComponent.addProductList(that.data.condition.phoneModel);
+                            }else{
+                                $.each(that.data.condition.phoneModel,function (i) {
+                                    if(that.data.condition.phoneModel[i].id==model.id){
+                                        $.msg("该型号手机已存在");
+                                        return false;
+                                    }else if(i==that.data.condition.phoneModel.length-1){
+                                        that.data.condition.phoneModel.push(model);
+                                    }
+                                });
+                            }
+                        }
+                    })
+                }
+            });
+        },
+        _openPhoneDialog : function(){
+            var that = this;
+            if(this.$element.find(".selectProduct_updata").length==0){
+                var dom = "<ul class='selectProduct_updata'>" +
+                    "<li>选择目标产品:</li>" +
+                    "<li>" +
+                    "<select class='select brand'>" +
+                    "<option>选择品牌</option>" +
+                    "</select>" +
+                    "</li>" +
+                    "<li>" +
+                    "<select class='select model'>" +
+                    "<option>选择型号</option>" +
+                    "</select>" +
+                    "</li>" +
+                    "<li><button class='addBtn_updata'><i class='icon iconfont icon-iconadd'></i></button></li>" +
+                    "</ul>";
+                this.$element.find(".addShowBtnContainer").append(dom);
+            }
+        },
+        /*获取手机型号列表*/
+        _getPhoneList : function () {
+            var that = this;
+            $.ajaxJSON({
+                name: "手机列表",
+                url: URL.GET_PHONE_LIST,
+                data: {
+                    industry: "mobile"
+                },
+                type: 'post',
+                iframe: true,
+                success: function (data) {
+                    var arr = [],
+                        modelsObj = {};
+                    this.data = data.data;
+                    that.modelData = data.data.brands;
+                    if (!this.data) {
+                        that.$element.find($(".brand")).select('data', [{text: "请选择", value: -1}]);
+                        that.$element.find($(".model")).select('data', [{text: "请选择", value: -1}]);
+                    } else {
+                        for (var i = 0; i < this.data.brands.length; i++) {
+                            var item = this.data.brands[i];
+                            arr.push({
+                                text: item.brandName,
+                                value: item.brandCode
+                            });
+                            modelsObj[item.brandCode] = [];
+                            for (var j = 0; j < item.models.length; j++) {
+                                modelsObj[item.brandCode].push({
+                                    text: item.models[j].modelName,
+                                    value: item.models[j].modelCode
+                                })
+                            }
+                        }
+                        that.$element.find($(".brand")).select('data', arr).select("trigger");
+                        that.$element.find($(".brand")).on("change", function () {
+                            var val = $(this).val();
+                            that.$element.find($(".model")).select("destroy").select('data', modelsObj[val]);
+
+                        });
+                        that.$element.find($(".brand")).trigger("change");
+                    }
+                }
+            })
+        },
+        _updatePhoneModel : function() {
+            var that = this;
+            var param = {
+                "cptInstId": this.data.condition.cptInstId,
+                "phoneModel": that.data.condition.phoneModel
+            };
+
+            $.ajaxJSON({
+                name: "更新实例属性",
+                url: URL.UPDATE_CPTiNST_ATTR,
+                data: param,
+                data: JSON.stringify(param),
+                contentType: 'application/json; charset=UTF-8',
+                iframe: true,
+                success: function (r) {
+                    that._onUpdateAttr(r.data.syncCptInstIdList);
+                    that._renderResult();
+                }
+            });
+        },
+        _delPhoneModel : function($ele){
+            if(this.data.condition.phoneModel.length <= 1){
+                $.msg({modal : true,msg : "型号手机不能为空"});
+                return;
+            }
+            var modelcode = $ele.parent().attr("modelcode");
+            for(var i = 0; i < this.data.condition.phoneModel.length;i++){
+                if(modelcode == this.data.condition.phoneModel[i].id){
+                    this.data.condition.phoneModel.splice(i,1);
+                }
+            }
+            this.$element.find($(".legend").find($(".legendBtn:first-child"))).addClass("active");
+            this._updatePhoneModel();
+        },
+        _filterRelData : function(baseCptId,relData){
+            for(var i = 0; i < relData.length;i++){
+                if(baseCptId != relData[i]["baseCptId"]){
+                    this.data.related.push({
+                        "baseCptId" : relData[i].baseCptId,
+                        "baseCptName" : relData[i].baseCptName,
+                        "baseCptKey" : relData[i].baseCptKey
+                    });
+                }
+            }
         }
     };
     $.fn.proUserAnalysis = function(option, value) {

@@ -386,19 +386,20 @@ body{
           background:#fff;
           position:relative;
           margin-left: -1px;
-          i{
+          i.delLegendIcon{
             color:#9f9fa1;
             display:none;
-            postion:absolute;
-            right:12px;
-            top:12px;
-            cursor:pointer;
+            right: 5px;
+            position: absolute;
+            font-size: 4px;
+            font-weight: normal;
+            top: 0;
           }
         }
         a.active{
           background:#fff9f9;
           border-color:#b9bcc4;
-          i{
+          i.delLegendIcon{
             color:#f25e61;
           }
         }
@@ -412,6 +413,9 @@ body{
           .iconfont{
             display:block;
           }
+        }
+        .addShowBtnContainer{
+          display:inline-block;
         }
       }
       .chart{
@@ -490,89 +494,6 @@ body{
           text-align: center;
           line-height: 50px;
       }
-      .proContainer,.infoContainer,.infoSource{
-        padding:27px 24px;
-        .sBox {
-          margin-bottom:14px;
-          label {
-            line-height: 36px;
-            display: inline-block;
-            margin-right:10px;
-            font-size:14px;
-          }
-          .ui-select {
-            margin-right: 10px;
-          }
-          .addBtn {
-            width: 78px;
-            line-height: 34px;
-            text-align:center;
-            border: 1px solid #ccc;
-            border-radius: 4px;
-            color: #757b8b;
-            background:#f4f4f4;
-            display:inline-block;
-          }
-        }
-        .rBox{
-          .proWrapper {
-            width: 33%;
-            display:inline-block;
-            .pro {
-              cursor: pointer;
-              border: 1px solid #efeeec;
-              padding: 15px;
-              margin:-2px 0 0 -1px;
-              .phoneThumb {
-                width: 50px;
-                height: 50px;
-                float: left;
-                margin-right: 15px;
-              }
-              .info {
-                font-size: 14px;
-                float: left;
-                p {
-                  line-height: 27px;
-                  color: #282828;
-                  font-size: 16px;
-                }
-                .pubDate {
-                  font-size: 12px;
-                  color: #b0b0b0;
-                }
-              }
-              i {
-                color: #f25e61;
-                cursor: pointer;
-                float: right;
-                margin-top: 19px;
-              }
-            }
-            .pro:hover {
-              background: #fff9f9;
-            }
-          }
-        }
-      }
-      .infoContainer,.infoSource{
-        .rBox{
-          .proWrapper {
-            width: 16.6%;
-            display: inline-block;
-            .pro {
-              .info {
-                p {
-                  line-height: 16px;
-                }
-              }
-              i {
-                margin-top: 0;
-              }
-            }
-          }
-        }
-      }
       .dateContainer{
         padding:27px 24px;
         label{
@@ -621,6 +542,89 @@ body{
         display: block;
         margin: 0 auto;
         border-radius: 4px;
+      }
+    }
+    .proContainer,.infoContainer,.infoSource{
+      padding:27px 24px;
+      .sBox {
+        margin-bottom:14px;
+        label {
+          line-height: 36px;
+          display: inline-block;
+          margin-right:10px;
+          font-size:14px;
+        }
+        .ui-select {
+          margin-right: 10px;
+        }
+        .addBtn {
+          width: 78px;
+          line-height: 34px;
+          text-align:center;
+          border: 1px solid #ccc;
+          border-radius: 4px;
+          color: #757b8b;
+          background:#f4f4f4;
+          display:inline-block;
+        }
+      }
+      .rBox{
+        .proWrapper {
+          width: 33%;
+          display:inline-block;
+          .pro {
+            cursor: pointer;
+            border: 1px solid #efeeec;
+            padding: 15px;
+            margin:-2px 0 0 -1px;
+            .phoneThumb {
+              width: 50px;
+              height: 50px;
+              float: left;
+              margin-right: 15px;
+            }
+            .info {
+              font-size: 14px;
+              float: left;
+              p {
+                line-height: 27px;
+                color: #282828;
+                font-size: 16px;
+              }
+              .pubDate {
+                font-size: 12px;
+                color: #b0b0b0;
+              }
+            }
+            i {
+              color: #f25e61;
+              cursor: pointer;
+              float: right;
+              margin-top: 19px;
+            }
+          }
+          .pro:hover {
+            background: #fff9f9;
+          }
+        }
+      }
+    }
+    .infoContainer,.infoSource{
+      .rBox{
+        .proWrapper {
+          width: 16.6%;
+          display: inline-block;
+          .pro {
+            .info {
+              p {
+                line-height: 16px;
+              }
+            }
+            i {
+              margin-top: 0;
+            }
+          }
+        }
       }
     }
   }
@@ -990,6 +994,58 @@ body{
         margin-left: 10px;
         border: none;
         curspr: pointer;
+      }
+    }
+  }
+}
+.phoneUpdatePopup{
+  position:absolute;
+  top:0;
+  left:200px;
+  width:642px;
+  overflow:hidden;
+  border:1px solid #b9bcc4;
+  background:#fff9f9;
+  .rBox{
+    display:none;
+  }
+}
+.addShowBtnContainer{
+  display: inline-block;
+  position: relative;
+  .selectProduct_updata{
+    position: absolute;
+    z-index: 1;
+    top: 30px;
+    left: 0px;
+    width: 640px;
+    padding: 18px 0;
+    background-color: #fbfbfb;
+    border: 1px solid #e5e5e5;
+    li{
+      height: 36px;
+      border: none;
+      width: auto;
+      margin-right: 10px;
+      line-height: 39px;
+      display:inline-block;
+      button{
+        height: 36px;
+        width: 80px;
+        border: 1px solid #e5e5e5;
+        -webkit-border-radius: 4px;
+        -moz-border-radius: 4px;
+        border-radius: 4px;
+        outline: none;
+        color:#9f9fa1;
+      }
+    }
+    li:first-child{
+      margin-left: 26px;
+      font-size: 14px;
+      select{
+        height: 36px;
+        width: 199px;
       }
     }
   }

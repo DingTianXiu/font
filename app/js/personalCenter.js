@@ -2,7 +2,6 @@
  * Created by dtx on 16/8/27.
  */
 (function ($) {
-
     var personalCenter = {
         bindEvent : function () {
             var that = this;
@@ -12,9 +11,16 @@
                 if($(this).html()=="修改密码"){
                     $(".personal_center_right").css("display","none");
                     $(".resetPasswordContainer").css("display","block");
+                    $(".resetSuccess").css("display","none");
+                    $(".option").html("修改密码");
                 }else {
+                    $("#currentPwd").val("");
+                    $("#newPwd").val("");
+                    $("#repeatPwd").val("");
                     $(".personal_center_right").css("display","block");
                     $(".resetPasswordContainer").css("display","none");
+                    $(".resetSuccess").css("display","none");
+                    $(".option").html("账号信息");
                 }
             });
             //弃用
@@ -43,6 +49,7 @@
         init : function () {
             if(localStorage.userInfo){
                 this.userInfo = JSON.parse(localStorage.userInfo);
+                $(".option").html("账号信息");
                 $(".userName").html(this.userInfo.orgName);
                 $("#userName").html(this.userInfo.loginName);
                 $("#company").html(this.userInfo.orgName);
@@ -149,9 +156,6 @@
                 $("#repeatPwd").unbind("focus");
                 that.repeatPwd = true
             }
-            if(that.currentPwd&&that.repeatPwd&&that.newPwd){
-                that.resetPwd();
-            }
         },
 
         showSubmit : function () {
@@ -174,7 +178,6 @@
         },
 
         resetPwd : function () {
-            var that = this;
             var pwdDetail = {
                 curPwd : $("#currentPwd").val(),
                 newPwd : $("#newPwd").val(),
@@ -184,11 +187,12 @@
                 name: "更改密码",
                 url: URL.UPDATE_PWD,
                 data: pwdDetail,
-                // contentType : 'application/json; charset=UTF-8',
                 type : "post",
                 iframe : true,
-                success : function (data) {
-                    console.log(data);
+                success : function () {
+                    $(".personal_center_right").css("display","none");
+                    $(".resetPasswordContainer").css("display","none");
+                    $(".resetSuccess").css("display","block");
                 }
             });
 

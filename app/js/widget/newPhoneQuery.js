@@ -15,7 +15,7 @@
             "result" : {},
             "related" : []
         };
-
+        this.selectedIdStr = "";
         this.$element = $(element);
         if(options.onComplete){
             if(typeof options.onComplete == "function"){
@@ -124,7 +124,7 @@
                         data: {baseCptId: that.data.condition.baseCptId},
                         iframe:true,
                         success: function (relData) {
-                            that.data.related = relData.data;
+                            that._filterRelData(that.data.condition.baseCptId,relData.data);
                             that._getData();
                         }
                     });
@@ -178,13 +178,7 @@
                         data: {baseCptId: that.data.condition.baseCptId},
                         iframe:true,
                         success: function (relData) {
-                            that.data.related = relData.data;
-                            for(var i = 0; i < relData.length;i++){
-                                that.data.related.push({
-                                    "baseCptId" : relData[i].baseCptId,
-                                    "baseCptName" : relData[i].baseCptName
-                                });
-                            }
+                            that._filterRelData(that.data.condition.baseCptId,relData.data);
                             that.data.condition["searchDateScope"] = r.data.searchDateScope.value;
                             that._getData();
                         }
@@ -263,6 +257,17 @@
         },
         _close : function(){
             this.$element.remove();
+        },
+        _filterRelData : function(baseCptId,relData){
+            for(var i = 0; i < relData.length;i++){
+                if(baseCptId != relData[i]["baseCptId"]){
+                    this.data.related.push({
+                        "baseCptId" : relData[i].baseCptId,
+                        "baseCptName" : relData[i].baseCptName,
+                        "baseCptKey" : relData[i].baseCptKey
+                    });
+                }
+            }
         }
     };
     $.fn.newPhoneQuery = function(option, value) {

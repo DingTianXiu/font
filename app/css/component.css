@@ -385,19 +385,20 @@ body {
   position: relative;
   margin-left: -1px;
 }
-.componentListWrapper .componentList .second .legend a i {
+.componentListWrapper .componentList .second .legend a i.delLegendIcon {
   color: #9f9fa1;
   display: none;
-  postion: absolute;
-  right: 12px;
-  top: 12px;
-  cursor: pointer;
+  right: 5px;
+  position: absolute;
+  font-size: 4px;
+  font-weight: normal;
+  top: 0;
 }
 .componentListWrapper .componentList .second .legend a.active {
   background: #fff9f9;
   border-color: #b9bcc4;
 }
-.componentListWrapper .componentList .second .legend a.active i {
+.componentListWrapper .componentList .second .legend a.active i.delLegendIcon {
   color: #f25e61;
 }
 .componentListWrapper .componentList .second .legend .addBtn,
@@ -412,6 +413,9 @@ body {
 .componentListWrapper .componentList .second .legend .addBtn .iconfont,
 .componentListWrapper .componentList .second .legend .delBtn .iconfont {
   display: block;
+}
+.componentListWrapper .componentList .second .legend .addShowBtnContainer {
+  display: inline-block;
 }
 .componentListWrapper .componentList .second .chart {
   height: 400px;
@@ -488,108 +492,6 @@ body {
   text-align: center;
   line-height: 50px;
 }
-.componentListWrapper .componentList .firstMultiAttr .proContainer,
-.componentListWrapper .componentList .firstMultiAttr .infoContainer,
-.componentListWrapper .componentList .firstMultiAttr .infoSource {
-  padding: 27px 24px;
-}
-.componentListWrapper .componentList .firstMultiAttr .proContainer .sBox,
-.componentListWrapper .componentList .firstMultiAttr .infoContainer .sBox,
-.componentListWrapper .componentList .firstMultiAttr .infoSource .sBox {
-  margin-bottom: 14px;
-}
-.componentListWrapper .componentList .firstMultiAttr .proContainer .sBox label,
-.componentListWrapper .componentList .firstMultiAttr .infoContainer .sBox label,
-.componentListWrapper .componentList .firstMultiAttr .infoSource .sBox label {
-  line-height: 36px;
-  display: inline-block;
-  margin-right: 10px;
-  font-size: 14px;
-}
-.componentListWrapper .componentList .firstMultiAttr .proContainer .sBox .ui-select,
-.componentListWrapper .componentList .firstMultiAttr .infoContainer .sBox .ui-select,
-.componentListWrapper .componentList .firstMultiAttr .infoSource .sBox .ui-select {
-  margin-right: 10px;
-}
-.componentListWrapper .componentList .firstMultiAttr .proContainer .sBox .addBtn,
-.componentListWrapper .componentList .firstMultiAttr .infoContainer .sBox .addBtn,
-.componentListWrapper .componentList .firstMultiAttr .infoSource .sBox .addBtn {
-  width: 78px;
-  line-height: 34px;
-  text-align: center;
-  border: 1px solid #ccc;
-  border-radius: 4px;
-  color: #757b8b;
-  background: #f4f4f4;
-  display: inline-block;
-}
-.componentListWrapper .componentList .firstMultiAttr .proContainer .rBox .proWrapper,
-.componentListWrapper .componentList .firstMultiAttr .infoContainer .rBox .proWrapper,
-.componentListWrapper .componentList .firstMultiAttr .infoSource .rBox .proWrapper {
-  width: 33%;
-  display: inline-block;
-}
-.componentListWrapper .componentList .firstMultiAttr .proContainer .rBox .proWrapper .pro,
-.componentListWrapper .componentList .firstMultiAttr .infoContainer .rBox .proWrapper .pro,
-.componentListWrapper .componentList .firstMultiAttr .infoSource .rBox .proWrapper .pro {
-  cursor: pointer;
-  border: 1px solid #efeeec;
-  padding: 15px;
-  margin: -2px 0 0 -1px;
-}
-.componentListWrapper .componentList .firstMultiAttr .proContainer .rBox .proWrapper .pro .phoneThumb,
-.componentListWrapper .componentList .firstMultiAttr .infoContainer .rBox .proWrapper .pro .phoneThumb,
-.componentListWrapper .componentList .firstMultiAttr .infoSource .rBox .proWrapper .pro .phoneThumb {
-  width: 50px;
-  height: 50px;
-  float: left;
-  margin-right: 15px;
-}
-.componentListWrapper .componentList .firstMultiAttr .proContainer .rBox .proWrapper .pro .info,
-.componentListWrapper .componentList .firstMultiAttr .infoContainer .rBox .proWrapper .pro .info,
-.componentListWrapper .componentList .firstMultiAttr .infoSource .rBox .proWrapper .pro .info {
-  font-size: 14px;
-  float: left;
-}
-.componentListWrapper .componentList .firstMultiAttr .proContainer .rBox .proWrapper .pro .info p,
-.componentListWrapper .componentList .firstMultiAttr .infoContainer .rBox .proWrapper .pro .info p,
-.componentListWrapper .componentList .firstMultiAttr .infoSource .rBox .proWrapper .pro .info p {
-  line-height: 27px;
-  color: #282828;
-  font-size: 16px;
-}
-.componentListWrapper .componentList .firstMultiAttr .proContainer .rBox .proWrapper .pro .info .pubDate,
-.componentListWrapper .componentList .firstMultiAttr .infoContainer .rBox .proWrapper .pro .info .pubDate,
-.componentListWrapper .componentList .firstMultiAttr .infoSource .rBox .proWrapper .pro .info .pubDate {
-  font-size: 12px;
-  color: #b0b0b0;
-}
-.componentListWrapper .componentList .firstMultiAttr .proContainer .rBox .proWrapper .pro i,
-.componentListWrapper .componentList .firstMultiAttr .infoContainer .rBox .proWrapper .pro i,
-.componentListWrapper .componentList .firstMultiAttr .infoSource .rBox .proWrapper .pro i {
-  color: #f25e61;
-  cursor: pointer;
-  float: right;
-  margin-top: 19px;
-}
-.componentListWrapper .componentList .firstMultiAttr .proContainer .rBox .proWrapper .pro:hover,
-.componentListWrapper .componentList .firstMultiAttr .infoContainer .rBox .proWrapper .pro:hover,
-.componentListWrapper .componentList .firstMultiAttr .infoSource .rBox .proWrapper .pro:hover {
-  background: #fff9f9;
-}
-.componentListWrapper .componentList .firstMultiAttr .infoContainer .rBox .proWrapper,
-.componentListWrapper .componentList .firstMultiAttr .infoSource .rBox .proWrapper {
-  width: 16.6%;
-  display: inline-block;
-}
-.componentListWrapper .componentList .firstMultiAttr .infoContainer .rBox .proWrapper .pro .info p,
-.componentListWrapper .componentList .firstMultiAttr .infoSource .rBox .proWrapper .pro .info p {
-  line-height: 16px;
-}
-.componentListWrapper .componentList .firstMultiAttr .infoContainer .rBox .proWrapper .pro i,
-.componentListWrapper .componentList .firstMultiAttr .infoSource .rBox .proWrapper .pro i {
-  margin-top: 0;
-}
 .componentListWrapper .componentList .firstMultiAttr .dateContainer {
   padding: 27px 24px;
 }
@@ -638,6 +540,108 @@ body {
   display: block;
   margin: 0 auto;
   border-radius: 4px;
+}
+.componentListWrapper .componentList .proContainer,
+.componentListWrapper .componentList .infoContainer,
+.componentListWrapper .componentList .infoSource {
+  padding: 27px 24px;
+}
+.componentListWrapper .componentList .proContainer .sBox,
+.componentListWrapper .componentList .infoContainer .sBox,
+.componentListWrapper .componentList .infoSource .sBox {
+  margin-bottom: 14px;
+}
+.componentListWrapper .componentList .proContainer .sBox label,
+.componentListWrapper .componentList .infoContainer .sBox label,
+.componentListWrapper .componentList .infoSource .sBox label {
+  line-height: 36px;
+  display: inline-block;
+  margin-right: 10px;
+  font-size: 14px;
+}
+.componentListWrapper .componentList .proContainer .sBox .ui-select,
+.componentListWrapper .componentList .infoContainer .sBox .ui-select,
+.componentListWrapper .componentList .infoSource .sBox .ui-select {
+  margin-right: 10px;
+}
+.componentListWrapper .componentList .proContainer .sBox .addBtn,
+.componentListWrapper .componentList .infoContainer .sBox .addBtn,
+.componentListWrapper .componentList .infoSource .sBox .addBtn {
+  width: 78px;
+  line-height: 34px;
+  text-align: center;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  color: #757b8b;
+  background: #f4f4f4;
+  display: inline-block;
+}
+.componentListWrapper .componentList .proContainer .rBox .proWrapper,
+.componentListWrapper .componentList .infoContainer .rBox .proWrapper,
+.componentListWrapper .componentList .infoSource .rBox .proWrapper {
+  width: 33%;
+  display: inline-block;
+}
+.componentListWrapper .componentList .proContainer .rBox .proWrapper .pro,
+.componentListWrapper .componentList .infoContainer .rBox .proWrapper .pro,
+.componentListWrapper .componentList .infoSource .rBox .proWrapper .pro {
+  cursor: pointer;
+  border: 1px solid #efeeec;
+  padding: 15px;
+  margin: -2px 0 0 -1px;
+}
+.componentListWrapper .componentList .proContainer .rBox .proWrapper .pro .phoneThumb,
+.componentListWrapper .componentList .infoContainer .rBox .proWrapper .pro .phoneThumb,
+.componentListWrapper .componentList .infoSource .rBox .proWrapper .pro .phoneThumb {
+  width: 50px;
+  height: 50px;
+  float: left;
+  margin-right: 15px;
+}
+.componentListWrapper .componentList .proContainer .rBox .proWrapper .pro .info,
+.componentListWrapper .componentList .infoContainer .rBox .proWrapper .pro .info,
+.componentListWrapper .componentList .infoSource .rBox .proWrapper .pro .info {
+  font-size: 14px;
+  float: left;
+}
+.componentListWrapper .componentList .proContainer .rBox .proWrapper .pro .info p,
+.componentListWrapper .componentList .infoContainer .rBox .proWrapper .pro .info p,
+.componentListWrapper .componentList .infoSource .rBox .proWrapper .pro .info p {
+  line-height: 27px;
+  color: #282828;
+  font-size: 16px;
+}
+.componentListWrapper .componentList .proContainer .rBox .proWrapper .pro .info .pubDate,
+.componentListWrapper .componentList .infoContainer .rBox .proWrapper .pro .info .pubDate,
+.componentListWrapper .componentList .infoSource .rBox .proWrapper .pro .info .pubDate {
+  font-size: 12px;
+  color: #b0b0b0;
+}
+.componentListWrapper .componentList .proContainer .rBox .proWrapper .pro i,
+.componentListWrapper .componentList .infoContainer .rBox .proWrapper .pro i,
+.componentListWrapper .componentList .infoSource .rBox .proWrapper .pro i {
+  color: #f25e61;
+  cursor: pointer;
+  float: right;
+  margin-top: 19px;
+}
+.componentListWrapper .componentList .proContainer .rBox .proWrapper .pro:hover,
+.componentListWrapper .componentList .infoContainer .rBox .proWrapper .pro:hover,
+.componentListWrapper .componentList .infoSource .rBox .proWrapper .pro:hover {
+  background: #fff9f9;
+}
+.componentListWrapper .componentList .infoContainer .rBox .proWrapper,
+.componentListWrapper .componentList .infoSource .rBox .proWrapper {
+  width: 16.6%;
+  display: inline-block;
+}
+.componentListWrapper .componentList .infoContainer .rBox .proWrapper .pro .info p,
+.componentListWrapper .componentList .infoSource .rBox .proWrapper .pro .info p {
+  line-height: 16px;
+}
+.componentListWrapper .componentList .infoContainer .rBox .proWrapper .pro i,
+.componentListWrapper .componentList .infoSource .rBox .proWrapper .pro i {
+  margin-top: 0;
 }
 .componentListWrapper .related {
   background: #fff;
@@ -1028,4 +1032,54 @@ body {
   margin-left: 10px;
   border: none;
   curspr: pointer;
+}
+.phoneUpdatePopup {
+  position: absolute;
+  top: 0;
+  left: 200px;
+  width: 642px;
+  overflow: hidden;
+  border: 1px solid #b9bcc4;
+  background: #fff9f9;
+}
+.phoneUpdatePopup .rBox {
+  display: none;
+}
+.addShowBtnContainer {
+  display: inline-block;
+  position: relative;
+}
+.addShowBtnContainer .selectProduct_updata {
+  position: absolute;
+  z-index: 1;
+  top: 30px;
+  left: 0px;
+  width: 640px;
+  padding: 18px 0;
+  background-color: #fbfbfb;
+  border: 1px solid #e5e5e5;
+}
+.addShowBtnContainer .selectProduct_updata li {
+  height: 36px;
+  border: none;
+  width: auto;
+  margin-right: 10px;
+  line-height: 39px;
+  display: inline-block;
+}
+.addShowBtnContainer .selectProduct_updata li button {
+  height: 36px;
+  width: 80px;
+  border: 1px solid #e5e5e5;
+  border-radius: 4px;
+  outline: none;
+  color: #9f9fa1;
+}
+.addShowBtnContainer .selectProduct_updata li:first-child {
+  margin-left: 26px;
+  font-size: 14px;
+}
+.addShowBtnContainer .selectProduct_updata li:first-child select {
+  height: 36px;
+  width: 199px;
 }

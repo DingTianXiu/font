@@ -10,6 +10,7 @@
     <div class="personal_head">
         <span class="userName"></span>
         <span>个人中心</span>
+        <span class="option"></span>
     </div>
     <div class="personal_center">
         <ul class="tab">
@@ -44,7 +45,7 @@
                 </tr>
             </table>
         </div>
-        <div class="resetPasswordContainer" style="display: none">
+        <div class="resetPasswordContainer">
             <ul>
                 <li><input id="currentPwd" type="password" placeholder="输入当前密码"></li>
                 <li><input id="newPwd" type="password" placeholder="设置新密码"></li>
@@ -53,6 +54,10 @@
                 <li><span id="messageTip">修改</span></li>
                 <li>说明：<br>1、密码长度需要8-16位，且同时包含大小写字母；</li>
             </ul>
+        </div>
+        <div class="resetSuccess">
+            <img src="../img/resetPwd.png">
+            <p>重置成功,新密码已生效</p>
         </div>
     </div>
 </body>

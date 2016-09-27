@@ -527,7 +527,7 @@
 			options.error && options.error.apply(this, args);
 			// TODO abort类型重新处理
 			//如果是401，表明登录状态过期需要重新登录
-			if(jqXHR.status == '401') {
+			if(jqXHR.status == '401' || jqXHR.status == '402') {
 				if(options.iframe) {
 					window.parent.location.href = window.ROOT + '/login.html';
 					return;
@@ -550,8 +550,8 @@
 		success : function(data, options, args) {
 			if (data.code == 200) {
 				options.success && options.success.apply(this, args);
-			}else if(data.code == '401') {
-				AJAX.error(options,{status:'401'});
+			}else if(data.code == '401' || data.code == '402') {
+				AJAX.error(options,{status : data.code});
 			} else {
 				options.fail && options.fail.apply(this, args);
 				if (!options.hideError) {
@@ -741,6 +741,7 @@
 		this.label = options.label ? options.label : "请选择目标产品：";
 		this.data = options.data;
 		this.selectedData = [];
+		this.isUpdate = options.update ? options.update : false;
 		if(options.phoneModel){
 			for(var i = 0; i < options.phoneModel.length;i++){
 				this.selectedData.push({
@@ -752,8 +753,6 @@
 				});
 			}
 		}
-		console.log(options);
-		console.log(this.selectedData);
 		this._init(element,options);
 	};
 	SelectorPlusPro.prototype = {
@@ -802,7 +801,6 @@
 				this.$brands.trigger("change");
 			}
 			for(var i = 0;i < this.selectedData.length;i++) {
-				console.log(this.selectedData[i]);
 				var item = this.selectedData[i];
 				this.$proWrapper = $("<div class='proWrapper'></div>").appendTo(this.$rBox);
 				this.$pro = $("<div class='pro clearfix'><img src='" + item.logoUrl +"' class='phoneThumb'/></div>").appendTo(this.$proWrapper);
@@ -850,9 +848,11 @@
 		},
 		_bindEvent : function(){
 			var that = this;
-			this.$addBtn.on("click",function(){
-				that._addBrandsTpl();
-			});
+			if(!this.update) {
+				this.$addBtn.on("click", function () {
+					that._addBrandsTpl();
+				});
+			}
 			this.$rBox.delegate(".icon-icondel",'click',function(){
 				$(this).parents(".proWrapper").remove();
 				var modelCode = $(this).attr("modelCode");

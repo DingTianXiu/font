@@ -55,8 +55,8 @@
 		_renderModule : function(){
 			var template = "";
 			for(var i = 0; i < this.moduleData.length;i++){
-				template += '<li><a href="javascript:;" id="'+ this.moduleData[i]["modId"] +'" class="moduleListItem '+ (i == 0 ? 'active' : '') +'">'+ this.moduleData[i]["modName"];
-				template +=  '<i class="icon iconfont icon-iconmodify"></i></a></li>';
+				template += '<li><a href="javascript:;" id="'+ this.moduleData[i]["modId"] +'" class="moduleListItem '+ (i == 0 ? 'active' : '') +'">'+ this.moduleData[i]["modName"] + '</a>';
+				template +=  '<i class="icon iconfont icon-iconmodify editModuleName"></i></li>';
 			}
 			template += '<li><a href="javascript:;" class="moduleListItem addModuleBtn">新建模块</a></li>';
 			$(".moduleList").html(template);
@@ -84,6 +84,7 @@
 							});
 							that.componentInstChain[r.data[i].cptInstId] = r.data[i].cptKey;
 						}
+						console.log(that.componentInstChain);
 						that._renderComponent();
 					}else{
 						openComponentDialog();
@@ -114,7 +115,7 @@
 			//切换模块
 			$(".moduleList").delegate("a","click",function(){
 				if($(this).hasClass("addModuleBtn")){
-					that.openModuleDialog();
+					that.openModuleDialog($(this));
 				}else {
 					var modId = parseInt($(this).attr("id"),10);
 					that.switchModule(modId);
@@ -123,7 +124,7 @@
 				}
 			});
 			$(".moduleList").delegate("i","click",function(){
-				that.openModuleDialog($(this).parents(a).text());
+				that.openModuleDialog($(this));
 			});
 			//保存模块
 			$("#saveModule").on("click",function(){
@@ -131,7 +132,7 @@
 			});
 			$("body").on("click",function(e){
 				var $el = $(e.target);
-				if($el.parents("#addModulePopup").length == 0 && ($el[0].id != 'addModulePopup') && ($el[0].className.indexOf('moduleListItem') == -1)){
+				if($el.parents("#addModulePopup").length == 0 && ($el[0].id != 'addModulePopup') && ($el[0].className.indexOf('moduleListItem') == -1) && ($el[0].className.indexOf('editModuleName') == -1)){
 					$("#addModulePopup").addClass("hide");
 				}
 			});
@@ -198,47 +199,85 @@
 				this._getComponentList();
 			}
 		},
-		openModuleDialog : function(){
-			$("#addModulePopup").removeClass("hide");
-			if(arguments.length == 0){
+		openModuleDialog : function($ele){
+			if($ele[0].tagName.toLowerCase() == "a"){
 				$("#newModuleName").val("");
 				this.isEditModule = false;
-			}else{
-				$("#newModuleName").val(arguments[0]);
+				if(this.moduleData.length > 8){
+					$.msg({modal:true,msg:"一个方案最多只能有8个模块"});
+					return;
+				}
+			}else if($ele[0].tagName.toLowerCase() == "i"){
+				$("#newModuleName").val($ele.prev("a").text()).attr("modId",$ele.prev("a").attr("id"));
 				this.isEditModule = true;
 			}
+			var offset = $(arguments[0]).parents("li").offset();
+			$("#addModulePopup").removeClass("hide").css("left",offset.left+"px");
+		},
+		validate : function(id){
+			var isValid = true;
+			$(id + " input").each(function(){
+				if($(this).val() == ""){
+					$(id + " .errorTip").text("不能为空");
+					$(this).addClass("error");
+					isValid =  false;
+					return false;
+				}else if($(this).val().length > 8){
+					$(id + " .errorTip").text($(this).parent().prev().text()  + "长度不能超过8个字符");
+					$(this).addClass("error");
+					isValid =  false;
+					return false;
+				}else{
+					$(id + " .errorTip").text("");
+					$(this).removeClass("error");
+				}
+			});
+			return isValid;
 		},
 		createModule : function(){
 			var that = this;
-			var newModuleName = $("#newModuleName").val();
-			if(this.isEditModule) {
-				//编辑模块名称
-				var param = {
-					sltId: parent.window.currentSchemeId,
-					modName: newModuleName,
-					userId: this.userInfo.userId
-				};
-			}else{
-				//新建模块
-				var param = {
-					modId : this.currentModuleId,
-					modName : newModuleName
-				}
-			}
-			$.ajaxJSON({
-				name : "新增模块",
-				url: URL.CREATE_MODULE,
-				data: param,
-				type : 'post',
-				iframe : true,
-				success: function (r) {
-					if(r.data){
-						that.moduleData.push(r.data);
-						that._renderModule();
-						$("#addModulePopup").addClass("hide");
+			if(this.validate("#addModulePopup")) {
+				var newModuleName = $("#newModuleName").val();
+				if (this.isEditModule) {
+					//编辑模块名称
+					var param = {
+						modId: $("#newModuleName").attr("modId"),
+						modName: newModuleName
 					}
+					var url = URL.UPDATE_MODULE;
+				} else {
+					//新建模块
+					var param = {
+						sltId: parent.window.currentSchemeId,
+						modName: newModuleName,
+						userId: this.userInfo.userId
+					};
+					var url = URL.CREATE_MODULE;
 				}
-			});
+				$.ajaxJSON({
+					name: "新增模块/修改模块名",
+					url: url,
+					data: param,
+					type: 'post',
+					iframe: true,
+					success: function (r) {
+						if (r.data) {
+							if (that.isEditModule) {
+								for (var i = 0; i < that.moduleData.length; i++) {
+									if (that.moduleData[i].modId == r.data.modId) {
+										that.moduleData[i].modName = r.data.modName;
+										break;
+									}
+								}
+							} else {
+								that.moduleData.push(r.data);
+							}
+							that._renderModule();
+							$("#addModulePopup").addClass("hide");
+						}
+					}
+				});
+			}
 		},
 		createWidget : function(param,step){
 			var that = this;
@@ -319,6 +358,7 @@
 					moduleId: that.currentModuleId,
 					cptInstId: param.cptInstId,
 					conCptInstId : param.conCptInstId ? param.conCptInstId : null,
+					name: "新品发布声量情感分析构件",
                     onComplete: function (data) {
                         that.componentChain[that.currentModuleId].push(data);
                         that.setBtnStatus();
@@ -332,40 +372,22 @@
 						that.createWidget(data,0);
 					}
 				});
-			}else if(param.cptKey == "customerFocusAnalyzeCpt"){
-                $(ele).newAttentionAnalysed({
-                    step: index,
-                    baseCptId: param.baseCptId,
-                    moduleId: that.currentModuleId,
-                    cptInstId: param.cptInstId,
-                    conCptInstId : param.conCptInstId ? param.conCptInstId : null,
-                    onComplete: function (data) {
-                        that.componentChain[that.currentModuleId].push(data);
-                        that.setBtnStatus();
-                    },
-                    //同步关联属性
-                    onUpdateAttr : function(data){
-                        that.updateSyncData(data);
-                    },
-                    //创建关联构件
-                    onRelatedWidget : function(data){
-                        that.createWidget(data,0);
-                    }
-                });
-            }
+			}
 		},
 		updateSyncData :　function(data){
-			if(data.length == 0) return;
+            if(data.length == 0) return;
 			for(var i = 0;i < data.length;i++){
 				var cptKey = this.componentInstChain[data[i]];
 				//根据cptKey判断同步哪个构件实例
 				if(cptKey == "customerInterestAnalyzeCpt") {
 					$("#" + data[i]).proUserAnalysis("getData");
 				}else if(cptKey == "phoneReleaseVolumeCompareCpt"){
-                    $("#" + data[i]).newPhoAddComp("getData");
-                }else if(cptKey == "customerFocusAnalyzeCpt"){
+					$("#" + data[i]).newPhoAddComp("getData");
+				}else if(cptKey == "customerFocusAnalyzeCpt"){
 					$("#" + data[i]).newAttentionAnalysed("getData");
-				}
+				}else if(cptKey == "phoneReleaseVolumeEmotionAnalyzeCpt"){
+                    $("#" + data[i]).newAffectionAnalysed("getData");
+                }				
 			}
 		},
 		setBtnStatus : function(){

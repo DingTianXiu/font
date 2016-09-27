@@ -6,6 +6,7 @@ body .personal_head {
   border-bottom: 1px solid #e1e1e1;
   line-height: 68px;
   padding-right: 25px;
+  background-color: #fff;
 }
 body .personal_head span {
   padding-right: 15px;
@@ -16,6 +17,9 @@ body .personal_head span {
 body .personal_head .userName {
   color: #f25e61;
   border-right: 1px solid #e1e1e1;
+}
+body .personal_head span:last-child {
+  border-left: 1px solid #e1e1e1;
 }
 body .personal_center {
   padding: 35px 0 0 25px;
@@ -77,6 +81,7 @@ body .personal_center .personal_center_right table tr td:last-child {
   width: auto;
 }
 body .personal_center .resetPasswordContainer {
+  display: none;
   float: left;
   margin-left: 25px;
 }
@@ -135,4 +140,16 @@ body .personal_center .resetPasswordContainer ul li:last-child {
   font-size: 14px;
   line-height: 22px;
   color: #999999;
+}
+body .personal_center .resetSuccess {
+  display: none;
+  float: left;
+  margin-left: 25px;
+  width: 268px;
+  text-align: center;
+}
+body .personal_center .resetSuccess p {
+  height: 80px;
+  font-size: 24px;
+  line-height: 80px;
 }
