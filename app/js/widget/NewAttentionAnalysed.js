@@ -353,47 +353,58 @@
         /*获取手机型号列表*/
         _getPhoneList : function () {
             var that = this;
-            $.ajaxJSON({
-                name: "手机列表",
-                url: URL.GET_PHONE_LIST,
-                data: {
-                    industry: "mobile"
-                },
-                type: 'post',
-                iframe: true,
-                success: function (data) {
-                    var arr = [],
-                        modelsObj = {};
-                    this.data = data.data;
-                    that.modelData = data.data.brands;
-                    if (!this.data) {
-                        that.$element.find($(".brand")).select('data', [{text: "请选择", value: -1}]);
-                        that.$element.find($(".model")).select('data', [{text: "请选择", value: -1}]);
-                    } else {
-                        for (var i = 0; i < this.data.brands.length; i++) {
-                            var item = this.data.brands[i];
-                            arr.push({
-                                text: item.brandName,
-                                value: item.brandCode
-                            });
-                            modelsObj[item.brandCode] = [];
-                            for (var j = 0; j < item.models.length; j++) {
-                                modelsObj[item.brandCode].push({
-                                    text: item.models[j].modelName,
-                                    value: item.models[j].modelCode
-                                })
+            if(that.arr&&that.modelsObj){
+                that.$element.find($(".brand")).select('data', that.arr).select("trigger");
+                that.$element.find($(".brand")).on("change", function () {
+                    var val = $(this).val();
+                    that.$element.find($(".model")).select("destroy").select('data', that.modelsObj[val]);
+                });
+                that.$element.find($(".brand")).trigger("change");
+            }else {
+                $.ajaxJSON({
+                    name: "手机列表",
+                    url: URL.GET_PHONE_LIST,
+                    data: {
+                        industry: "mobile"
+                    },
+                    type: 'post',
+                    iframe: true,
+                    success: function (data) {
+                        var arr = [],
+                            modelsObj = {};
+                        this.data = data.data;
+                        that.modelData = data.data.brands;
+                        if (!this.data) {
+                            that.$element.find($(".brand")).select('data', [{text: "请选择", value: -1}]);
+                            that.$element.find($(".model")).select('data', [{text: "请选择", value: -1}]);
+                        } else {
+                            for (var i = 0; i < this.data.brands.length; i++) {
+                                var item = this.data.brands[i];
+                                arr.push({
+                                    text: item.brandName,
+                                    value: item.brandCode
+                                });
+                                modelsObj[item.brandCode] = [];
+                                for (var j = 0; j < item.models.length; j++) {
+                                    modelsObj[item.brandCode].push({
+                                        text: item.models[j].modelName,
+                                        value: item.models[j].modelCode
+                                    })
+                                }
                             }
-                        }
-                        that.$element.find($(".brand")).select('data', arr).select("trigger");
-                        that.$element.find($(".brand")).on("change", function () {
-                            var val = $(this).val();
-                            that.$element.find($(".model")).select("destroy").select('data', modelsObj[val]);
+                            that.$element.find($(".brand")).select('data', arr).select("trigger");
+                            that.$element.find($(".brand")).on("change", function () {
+                                var val = $(this).val();
+                                that.$element.find($(".model")).select("destroy").select('data', modelsObj[val]);
 
-                        });
-                        that.$element.find($(".brand")).trigger("change");
+                            });
+                            that.$element.find($(".brand")).trigger("change");
+                            that.arr = arr;
+                            that.modelsObj = modelsObj;
+                        }
                     }
-                }
-            })
+                })
+            }
         },
 
         /*获取信息来源列表*/

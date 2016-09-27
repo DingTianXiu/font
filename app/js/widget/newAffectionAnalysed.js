@@ -344,7 +344,15 @@
         /*获取手机型号列表*/
         _getPhoneList : function () {
             var that = this;
-            $.ajaxJSON({
+            if(that.arr&&that.modelsObj){
+                that.$element.find($(".brand")).select('data', that.arr).select("trigger");
+                that.$element.find($(".brand")).on("change", function () {
+                    var val = $(this).val();
+                    that.$element.find($(".model")).select("destroy").select('data', that.modelsObj[val]);
+                });
+                that.$element.find($(".brand")).trigger("change");
+            }else{
+                $.ajaxJSON({
                     name: "手机列表",
                     url: URL.GET_PHONE_LIST,
                     data: {
@@ -382,9 +390,12 @@
 
                             });
                             that.$element.find($(".brand")).trigger("change");
+                            that.arr = arr;
+                            that.modelsObj = modelsObj;
                         }
                     }
                 })
+            }
         },
 
         /*获取信息来源列表*/

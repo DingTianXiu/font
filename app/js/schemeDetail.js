@@ -372,6 +372,27 @@
 						that.createWidget(data,0);
 					}
 				});
+			}else if(param.cptKey == "customerFocusAnalyzeCpt"){
+				$(ele).newAttentionAnalysed({
+					step: index,
+					baseCptId: param.baseCptId,
+					moduleId: that.currentModuleId,
+					cptInstId: param.cptInstId,
+					conCptInstId : param.conCptInstId ? param.conCptInstId : null,
+					name: "新品发布声量情感分析构件",
+					onComplete: function (data) {
+						that.componentChain[that.currentModuleId].push(data);
+						that.setBtnStatus();
+					},
+					//同步关联属性
+					onUpdateAttr : function(data){
+						that.updateSyncData(data);
+					},
+					//创建关联构件
+					onRelatedWidget : function(data){
+						that.createWidget(data,0);
+					}
+				});
 			}
 		},
 		updateSyncData :　function(data){
