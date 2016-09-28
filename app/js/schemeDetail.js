@@ -254,6 +254,7 @@
 					};
 					var url = URL.CREATE_MODULE;
 				}
+				$("#saveModule").attr("disabled","disabled");
 				$.ajaxJSON({
 					name: "新增模块/修改模块名",
 					url: url,
@@ -264,7 +265,7 @@
 						if (r.data) {
 							if (that.isEditModule) {
 								for (var i = 0; i < that.moduleData.length; i++) {
-									if (that.moduleData[i].modId == r.data.modId) {
+									if (that.moduleData[i].modId == r.data.id) {
 										that.moduleData[i].modName = r.data.modName;
 										break;
 									}
@@ -274,6 +275,7 @@
 							}
 							that._renderModule();
 							$("#addModulePopup").addClass("hide");
+							$("#saveModule").removeAttr("disabled");
 						}
 					}
 				});
@@ -291,7 +293,6 @@
 					moduleId: that.currentModuleId,
 					cptInstId: param.cptInstId,
 					conCptInstId : param.conCptInstId ? param.conCptInstId : null,
-					//searchDateScope : param.searchDateScope,
 					onComplete: function (data) {
 						that.componentChain[that.currentModuleId].push(data);
 						that.setBtnStatus();
@@ -379,7 +380,7 @@
 					moduleId: that.currentModuleId,
 					cptInstId: param.cptInstId,
 					conCptInstId : param.conCptInstId ? param.conCptInstId : null,
-					name: "新品发布声量情感分析构件",
+					name: "产品用户关注点分析构件",
 					onComplete: function (data) {
 						that.componentChain[that.currentModuleId].push(data);
 						that.setBtnStatus();

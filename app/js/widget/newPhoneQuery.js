@@ -197,7 +197,11 @@
                 success : function(r){
                     that.data.result = r.data;
                     that._renderResult();
-                    that._onComplete(this.data);
+                    that._onComplete({
+                        "baseCptId" : that.data.condition.baseCptId,
+                        "cptInstId" : that.data.condition.cptInstId,
+                        "cptKey" : "phoneReleaseMonitorCpt"
+                    });
                 }
             });
         },
@@ -251,7 +255,7 @@
                 success:function(r){
                     that.data.result = r.data.cptData;
                     that._renderResult();
-                    that._onComplete(that.data);
+                    //that._onComplete(that.data);
                 }
             });
         },

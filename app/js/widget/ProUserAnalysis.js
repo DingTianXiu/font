@@ -12,10 +12,12 @@
                 "cptInstId" : options.cptInstId,
                 "conCptInstId" : options.conCptInstId,
                 "compareDateScope" : {
-                    "beforeDateNum": options.beforeDateNum ? options.beforeDateNum : 28,
-                    "afterDateNum": options.afterDateNum ? options.afterDateNum : 30
+                    "value" : {
+                        "beforeDateNum": options.beforeDateNum ? options.beforeDateNum : 28,
+                        "afterDateNum": options.afterDateNum ? options.afterDateNum : 30
+                    }
                 },
-                "phoneModel" : []
+                "phoneModel" : {}
             },
             "result" : {},
             "related" : []
@@ -75,7 +77,7 @@
             });
             this.$element.delegate(".addBtn_updata","click",function () {
                 that._addProduct();
-                if(that.data.condition.phoneModel.length == that.$element.find(".phoneModel").length){
+                if(that.data.condition.phoneModel.value.length == that.$element.find(".phoneModel").length){
                     return;
                 }
                 that.$element.find($(".legend").find($(".legendBtn:first-child"))).addClass("active");
@@ -92,31 +94,44 @@
         },
         _initConfigSync:function(){
             var that = this;
-            $.msg({
-                type : "confirm",
-                msg : "确认删除？",
-                ok : function(){
+            $.cptConfig({
+                data : that.data.condition,
+                onSwitchType : function(data){
+                    var param = {
+                        "attrInstId" : data.id,
+                        "syncType" : data.syncType
+                    };
                     $.ajaxJSON({
-                        name: '删除构件实例',
-                        url: URL.DELETE_CPTINT,
-                        data: {"cptInstId": that.data.condition.cptInstId},
+                        name: '设置属性实例同步信息',
+                        url: URL.UPDATE_SYNC_TYPE,
+                        data: param,
                         iframe: true,
                         success: function (r) {
-                            $.msg("删除成功");
-                            that._onComplete(that.data.condition.cptInstId);
+                            that.data.condition[data.key]["syncType"] = data.syncType;
                         }
                     });
+                },
+                onDelete : function(){
+
                 }
             });
-            //$.ajaxJSON({
-            //    name: '设置属性实例同步信息',
-            //    url: URL.UPDATE_SYNC_TYPE,
-            //    data: {"attrInstId": 231,"syncType" : 0},
-            //    iframe: true,
-            //    success: function (r) {
-            //        $.msg("设置属性231同步成功");
+            //$.msg({
+            //    type : "confirm",
+            //    msg : "确认删除？",
+            //    ok : function(){
+            //        $.ajaxJSON({
+            //            name: '删除构件实例',
+            //            url: URL.DELETE_CPTINT,
+            //            data: {"cptInstId": that.data.condition.cptInstId},
+            //            iframe: true,
+            //            success: function (r) {
+            //                $.msg("删除成功");
+            //                that._onComplete(that.data.condition.cptInstId);
+            //            }
+            //        });
             //    }
             //});
+
             //$.ajaxJSON({
             //    name: '设置属性实例同步信息',
             //    url: URL.UPDATE_SYNC_TYPE,
@@ -133,10 +148,10 @@
                 range: true,
                 min: -90,
                 max: 30,
-                values: [that.data.condition.compareDateScope["beforeDateNum"]*-1 , that.data.condition.compareDateScope["afterDateNum"] ],
+                values: [that.data.condition.compareDateScope.value["beforeDateNum"]*-1 , that.data.condition.compareDateScope.value["afterDateNum"] ],
                 slide: function( event, ui ) {
-                    that.data.condition.compareDateScope["beforeDateNum"] = ui.values[ 0 ] * -1;
-                    that.data.condition.compareDateScope["afterDateNum"] = ui.values[ 1 ];
+                    that.data.condition.compareDateScope.value["beforeDateNum"] = ui.values[ 0 ] * -1;
+                    that.data.condition.compareDateScope.value["afterDateNum"] = ui.values[ 1 ];
                 }
             });
         },
@@ -154,7 +169,7 @@
                     iframe: true,
                     success: function (r) {
                         that._initBrand(r.data.phoneModel.value);
-                        that.data.condition.phoneModel = r.data.phoneModel.value;
+                        that.data.condition.phoneModel = r.data.phoneModel;
                     }
                 });
             }else{
@@ -173,7 +188,7 @@
                 iframe: true,
                 success: function (r) {
                     if(phoneModel) {
-                        that.$element.find(".proContainer").selectorPlusPro({"data": r.data, "phoneModel": phoneModel});
+                        that.$element.find(".proContainer").selectorPlusPro({"data": r.data, "phoneModel": phoneModel.value});
                     }else{
                         that.$element.find(".proContainer").selectorPlusPro({"data": r.data});
                     }
@@ -216,6 +231,7 @@
                 });
             }
             params["infoSource"] = infoSource;
+            params["compareDateScope"] = this.data.condition.compareDateScope.value;
             if(this.data.condition.conCptInstId){
                 params["conCptInstId"] = this.data.condition.conCptInstId;
             }
@@ -253,9 +269,10 @@
             var template = Handlebars.compile(source);
             var html = template(this.data);
             this.$element.html(html).attr("id", that.data.condition.cptInstId);
+            console.log(that.data.condition);
             this.$element.find(".dateBox").datePicker({
-                beforeDateNum : that.data.condition.compareDateScope["beforeDateNum"],
-                afterDateNum : that.data.condition.compareDateScope["afterDateNum"],
+                beforeDateNum : that.data.condition.compareDateScope.value["beforeDateNum"]*-1,
+                afterDateNum : that.data.condition.compareDateScope.value["afterDateNum"],
                 onSaveDate : function(beforeDateNum,afterDateNum){
                     that._updateDate(beforeDateNum,afterDateNum);
                 }
@@ -263,8 +280,8 @@
             this.$second = this.$element.find(".second");
             this.$legend = $("<div class='legend'></div>").prependTo(this.$second);
             var tpl = "";
-            for(var i = 0; i < this.data.condition.phoneModel.length;i++){
-                var item = this.data.condition.phoneModel[i];
+            for(var i = 0; i < this.data.condition.phoneModel.value.length;i++){
+                var item = this.data.condition.phoneModel.value[i];
                 tpl += "<a href='javascript:;' class='legendBtn' modelCode='"+ item.id +"'>"+ item.brandName + " " + item.modelName +"<i class='icon iconfont icon-iconclouse delLegendIcon'></i></a>"
             }
             this.$legend.html(tpl);
@@ -341,8 +358,8 @@
         },
         _updateDate : function(beforeDateNum,afterDateNum){
             var that = this;
-            that.data.condition.compareDateScope.beforeDateNum = beforeDateNum;
-            that.data.condition.compareDateScope.afterDateNum = afterDateNum;
+            that.data.condition.compareDateScope.value.beforeDateNum = beforeDateNum;
+            that.data.condition.compareDateScope.value.afterDateNum = afterDateNum;
             var param = {
                 "cptInstId" : that.data.condition.cptInstId,
                 "compareDateScope" : {
@@ -359,7 +376,7 @@
                     //that._onUpdateAttr(r.data.syncCptInstIdList);
                     that.data.result = r.data.cptData;
                     that._renderResult();
-                    that._onComplete(that.data);
+                    //that._onComplete(that.data);
                 }
             });
         },
@@ -386,9 +403,9 @@
                 data: param,
                 iframe: true,
                 success: function (r) {
-                    that.data.condition["compareDateScope"] = r.data.compareDateScope.value;
-                    that.data.condition["infoSource"] = r.data.infoSource.value;
-                    that.data.condition["phoneModel"] = r.data.phoneModel.value;
+                    that.data.condition["compareDateScope"] = r.data.compareDateScope;
+                    that.data.condition["infoSource"] = r.data.infoSource;
+                    that.data.condition["phoneModel"] = r.data.phoneModel;
                     $.ajaxJSON({
                         name : '获取构件实例数据',
                         url :URL.GET_CPTINST_DATA,
@@ -397,7 +414,11 @@
                         success : function(r){
                             that.data.result = r.data;
                             that._renderResult();
-                            that._onComplete(this.data);
+                            that._onComplete({
+                                "baseCptId" : that.data.condition.baseCptId,
+                                "cptInstId" : that.data.condition.cptInstId,
+                                "cptKey" : "customerInterestAnalyzeCpt"
+                            });
                         }
                     });
                 }
@@ -427,20 +448,14 @@
                                 "picUrl": models[j].logoUrl,
                                 "releaseDate": models[j].pubDate
                             };
-                            if(!that.data.condition.phoneModel){
-                                that.data.condition.phoneModel = [];
-                                that.data.condition.phoneModel.push(model);
-                                //that.addComponent.addProductList(that.data.condition.phoneModel);
-                            }else{
-                                $.each(that.data.condition.phoneModel,function (i) {
-                                    if(that.data.condition.phoneModel[i].id==model.id){
-                                        $.msg("该型号手机已存在");
-                                        return false;
-                                    }else if(i==that.data.condition.phoneModel.length-1){
-                                        that.data.condition.phoneModel.push(model);
-                                    }
-                                });
-                            }
+                            $.each(that.data.condition.phoneModel['value'],function (i) {
+                                if(that.data.condition.phoneModel['value'][i].id==model.id){
+                                    $.msg("该型号手机已存在");
+                                    return false;
+                                }else if(i==that.data.condition.phoneModel.value.length-1){
+                                    that.data.condition.phoneModel.value.push(model);
+                                }
+                            });
                         }
                     })
                 }
@@ -515,7 +530,7 @@
             var that = this;
             var param = {
                 "cptInstId": this.data.condition.cptInstId,
-                "phoneModel": that.data.condition.phoneModel
+                "phoneModel": that.data.condition.phoneModel.value
             };
 
             $.ajaxJSON({
@@ -532,14 +547,14 @@
             });
         },
         _delPhoneModel : function($ele){
-            if(this.data.condition.phoneModel.length <= 1){
+            if(this.data.condition.phoneModel.value.length <= 1){
                 $.msg({modal : true,msg : "型号手机不能为空"});
                 return;
             }
             var modelcode = $ele.parent().attr("modelcode");
-            for(var i = 0; i < this.data.condition.phoneModel.length;i++){
-                if(modelcode == this.data.condition.phoneModel[i].id){
-                    this.data.condition.phoneModel.splice(i,1);
+            for(var i = 0; i < this.data.condition.phoneModel.value.length;i++){
+                if(modelcode == this.data.condition.phoneModel.value[i].id){
+                    this.data.condition.phoneModel.value.splice(i,1);
                 }
             }
             this.$element.find($(".legend").find($(".legendBtn:first-child"))).addClass("active");

@@ -180,7 +180,11 @@
                     that.addComponent.addEcharts(that.$element,that.data.condition.cptInstId);
 
                     that._renderResult();
-                    that._onComplete(this.data);
+                    that._onComplete({
+                        "baseCptId" : that.data.condition.baseCptId,
+                        "cptInstId" : that.data.condition.cptInstId,
+                        "cptKey" : "customerFocusAnalyzeCpt"
+                    });
                 }
             });
         },
@@ -227,15 +231,20 @@
         /*渲染构件*/
         _renderResult : function () {
             var that = this;
-
+            if(that.$element.find(".dateHoverBox").length){
+                that.$element.find(".dateBox").data("datePicker","");
+                that.$element.find(".dateBox").html("");
+            }
             that.$element.find(".dateBox").datePicker({
                 afterDateNum : that.data.condition.compareDateScope.afterDateNum,
                 beforeDateNum : that.data.condition.compareDateScope.beforeDateNum,
                 onSaveDate : function(beforeDateNum,afterDateNum){
-                    that.data.condition.compareDateScope.beforeDateNum = beforeDateNum;
-                    that.data.condition.compareDateScope.afterDateNum = afterDateNum;
-                    that.$element.find(".echartsContainer").remove();
-                    that._updata(beforeDateNum,afterDateNum);
+                    if(that.data.condition.compareDateScope.beforeDateNum!=beforeDateNum||that.data.condition.compareDateScope.afterDateNum != afterDateNum){
+                        that.data.condition.compareDateScope.beforeDateNum = beforeDateNum;
+                        that.data.condition.compareDateScope.afterDateNum = afterDateNum;
+                        that.$element.find(".echartsContainer").remove();
+                        that._updata(beforeDateNum,afterDateNum);
+                    }
                 }
             });
 
