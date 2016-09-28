@@ -148,8 +148,12 @@
                 iframe: true,
                 success: function (data) {
                     that.data.condition.phoneModel = [];
+                    that.data.condition.infoSource = [];
                     $.each(data.data.phoneModel.value,function (i) {
                         that.data.condition.phoneModel.push(data.data.phoneModel.value[i]);
+                    });
+                    $.each(data.data.infoSource.value,function (i) {
+                        that.data.condition.infoSource.push(data.data.infoSource.value[i]);
                     });
                     that._createComponentEdit();
                 }
@@ -722,6 +726,13 @@
             /*设置数据同步*/
             that.$element.find(".set").on("click",function () {
                 that._deleteComponent();
+            });
+
+            $("body").on("click",function (e) {
+                var $el = $(e.target);
+                if($el.parents(".selectProduct_updata").length == 0 && !($el[0].className == 'selectProduct_updata') &&  $el[0].className != "addShow"){
+                    $(".selectProduct_updata").remove();
+                }
             })
         },
 

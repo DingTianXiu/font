@@ -39,31 +39,6 @@
         this._init(element,options);
 	};
 
-	// var phoSelect = function(element,options){
-	// 	this.$phoselect = $(element);
-	// 	this.$element = $('<div class="chooBrand">');
-	// 	this.$element.append(this.$phoselect);
-	// 	this.options = $.extend({}, $.fn.select.defaults, options);
-	// 	this.$button = $('<a href="javascript:;" class="btnAdd iconfont">&#xe602;</a>');
-	// 	this.$button.append(this.$element);
-		
-	// 	this.init();
-	// };
-	// phoSelect.prototype = {
-	// 	constructor:phoSelect,
-	// 	destroy:function(){
-	// 		this.$phoselect.removeData('select');
-	// 		this.$element.replaceWith(this.$select);
-	// 	}
-	// };
-	// var phoneList = function(element){
-	// 	this.$phoList = $(element);
-	// 	this.element = $('<div class="phoneList">');
-	// 	this.element.insterAfter('$(".chooTarPro")');
-	// }
-	/** end **/
-
-
 	newPhoAddComp.prototype = {
         constructor : newPhoAddComp,
         _init : function(element,options){
@@ -88,7 +63,7 @@
             this.$element.on("click",".legendBtn",function(){
                 that._switchLegendBtn($(this));
             });
-            this.$element.delegate(".relatedBtn","click",function(){
+            this.$element.on("click",".relatedBtn",function(){
                 var param = {
                     baseCptId: $(this).attr("baseCptId"),
                     cptKey: $(this).attr("type"),
@@ -96,8 +71,17 @@
                 };
                 that._onRelatedWidget(param);
             });
-            this.$element.on("click",".addBtn",function () {
-                that._addPhoneList();
+            this.$element.on("click",".addBtn",function(){
+                that._openPhoneDialog();
+                that._getPhoneList();
+            });
+            this.$element.on("click",".addBtn_updata",function () {
+                that._addProduct();
+                if(that.data.condition.phoneModel.length == that.$element.find(".phoneModel").length){
+                    return;
+                }
+                that.$element.find($(".legend").find($(".legendBtn:first-child"))).addClass("active");
+                that._updatePhoneModel();
             });
         },
         _renderResult : function(){
@@ -121,12 +105,13 @@
                 tpl += "<a href='javascript:;' class='legendBtn' modelCode='"+ item.id +"'>"+ item.brandName + " " + item.modelName +"<i>x</i></a>"
             }
             this.$legend.html(tpl);
-            this.$addBtn = $("<a href='javascript:;' class='addBtn'><i class='icon iconfont icon-iconadd'></i></a>").appendTo(this.$legend);
+            this.$addBtn = $("<div class='addShowBtnContainer'><a href='javascript:;' class='addBtn'><i class='icon iconfont icon-iconadd'></i></a></div>").appendTo(this.$legend);
             this.delBtn = $("<a href='javascript:;' class='delBtn'><i class='icon iconfont icon-icondel'></i></a>").appendTo(this.$legend);
             this.$hrLline = $("<hr class='hrLine'>").appendTo(this.$legend);
             if(!this.data.result) return;
             var defaultModelCode = this.$legend.find(".legendBtn").eq(0).attr("modelCode");
-            this._renderChart(that.data.result.volumeData[defaultModelCode]);
+            this._renderChart(that.data.result[defaultModelCode]);
+            // this._renderChart(that.data.result.volumeData[defaultModelCode]);
             this.$legend.find(".legendBtn").eq(0).addClass("active");
         },
         _switchLegendBtn : function($ele){
@@ -134,7 +119,8 @@
             // console.log(code);
             $ele.addClass("active");
             $ele.siblings().removeClass("active");
-            this._renderChart(this.data.result.volumeData[code]);
+            this._renderChart(this.data.result[code]);
+            // this._renderChart(this.data.result.volumeData[code]);
         },
         _updateDate : function(beforeDateNum,afterDateNum){
             var that = this;
@@ -159,6 +145,50 @@
                 }
             });
         },
+        _getPhoneList : function () {
+            var that = this;
+            $.ajaxJSON({
+                name: "手机列表、型号",
+                url: URL.GET_PHONE_LIST,
+                data: {
+                    industry: "mobile"
+                },
+                type: 'post',
+                iframe: true,
+                success: function (data) {
+                    var arr = [],
+                        modelsObj = {};
+                    this.data = data.data;
+                    that.modelData = data.data.brands;
+                    if (!this.data) {
+                        that.$element.find($(".brand")).select('data', [{text: "请选择", value: -1}]);
+                        that.$element.find($(".model")).select('data', [{text: "请选择", value: -1}]);
+                    } else {
+                        for (var i = 0; i < this.data.brands.length; i++) {
+                            var item = this.data.brands[i];
+                            arr.push({
+                                text: item.brandName,
+                                value: item.brandCode
+                            });
+                            modelsObj[item.brandCode] = [];
+                            for (var j = 0; j < item.models.length; j++) {
+                                modelsObj[item.brandCode].push({
+                                    text: item.models[j].modelName,
+                                    value: item.models[j].modelCode
+                                })
+                            }
+                        }
+                        that.$element.find($(".brand")).select('data', arr).select("trigger");
+                        that.$element.find($(".brand")).on("change", function () {
+                            var val = $(this).val();
+                            that.$element.find($(".model")).select("destroy").select('data', modelsObj[val]);
+
+                        });
+                        that.$element.find($(".brand")).trigger("change");
+                    }
+                }
+            })
+        },
         _phoneInfo :function(phoneModel){
             var _this = this;
 		    var $phoneList = $(".phoneList"),
@@ -181,20 +211,6 @@
                     }else{
                         _this.$element.find(".proContraIn").selectorPlusPro({"data": i.data});
                     }
-					// if(i.data){
-					// 	_this.data.brands = i.data.brands;
-					//         _renderCondition = function(){
-					//             var that = this,
-					//             	source = $("#addPhoneCompent").html(),
-					//             	template = Handlebars.compile(source),
-					//             	html = template(this.data);
-					//             $('.WraNewPro').removeClass('hide');
-					//             $('.WraNewPro .proContraIn').html(html);
-					          
-					//         }
-					//         that._getPhoneModel();
-					// }
-
 				}
 			});
         },
@@ -237,8 +253,28 @@
                 }
             });
         },
-        /*step2添加手机型号*/
-        _addPhoneList : function () {
+        /*step2弹框 - 添加手机品牌及型号*/
+        _openPhoneDialog : function(){
+            var that = this;
+            if(this.$element.find(".selectProduct_updata").length==0){
+                var dom = "<ul class='selectProduct_updata'>" +
+                    "<li>选择目标产品:</li>" +
+                    "<li>" +
+                    "<select class='select brand'>" +
+                    "<option>选择品牌</option>" +
+                    "</select>" +
+                    "</li>" +
+                    "<li>" +
+                    "<select class='select model'>" +
+                    "<option>选择型号</option>" +
+                    "</select>" +
+                    "</li>" +
+                    "<li><button class='addBtn_updata'><i class='icon iconfont icon-iconadd'></i></button></li>" +
+                    "</ul>";
+                this.$element.find(".addShowBtnContainer").append(dom);
+            }
+        },
+        _addProduct : function () {
             var that = this;
             var id = $(".model").val(),
                 brandCode = $(".brand").val();
@@ -258,17 +294,14 @@
                             if(!that.data.condition.phoneModel){
                                 that.data.condition.phoneModel = [];
                                 that.data.condition.phoneModel.push(model);
-                                that.addComponent.addProductList(that.data.condition.phoneModel);
-                                that._bindEvent();
+                                //that.addComponent.addProductList(that.data.condition.phoneModel);
                             }else{
                                 $.each(that.data.condition.phoneModel,function (i) {
                                     if(that.data.condition.phoneModel[i].id==model.id){
                                         $.msg("该型号手机已存在");
-                                        return false
-                                    }else if(i == that.data.condition.phoneModel.length-1){
+                                        return false;
+                                    }else if(i==that.data.condition.phoneModel.length-1){
                                         that.data.condition.phoneModel.push(model);
-                                        that.addComponent.addProductList(that.data.condition.phoneModel);
-                                        that._bindEvent();
                                     }
                                 });
                             }
@@ -320,12 +353,43 @@
                         data: {baseCptId: that.data.condition.baseCptId},
                         iframe:true,
                         success: function (relData) {
-                            that.data.related = relData.data;
+                            that._filterRelData(that.data.condition.baseCptId,relData.data);
                             that._getData();
                         }
                     });
                 }
             });
+        },
+        _updatePhoneModel : function() {
+            var that = this;
+            var param = {
+                "cptInstId": this.data.condition.cptInstId,
+                "phoneModel": that.data.condition.phoneModel
+            };
+
+            $.ajaxJSON({
+                name: "更新实例属性",
+                url: URL.UPDATE_CPTiNST_ATTR,
+                data: param,
+                data: JSON.stringify(param),
+                contentType: 'application/json; charset=UTF-8',
+                iframe: true,
+                success: function (r) {
+                    that._onUpdateAttr(r.data.syncCptInstIdList);
+                    that._renderResult();
+                }
+            });
+        },
+        _filterRelData : function(baseCptId,relData){
+            for(var i = 0; i < relData.length;i++){
+                if(baseCptId != relData[i]["baseCptId"]){
+                    this.data.related.push({
+                        "baseCptId" : relData[i].baseCptId,
+                        "baseCptName" : relData[i].baseCptName,
+                        "baseCptKey" : relData[i].baseCptKey
+                    });
+                }
+            }
         },
         _getAttr : function(){
         	var that = this;
@@ -397,16 +461,15 @@
             this._initSlider(this.$element.find(".firstMultiAttr").find(".sliderBox"));
         },
 		_renderChart : function(data){
-            console.log(data);
+            // console.log(data);
             if(!data){
                 this.$element.find(".lineChart").html("");
                 return;
             }
             var xList = [],
-                seriesList = [],
                 negativeList = [],
                 neutralList = [],
-                sumList = [];
+                positiveList = [];
             var dom = document.getElementById("containerChart1");
             var myChart = echarts.init(dom);
             for(var i = 0; i < data.length;i++){
@@ -414,7 +477,8 @@
                 negativeList.push(data[i].negative);
                 neutralList.push(data[i].neutral);
                 sumList.push(data[i].sum);
-            }
+            };
+
             var settings = {
                 type: 'bar',
                 stack: '总量',
@@ -426,7 +490,7 @@
                     }
                 }
             };
-           
+            
             var option = {
                 color : ['#5f97fb','#87b1fc','#afcbfd'],
                 tooltip : {
@@ -455,14 +519,15 @@
                     }
                 },
                 series: [
-                   negativeList,neutralList,sumList
+                    { name : '正面', data : negativeList},
+                    { name : '中性', data : neutralList},
+                    { name : '负面', data : sumList},
                 ]
             };
             var myChart = echarts.init(document.getElementById('containerChart1'));
             // if (option && typeof option === "object") {
             //     myChart.setOption(option, true);
             // }
-            console.log(option);    
             myChart.setOption(option);
         },
 
