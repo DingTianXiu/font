@@ -149,6 +149,7 @@
                 success: function (data) {
                     that.data.condition.phoneModel = [];
                     that.data.condition.infoSource = [];
+                    that.data.condition.compareDateScope = data.data.compareDateScope.value;
                     $.each(data.data.phoneModel.value,function (i) {
                         that.data.condition.phoneModel.push(data.data.phoneModel.value[i]);
                     });
