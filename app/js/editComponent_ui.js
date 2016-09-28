@@ -82,7 +82,7 @@
         },
 
         _addProductList : function(product_data){
-            if($(".productList").length>=0){
+            if($(".productList").length){
                 $(".productList").remove();
             }
             if(product_data.length>0){

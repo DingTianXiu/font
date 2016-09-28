@@ -501,12 +501,13 @@
                                 "picUrl": models[j].logoUrl,
                                 "releaseDate": models[j].pubDate
                             };
-                            if(!that.data.condition.phoneModel){
+                            if(!that.data.condition.phoneModel||that.data.condition.phoneModel.length==0){
                                 that.data.condition.phoneModel = [];
                                 that.data.condition.phoneModel.push(model);
                                 that.addComponent.addProductList(that.data.condition.phoneModel);
                                 that._bindEvent();
                             }else{
+                                console.log(typeof that.data.condition.phoneModel);
                                 $.each(that.data.condition.phoneModel,function (i) {
                                     if(that.data.condition.phoneModel[i].id==model.id){
                                         $.msg("该型号手机已存在");
@@ -534,7 +535,7 @@
                         "srcName" : that.resourceData[i].srcName,
                         "srcKey" : that.resourceData[i].srcKey
                     };
-                    if(!that.data.condition.infoSource){
+                    if(!that.data.condition.infoSource||that.data.condition.infoSource.length==0){
                         that.data.condition.infoSource = [];
                         that.data.condition.infoSource.push(resource);
                         that.addComponent.addResourceList(that.data.condition.infoSource);
