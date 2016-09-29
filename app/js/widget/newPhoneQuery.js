@@ -66,21 +66,50 @@
         },
         _initConfigSync:function(){
             var that = this;
-            $.msg({
-                type : "confirm",
-                msg : "确认删除？",
-                ok : function(){
+            if(!this.data.condition.cptInstId){
+                $.msg({
+                    type : "confirm",
+                    msg : "确认删除？",
+                    ok : function(){
+                        $ele.parents(".component").remove();
+                    }
+                });
+                return;
+            }
+            $.cptConfig({
+                data : that.data.condition,
+                onSwitchType : function(data){
+                    var param = {
+                        "attrInstId" : data.id,
+                        "syncType" : data.syncType
+                    };
                     $.ajaxJSON({
-                        name: '删除构件实例',
-                        url: URL.DELETE_CPTINT,
-                        data: {"cptInstId": that.data.condition.cptInstId},
+                        name: '设置属性实例同步信息',
+                        url: URL.UPDATE_SYNC_TYPE,
+                        data: param,
                         iframe: true,
                         success: function (r) {
-                            $.msg("删除成功");
+                            that.data.condition[data.key]["syncType"] = data.syncType;
                         }
                     });
+                },
+                onDelete : function(){
+                    that._delCpt();
                 }
-            })
+            });
+        },
+        _delCpt : function(){
+            var that = this;
+            $.ajaxJSON({
+                name: '删除构件实例',
+                url: URL.DELETE_CPTINT,
+                data: {"cptInstId": that.data.condition.cptInstId},
+                iframe: true,
+                success: function (r) {
+                    $.msg("删除成功");
+                    that._onComplete(that.data.condition.cptInstId);
+                }
+            });
         },
         _initSlider : function($ele){
             var that = this;
@@ -118,6 +147,11 @@
                 contentType : 'application/json; charset=UTF-8',
                 success: function (r) {
                     that.data.condition.cptInstId = r.data.cptInstId;
+                    that._onComplete({
+                        "baseCptId" : that.data.condition.baseCptId,
+                        "cptInstId" : that.data.condition.cptInstId,
+                        "cptKey" : "phoneReleaseMonitorCpt"
+                    });
                     $.ajaxJSON({
                         name: '获取构件的关联构件',
                         url: URL.GET_REL_CPT,
@@ -197,11 +231,6 @@
                 success : function(r){
                     that.data.result = r.data;
                     that._renderResult();
-                    that._onComplete({
-                        "baseCptId" : that.data.condition.baseCptId,
-                        "cptInstId" : that.data.condition.cptInstId,
-                        "cptKey" : "phoneReleaseMonitorCpt"
-                    });
                 }
             });
         },

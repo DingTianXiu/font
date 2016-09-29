@@ -13,8 +13,16 @@
                 "cptInstId" : options.cptInstId,   //新增构件实例ID
                 "conCptInstId" : options.conCptInstId?options.conCptInstId:null,
                 "compareDateScope" : {
-                    "beforeDateNum": options.beforeDateNum ? options.beforeDateNum : 28,
-                    "afterDateNum": options.afterDateNum ? options.afterDateNum : 30
+                    "value" : {
+                        "beforeDateNum": options.beforeDateNum ? options.beforeDateNum : 28,
+                        "afterDateNum": options.afterDateNum ? options.afterDateNum : 30
+                    }
+                },
+                "phoneModel" : {
+                    "value" : []
+                },
+                "infoSource" : {
+                    "value" : []
                 }
             },
             "result" : {},
@@ -73,11 +81,11 @@
             that.addComponent.addSelectTime();
             that._initSlider($("#addTime"));
             that._getStyleList();
-            if(that.data.condition.phoneModel&&that.data.condition.phoneModel.length>0){
-                that.addComponent.addProductList(that.data.condition.phoneModel);
+            if(that.data.condition.phoneModel&&that.data.condition.phoneModel.value.length>0){
+                that.addComponent.addProductList(that.data.condition.phoneModel.value);
             }
-            if(that.data.condition.infoSource&&that.data.condition.infoSource.length>0){
-                that.addComponent.addResourceList(that.data.condition.infoSource);
+            if(that.data.condition.infoSource&&that.data.condition.infoSource.value.length>0){
+                that.addComponent.addResourceList(that.data.condition.infoSource.value);
             }
             that._bindEvent(that.addComponent);
         },
@@ -92,11 +100,11 @@
                     "cptInstId" : that.data.condition.cptInstId,   //新增构件实例ID
                     "conCptInstId" : that.data.condition.conCptInstId,
                     "compareDateScope" : {
-                        "beforeDateNum": that.data.condition.compareDateScope.beforeDateNum,
-                        "afterDateNum": that.data.condition.compareDateScope.afterDateNum
+                        "beforeDateNum": that.data.condition.compareDateScope.value.beforeDateNum,
+                        "afterDateNum": that.data.condition.compareDateScope.value.afterDateNum
                     },
-                    "phoneModel" : that.data.condition.phoneModel,
-                    "infoSource" : that.data.condition.infoSource
+                    "phoneModel" : that.data.condition.phoneModel.value,
+                    "infoSource" : that.data.condition.infoSource.value
                 };
                 $.ajaxJSON({
                     name : "保存构建实例",
@@ -108,10 +116,15 @@
                     success: function (i) {
                         that.data.result = i.data;
                         that.data.condition.cptInstId = i.data.cptInstId;
-                        that.addComponent.addTab(that.$element,that.data.condition.phoneModel);
+                        that.addComponent.addTab(that.$element,that.data.condition.phoneModel.value);
                         that.$element.find($(".tab")).find($(".phoneModel:first-child")).addClass("tabSelected");
                         that._getData(that.addComponent);
-                        that._bindEvent(that.addComponent)
+                        that._bindEvent(that.addComponent);
+                        that._onComplete({
+                            "baseCptId" : that.data.condition.baseCptId,
+                            "cptInstId" : that.data.condition.cptInstId,
+                            "cptKey" : "customerFocusAnalyzeCpt"
+                        });
                     }
                 });
             }else {
@@ -121,11 +134,11 @@
                     "cptInstId" : that.data.condition.cptInstId,   //新增构件实例ID
                     "conCptInstId" : that.data.condition.conCptInstId,
                     "compareDateScope" : {
-                        "beforeDateNum": that.data.condition.compareDateScope.beforeDateNum,
-                        "afterDateNum": that.data.condition.compareDateScope.afterDateNum
+                        "beforeDateNum": that.data.condition.compareDateScope.value.beforeDateNum,
+                        "afterDateNum": that.data.condition.compareDateScope.value.afterDateNum
                     },
-                    "phoneModel" : that.data.condition.phoneModel,
-                    "infoSource" : that.data.condition.infoSource,
+                    "phoneModel" : that.data.condition.phoneModel.value,
+                    "infoSource" : that.data.condition.infoSource.value,
                     "step" : "1"
                 };
                 that.addComponent = that.$element.editComponent(that.$element,option,that.data.title);
@@ -147,15 +160,11 @@
                 type: 'post',
                 iframe: true,
                 success: function (data) {
-                    that.data.condition.phoneModel = [];
-                    that.data.condition.infoSource = [];
-                    that.data.condition.compareDateScope = data.data.compareDateScope.value;
-                    $.each(data.data.phoneModel.value,function (i) {
-                        that.data.condition.phoneModel.push(data.data.phoneModel.value[i]);
-                    });
-                    $.each(data.data.infoSource.value,function (i) {
-                        that.data.condition.infoSource.push(data.data.infoSource.value[i]);
-                    });
+                    that.data.condition.phoneModel = data.data.phoneModel;
+                    that.data.condition.infoSource = data.data.infoSource;
+                    if(data.data.compareDateScope){
+                        that.data.condition.compareDateScope = data.data.compareDateScope;
+                    }
                     that._createComponentEdit();
                 }
             })
@@ -180,11 +189,6 @@
                     that.addComponent.addEcharts(that.$element,that.data.condition.cptInstId);
 
                     that._renderResult();
-                    that._onComplete({
-                        "baseCptId" : that.data.condition.baseCptId,
-                        "cptInstId" : that.data.condition.cptInstId,
-                        "cptKey" : "customerFocusAnalyzeCpt"
-                    });
                 }
             });
         },
@@ -193,8 +197,8 @@
         _updata : function (beforeDateNum,afterDateNum) {
             var that = this;
             if(beforeDateNum||afterDateNum){
-                that.data.condition.compareDateScope.beforeDateNum = beforeDateNum;
-                that.data.condition.compareDateScope.afterDateNum = afterDateNum;
+                that.data.condition.compareDateScope.value.beforeDateNum = beforeDateNum;
+                that.data.condition.compareDateScope.value.afterDateNum = afterDateNum;
                 var option = {
                     "cptInstId" : that.data.condition.cptInstId,   //新增构件实例ID
                     "compareDateScope" : {
@@ -205,7 +209,7 @@
             }else{
                 var option = {
                     "cptInstId" : that.data.condition.cptInstId,   //新增构件实例ID
-                    "phoneModel" : that.data.condition.phoneModel
+                    "phoneModel" : that.data.condition.phoneModel.value
                 };
             }
             $.ajaxJSON({
@@ -236,12 +240,12 @@
                 that.$element.find(".dateBox").html("");
             }
             that.$element.find(".dateBox").datePicker({
-                afterDateNum : that.data.condition.compareDateScope.afterDateNum,
-                beforeDateNum : that.data.condition.compareDateScope.beforeDateNum,
+                afterDateNum : that.data.condition.compareDateScope.value.afterDateNum,
+                beforeDateNum : that.data.condition.compareDateScope.value.beforeDateNum,
                 onSaveDate : function(beforeDateNum,afterDateNum){
-                    if(that.data.condition.compareDateScope.beforeDateNum!=beforeDateNum||that.data.condition.compareDateScope.afterDateNum != afterDateNum){
-                        that.data.condition.compareDateScope.beforeDateNum = beforeDateNum;
-                        that.data.condition.compareDateScope.afterDateNum = afterDateNum;
+                    if(that.data.condition.compareDateScope.value.beforeDateNum!=beforeDateNum||that.data.condition.compareDateScope.value.afterDateNum != afterDateNum){
+                        that.data.condition.compareDateScope.value.beforeDateNum = beforeDateNum;
+                        that.data.condition.compareDateScope.value.afterDateNum = afterDateNum;
                         that.$element.find(".echartsContainer").remove();
                         that._updata(beforeDateNum,afterDateNum);
                     }
@@ -251,7 +255,7 @@
             if(!that.index){
                 that.index = 0;
             }
-            var phoneId = that.data.condition.phoneModel[that.index].id;
+            var phoneId = that.data.condition.phoneModel.value[that.index].id;
             var selectData = that.data.result&&that.data.result[phoneId]?that.data.result[phoneId]:null;
             that.foucsWordList = [];
             if(selectData&&selectData.length>0){
@@ -316,7 +320,7 @@
                         if(that.$element.find(".tipsContainer").length>0){
                             that.$element.find(".tipsContainer").remove()
                         }
-                        var phoneId = that.data.condition.phoneModel[that.index].id;
+                        var phoneId = that.data.condition.phoneModel.value[that.index].id;
                         var selectData = that.data.result[phoneId];
                         for(var i=0;i<selectData.length;i++){
                             if(selectData[i].focusWord == $(this).html()){
@@ -338,10 +342,10 @@
                 type : "post",
                 iframe : true,
                 success : function (data) {
-                    that.data.condition.phoneModel = data.data.phoneModel.value;
-                    that.data.condition.infoSource = data.data.infoSource.value;
-                    that.data.condition.compareDateScope = data.data.compareDateScope.value;
-                    that.addComponent.addTab(that.$element,that.data.condition.phoneModel);
+                    that.data.condition.phoneModel = data.data.phoneModel;
+                    that.data.condition.infoSource = data.data.infoSource;
+                    that.data.condition.compareDateScope = data.data.compareDateScope;
+                    that.addComponent.addTab(that.$element,that.data.condition.phoneModel.value);
                     that.$element.find($(".tab").find($(".phoneModel:first-child"))).addClass("tabSelected");
                     that._getData();
                     that._bindEvent()
@@ -356,10 +360,10 @@
                 range: true,
                 min: -90,
                 max: 30,
-                values: [that.data.condition.compareDateScope["beforeDateNum"]*-1 , that.data.condition.compareDateScope["afterDateNum"]*-1 ],
+                values: [that.data.condition.compareDateScope.value["beforeDateNum"]*-1 , that.data.condition.compareDateScope.value["afterDateNum"]*-1 ],
                 slide: function( event, ui ) {
-                    that.data.condition.compareDateScope["beforeDateNum"] = ui.values[ 0 ] * -1;
-                    that.data.condition.compareDateScope["afterDateNum"] = ui.values[ 1 ] * -1;
+                    that.data.condition.compareDateScope.value["beforeDateNum"] = ui.values[ 0 ] * -1;
+                    that.data.condition.compareDateScope.value["afterDateNum"] = ui.values[ 1 ] * -1;
                 }
             });
         },
@@ -484,11 +488,24 @@
                 iframe : true,
                 success: function (i) {
                     if(i.data.length>0){
-                        that.addComponent.addRelateComponent(that.$element,i.data);
+                        that._filterRelData(that.data.condition.baseCptId,i.data);
+                        that.addComponent.addRelateComponent(that.$element,that.data.related);
                         that._bindEvent();
                     }
                 }
             })
+        },
+
+        _filterRelData : function(baseCptId,relData){
+            for(var i = 0; i < relData.length;i++){
+                if(baseCptId != relData[i]["baseCptId"]){
+                    this.data.related.push({
+                        "baseCptId" : relData[i].baseCptId,
+                        "baseCptName" : relData[i].baseCptName,
+                        "baseCptKey" : relData[i].baseCptKey
+                    });
+                }
+            }
         },
 
         /*添加手机型号*/
@@ -509,19 +526,19 @@
                                 "picUrl": models[j].logoUrl,
                                 "releaseDate": models[j].pubDate
                             };
-                            if(!that.data.condition.phoneModel||that.data.condition.phoneModel.length==0){
-                                that.data.condition.phoneModel = [];
-                                that.data.condition.phoneModel.push(model);
-                                that.addComponent.addProductList(that.data.condition.phoneModel);
+                            if(!that.data.condition.phoneModel.value||that.data.condition.phoneModel.value.length==0){
+                                that.data.condition.phoneModel.value = [];
+                                that.data.condition.phoneModel.value.push(model);
+                                that.addComponent.addProductList(that.data.condition.phoneModel.value);
                                 that._bindEvent();
                             }else{
-                                $.each(that.data.condition.phoneModel,function (i) {
-                                    if(that.data.condition.phoneModel[i].id==model.id){
+                                $.each(that.data.condition.phoneModel.value,function (i) {
+                                    if(that.data.condition.phoneModel.value[i].id==model.id){
                                         $.msg("该型号手机已存在");
                                         return false
-                                    }else if(i==that.data.condition.phoneModel.length-1){
-                                        that.data.condition.phoneModel.push(model);
-                                        that.addComponent.addProductList(that.data.condition.phoneModel);
+                                    }else if(i==that.data.condition.phoneModel.value.length-1){
+                                        that.data.condition.phoneModel.value.push(model);
+                                        that.addComponent.addProductList(that.data.condition.phoneModel.value);
                                         that._bindEvent();
                                     }
                                 });
@@ -542,23 +559,50 @@
                         "srcName" : that.resourceData[i].srcName,
                         "srcKey" : that.resourceData[i].srcKey
                     };
-                    if(!that.data.condition.infoSource||that.data.condition.infoSource.length==0){
-                        that.data.condition.infoSource = [];
-                        that.data.condition.infoSource.push(resource);
-                        that.addComponent.addResourceList(that.data.condition.infoSource);
+                    if(!that.data.condition.infoSource||that.data.condition.infoSource.value.length==0){
+                        that.data.condition.infoSource = {
+                            "value" : []
+                        };
+                        that.data.condition.infoSource.value.push(resource);
+                        that.addComponent.addResourceList(that.data.condition.infoSource.value);
                         that._bindEvent();
                     }else{
-                        $.each(that.data.condition.infoSource,function (j) {
-                            if(that.data.condition.infoSource[j].id==that.resourceData[i].id){
+                        $.each(that.data.condition.infoSource.value,function (j) {
+                            if(that.data.condition.infoSource.value[j].srcName==that.resourceData[i].srcName){
                                 $.msg("该型号信息来源已存在");
                                 return false
-                            }else if(j==that.data.condition.infoSource.length-1){
-                                that.data.condition.infoSource.push(resource);
-                                that.addComponent.addResourceList(that.data.condition.infoSource);
+                            }else if(j==that.data.condition.infoSource.value.length-1){
+                                that.data.condition.infoSource.value.push(resource);
+                                that.addComponent.addResourceList(that.data.condition.infoSource.value);
                                 that._bindEvent();
                             }
                         });
                     }
+                }
+            });
+        },
+
+        _initConfigSync:function(){
+            var that = this;
+            $.cptConfig({
+                data : that.data.condition,
+                onSwitchType : function(data){
+                    var param = {
+                        "attrInstId" : data.id,
+                        "syncType" : data.syncType
+                    };
+                    $.ajaxJSON({
+                        name: '设置属性实例同步信息',
+                        url: URL.UPDATE_SYNC_TYPE,
+                        data: param,
+                        iframe: true,
+                        success: function (r) {
+                            that.data.condition[data.key]["syncType"] = data.syncType;
+                        }
+                    });
+                },
+                onDelete : function(){
+                    that._deleteComponent();
                 }
             });
         },
@@ -575,8 +619,9 @@
                         url: URL.DELETE_CPTINT,
                         data: {"cptInstId": that.data.condition.cptInstId},
                         iframe: true,
-                        success: function (r) {
+                        success: function () {
                             $.msg("删除成功");
+                            that._onComplete(that.data.condition.cptInstId);
                         }
                     });
                 }
@@ -604,8 +649,8 @@
             /*删除手机型号事件监听*/
             $(".deleteProductBtn").on("click",function () {
                 var index = $(this).parents("li").attr("index");
-                that.data.condition.phoneModel.splice(index,1);
-                that.addComponent.addProductList(that.data.condition.phoneModel);
+                that.data.condition.phoneModel.value.splice(index,1);
+                that.addComponent.addProductList(that.data.condition.phoneModel.value);
                 that._bindEvent();
             });
 
@@ -617,8 +662,8 @@
             /*删除信息来源事件监听*/
             $(".deleteResourceBtn").on("click",function () {
                 var index = $(this).parents("li").attr("index");
-                that.data.condition.infoSource.splice(index,1);
-                that.addComponent.addResourceList(that.data.condition.infoSource);
+                that.data.condition.infoSource.value.splice(index,1);
+                that.addComponent.addResourceList(that.data.condition.infoSource.value);
                 that._bindEvent();
             });
 
@@ -635,11 +680,11 @@
                     "moduleId" : that.data.condition.moduleId,    //模块ID
                     "conCptInstId" : that.data.condition.conCptInstId,   //新增构件实例ID
                     "compareDateScope" : {
-                        "beforeDateNum": that.data.condition.compareDateScope.beforeDateNum ? that.data.condition.compareDateScope.beforeDateNum : 28,
-                        "afterDateNum": that.data.condition.compareDateScope.afterDateNum ? that.data.condition.compareDateScope.afterDateNum : 30
+                        "beforeDateNum": that.data.condition.compareDateScope.value.beforeDateNum ? that.data.condition.compareDateScope.value.beforeDateNum : 28,
+                        "afterDateNum": that.data.condition.compareDateScope.value.afterDateNum ? that.data.condition.compareDateScope.value.afterDateNum : 30
                     },
-                    "phoneModel" : that.data.condition.phoneModel,
-                    "infoSource" : that.data.condition.infoSource,
+                    "phoneModel" : that.data.condition.phoneModel.value,
+                    "infoSource" : that.data.condition.infoSource.value,
                     "cptStyId": ""
                 };
                 that._createComponent(queryOptions,that.step);
@@ -662,7 +707,7 @@
 
             /*在已生成构件删除手机型号事件监听*/
             that.$element.find(".delShow").on("click",function () {
-                if(that.data.condition.phoneModel.length<=1){
+                if(that.data.condition.phoneModel.value.length<=1){
                     $.msg("型号手机不能为空");
                     return
                 }
@@ -673,10 +718,10 @@
                         if(that.index==index){
                             that.index = 0;
                         }
-                        that.data.condition.phoneModel.splice(index,1);
+                        that.data.condition.phoneModel.value.splice(index,1);
                         that.$element.find(".tabContainer").remove();
                         that.$element.find(".echartsContainer").remove();
-                        that.addComponent.addTab(that.$element,that.data.condition.phoneModel);
+                        that.addComponent.addTab(that.$element,that.data.condition.phoneModel.value);
                         that.$element.find($(".tab").find($(".phoneModel:first-child"))).addClass("tabSelected");
                         that._updata();
                         that._bindEvent();
@@ -691,12 +736,12 @@
                     that._getPhoneList();
                     that.$element.find(".addBtn_updata").on("click",function () {
                         that._addProduct();
-                        if(that.data.condition.phoneModel.length == that.$element.find(".phoneModel").length){
+                        if(that.data.condition.phoneModel.value.length == that.$element.find(".phoneModel").length){
                             return
                         }
                         that.$element.find($(".tabContainer")).remove();
                         that.$element.find($(".echartsContainer")).remove();
-                        that.addComponent.addTab(that.$element,that.data.condition.phoneModel);
+                        that.addComponent.addTab(that.$element,that.data.condition.phoneModel.value);
                         that.$element.find($(".tab").find($(".phoneModel:first-child"))).addClass("tabSelected");
                         that._updata();
                         that._bindEvent();
@@ -718,7 +763,7 @@
 
             /*设置数据同步*/
             that.$element.find(".set").on("click",function () {
-                that._deleteComponent();
+                that._initConfigSync();
             });
 
             $("body").on("click",function (e) {

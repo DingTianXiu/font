@@ -143,6 +143,9 @@
 				}
 			});
 			$(".side").delegate("a","mouseover",function(){
+				if($(this).parent()[0].tagName.toUpperCase() != "LI"){
+					return;
+				}
 				var offset = $(this).parents("li").offset();
 				if(offset) {
 					$(".editSchemeName").removeClass("hide").css("top", (offset.top + 36) + "px");

@@ -57,7 +57,7 @@
             var that = this;
             this.$element.delegate(".configBtn","click",function(){
                 //设置构件同步关系
-                that._initConfigSync();
+                that._initConfigSync($(this));
             });
             this.$element.delegate(".nextStep","click",function(){
                 that._createWidget();
@@ -92,8 +92,18 @@
                 that._onRelatedWidget(param);
             });
         },
-        _initConfigSync:function(){
+        _initConfigSync:function($ele){
             var that = this;
+            if(!this.data.condition.cptInstId){
+                $.msg({
+                    type : "confirm",
+                    msg : "确认删除？",
+                    ok : function(){
+                        $ele.parents(".component").remove();
+                    }
+                });
+                return;
+            }
             $.cptConfig({
                 data : that.data.condition,
                 onSwitchType : function(data){
@@ -112,35 +122,22 @@
                     });
                 },
                 onDelete : function(){
-
+                    that._delCpt();
                 }
             });
-            //$.msg({
-            //    type : "confirm",
-            //    msg : "确认删除？",
-            //    ok : function(){
-            //        $.ajaxJSON({
-            //            name: '删除构件实例',
-            //            url: URL.DELETE_CPTINT,
-            //            data: {"cptInstId": that.data.condition.cptInstId},
-            //            iframe: true,
-            //            success: function (r) {
-            //                $.msg("删除成功");
-            //                that._onComplete(that.data.condition.cptInstId);
-            //            }
-            //        });
-            //    }
-            //});
-
-            //$.ajaxJSON({
-            //    name: '设置属性实例同步信息',
-            //    url: URL.UPDATE_SYNC_TYPE,
-            //    data: {"attrInstId": 237,"syncType" : 0},
-            //    iframe: true,
-            //    success: function (r) {
-            //        $.msg("设置属性237同步成功");
-            //    }
-            //});
+        },
+        _delCpt : function(){
+            var that = this;
+            $.ajaxJSON({
+                name: '删除构件实例',
+                url: URL.DELETE_CPTINT,
+                data: {"cptInstId": that.data.condition.cptInstId},
+                iframe: true,
+                success: function (r) {
+                    $.msg("删除成功");
+                    that._onComplete(that.data.condition.cptInstId);
+                }
+            });
         },
         _initSlider : function($ele){
             var that = this;
@@ -178,7 +175,7 @@
             this._initInfoSource();
             this._initSlider(this.$element.find(".firstMultiAttr").find(".sliderBox"));
         },
-        _initBrand : function(phoneModel){
+        _initBrand : function(phoneModelValue){
             var that = this;
             $.ajaxJSON({
                 name: "手机品牌及型号",
@@ -187,8 +184,8 @@
                 type: 'get',
                 iframe: true,
                 success: function (r) {
-                    if(phoneModel) {
-                        that.$element.find(".proContainer").selectorPlusPro({"data": r.data, "phoneModel": phoneModel.value});
+                    if(phoneModelValue) {
+                        that.$element.find(".proContainer").selectorPlusPro({"data": r.data, "phoneModel": phoneModelValue});
                     }else{
                         that.$element.find(".proContainer").selectorPlusPro({"data": r.data});
                     }
@@ -244,6 +241,11 @@
                 contentType : 'application/json; charset=UTF-8',
                 success: function (r) {
                     that.data.condition.cptInstId = r.data.cptInstId;
+                    that._onComplete({
+                        "baseCptId" : that.data.condition.baseCptId,
+                        "cptInstId" : that.data.condition.cptInstId,
+                        "cptKey" : "customerInterestAnalyzeCpt"
+                    });
                     $.ajaxJSON({
                         name: '获取构件的关联构件',
                         url: URL.GET_REL_CPT,
@@ -414,11 +416,6 @@
                         success : function(r){
                             that.data.result = r.data;
                             that._renderResult();
-                            that._onComplete({
-                                "baseCptId" : that.data.condition.baseCptId,
-                                "cptInstId" : that.data.condition.cptInstId,
-                                "cptKey" : "customerInterestAnalyzeCpt"
-                            });
                         }
                     });
                 }

@@ -84,7 +84,6 @@
 							});
 							that.componentInstChain[r.data[i].cptInstId] = r.data[i].cptKey;
 						}
-						console.log(that.componentInstChain);
 						that._renderComponent();
 					}else{
 						openComponentDialog();
@@ -339,8 +338,7 @@
 					cptInstId: param.cptInstId,
 					conCptInstId : param.conCptInstId ? param.conCptInstId : null,
 					onComplete: function (data) {
-						that.componentChain[that.currentModuleId].push(data);
-						that.setBtnStatus();
+						that.updateComponentChain(data);
 					},
 					//同步关联属性
 					onUpdateAttr : function(data){
@@ -361,7 +359,7 @@
 					conCptInstId : param.conCptInstId ? param.conCptInstId : null,
 					name: "新品发布声量情感分析构件",
                     onComplete: function (data) {
-                        that.componentChain[that.currentModuleId].push(data);
+                        that.updateComponentChain(data);
                         that.setBtnStatus();
                     },
 					//同步关联属性
@@ -382,8 +380,8 @@
 					conCptInstId : param.conCptInstId ? param.conCptInstId : null,
 					name: "产品用户关注点分析构件",
 					onComplete: function (data) {
-						that.componentChain[that.currentModuleId].push(data);
-						that.setBtnStatus();
+                        that.updateComponentChain(data);
+                        that.setBtnStatus();
 					},
 					//同步关联属性
 					onUpdateAttr : function(data){
@@ -438,6 +436,27 @@
 				$(".publishTip").addClass("hide");
 			}
 			$(".btnbox").html(template);
+		},
+		updateComponentChain : function(data){
+			if(!this.componentChain[this.currentModuleId]){
+				this.componentChain[this.currentModuleId] = [];
+			}
+			if(typeof data == "object"){
+				this.componentChain[this.currentModuleId].push(data);
+                this.componentInstChain[data.cptInstId] = data.cptKey;
+            }else if(typeof data == "number"){
+				var list = this.componentChain[this.currentModuleId];
+				for(var i = 0; i < list.length;i++){
+					if(list[i].cptInstId == data){
+						list.splice(i,1);
+						$("#" + data).remove();
+						if(!list.length){
+							this.switchModule(this.currentModuleId);
+						}
+						break;
+					}
+				}
+			}
 		},
 		init : function(){
 			var that = this;

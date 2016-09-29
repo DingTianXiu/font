@@ -981,6 +981,66 @@
 		return (methodReturn === undefined) ? $set : methodReturn;
 	};
 	$.fn.selectorPlusSource.constructor = SelectorPlusSource;
+
+	/*
+	*	@param opts(JSON)生成提示框参数
+	*	data 构件属性
+	*	onSwitchType	选择同步类型回调函数
+	*	onDelete		删除构件加调函数
+	* */
+	$.cptConfig = function(opts){
+		var that = this;
+		var $cptConfigBox = $("<div class='cptConfigBox'></div>");
+		$cptConfigBox.append("<h3>数据同步</h3>");
+		var $syncBox = $("<ul class='syncBox clearfix'></ul>").appendTo($cptConfigBox);
+
+		for(var i in opts.data){
+			if(i == "phoneModel" || i == "infoSource" || i == "compareDateScope" || i == ""){
+				var sync = opts.data[i].syncType == 0 ? "checked" : "";
+				var unSync = opts.data[i].syncType == 1 ? "checked" : "";
+				var tpl = "<li><p>" + opts.data[i].name + ":</p><p class='radioBox'>";
+				tpl += "<input type='radio' name='"+ i +"' "+ sync  +" value='0' id='"+ i +"0'/><label for='"+ i +"0'>模块内同步</label>";
+				tpl += "<input type='radio' name='"+ i +"' "+ unSync +" value='1' id='"+ i +"1'/><label for='"+ i +"1'>该构件独有</label></p></li>";
+				$syncBox.append(tpl);
+			}
+		}
+		var $btnBox = $("<div class='btnbox'></div>").appendTo($cptConfigBox);
+		var $delBtn = $("<button class='delBtn'>删除构件</button>").appendTo($btnBox);
+		var $confirmBox = $("<div class='confirmBox hide clearfix'><span>确定删除该构件及相关数据吗？你可以在构件库中重新添加该构件</span></div>").appendTo($btnBox);
+		var $confirmBtn = $("<button class='confirmBtn'>确认</button>").appendTo($confirmBox);
+		var $cancel = $("<button class='cancel'>取消</button>").appendTo($confirmBox);
+		var nopts = $.extend({}, {
+			title : '构件设置',
+			resizable : false,
+			minHeight : 14,
+			width:600,
+			modal : true,
+			close : function() {
+				$(this).dialog("destroy").remove();
+			}
+		}, opts);
+		var $dialog = $cptConfigBox.dialog(nopts);
+		$cptConfigBox.find("input").on("click",function(){
+			var type = $(this).attr("name");
+			var data = opts.data[type];
+			data["key"] = type;
+			data["syncType"] = $(this).val();
+			opts.onSwitchType &&  opts.onSwitchType.apply(this,[data]);
+			$dialog.dialog("destroy").remove();
+		});
+		$cptConfigBox.find(".delBtn").on("click",function(){
+			$confirmBox.removeClass("hide");
+			$delBtn.addClass("hide");
+		});
+		$confirmBtn.on("click",function(){
+			opts.onDelete &&  opts.onDelete.apply(this);
+			$dialog.dialog("destroy").remove();
+		});
+		$cancel.on("click",function(){
+			$delBtn.removeClass("hide");
+			$confirmBox.addClass("hide");
+		});
+	}
 })(window.jQuery);
 
 
