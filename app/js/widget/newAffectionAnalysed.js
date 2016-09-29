@@ -348,11 +348,12 @@
         /*对比监测时间*/
         _initSlider : function($ele){
             var that = this;
+            console.log(that.data.condition.compareDateScope.value);
             $ele.slider({
                 range: true,
                 min: -90,
                 max: 30,
-                values: [that.data.condition.compareDateScope.value["beforeDateNum"]*-1 , that.data.condition.compareDateScope.value["afterDateNum"]*-1 ],
+                values: [that.data.condition.compareDateScope.value["beforeDateNum"]*-1, that.data.condition.compareDateScope.value["afterDateNum"]],
                 slide: function( event, ui ) {
                     that.data.condition.compareDateScope.value["beforeDateNum"] = ui.values[ 0 ] * -1;
                     that.data.condition.compareDateScope.value["afterDateNum"] = ui.values[ 1 ] * -1;

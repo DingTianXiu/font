@@ -383,7 +383,7 @@ body {
   padding-top: 0;
   background: #fff;
   position: relative;
-  margin-left: -1px;
+  margin: -2px 0 0 -1px;
 }
 .componentListWrapper .componentList .second .legend a i.delLegendIcon {
   color: #9f9fa1;
@@ -1082,4 +1082,34 @@ body {
 .addShowBtnContainer .selectProduct_updata li:first-child select {
   height: 36px;
   width: 199px;
+}
+.cptConfigBox h3 {
+  border-bottom: 1px solid #ccc;
+  padding: 10px 0;
+}
+.cptConfigBox .syncBox {
+  padding: 0 10px 10px 10px;
+}
+.cptConfigBox .syncBox li {
+  float: left;
+  margin: 0 5px;
+}
+.cptConfigBox .syncBox li p {
+  padding: 10px 0;
+}
+.cptConfigBox .syncBox li p label {
+  margin-right: 10px;
+}
+.cptConfigBox .btnbox {
+  width: auto;
+  border-top: 1px solid #000;
+  padding: 10px 0 0 0;
+  margin: 0;
+  line-height: 24px;
+}
+.cptConfigBox .btnbox button {
+  line-height: 24px;
+  padding: 0 8px;
+  float: right;
+  margin-left: 5px;
 }
