@@ -360,10 +360,10 @@
                 range: true,
                 min: -90,
                 max: 30,
-                values: [that.data.condition.compareDateScope.value["beforeDateNum"]*-1 , that.data.condition.compareDateScope.value["afterDateNum"] ],
+                values: [that.data.condition.compareDateScope.value["beforeDateNum"]*-1 , that.data.condition.compareDateScope.value["afterDateNum"]],
                 slide: function( event, ui ) {
                     that.data.condition.compareDateScope.value["beforeDateNum"] = ui.values[ 0 ] * -1;
-                    that.data.condition.compareDateScope.value["afterDateNum"] = ui.values[ 1 ] * -1;
+                    that.data.condition.compareDateScope.value["afterDateNum"] = ui.values[ 1 ];
                 }
             });
         },

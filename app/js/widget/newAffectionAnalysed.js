@@ -264,9 +264,10 @@
                 selectData_positive.push(selectData.positive);
                 selectData_negative.push(selectData.negative);
             }
-            var afterDateNum = that.data.result&&that.data.result.afterDateNum?that.data.result.afterDateNum:28,
-                beforeDateNum = that.data.result&&that.data.result.beforeDateNum?-that.data.result.beforeDateNum:-30;
+            var afterDateNum = that.data.condition.compareDateScope.value.afterDateNum,
+                beforeDateNum = that.data.condition.compareDateScope.value.beforeDateNum*-1;
             var dateList = [];
+            console.log(beforeDateNum,afterDateNum);
             for(var i=beforeDateNum;i<afterDateNum;i++){
                 dateList.push(i);
             }
@@ -348,7 +349,6 @@
         /*对比监测时间*/
         _initSlider : function($ele){
             var that = this;
-            console.log(that.data.condition.compareDateScope.value);
             $ele.slider({
                 range: true,
                 min: -90,
@@ -356,7 +356,7 @@
                 values: [that.data.condition.compareDateScope.value["beforeDateNum"]*-1, that.data.condition.compareDateScope.value["afterDateNum"]],
                 slide: function( event, ui ) {
                     that.data.condition.compareDateScope.value["beforeDateNum"] = ui.values[ 0 ] * -1;
-                    that.data.condition.compareDateScope.value["afterDateNum"] = ui.values[ 1 ] * -1;
+                    that.data.condition.compareDateScope.value["afterDateNum"] = ui.values[ 1 ];
                 }
             });
         },

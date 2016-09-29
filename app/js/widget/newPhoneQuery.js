@@ -177,10 +177,10 @@
             var html = template(this.data);
             this.$element.html(html).attr("id", that.data.condition.cptInstId);
             this.$element.find(".dateBox").datePicker({
-                beforeDateNum : that.data.condition.searchDateScope["beforeDateNum"]*-1,
+                beforeDateNum : that.data.condition.searchDateScope["beforeDateNum"],
                 afterDateNum : that.data.condition.searchDateScope["afterDateNum"],
                 onSaveDate : function(beforeDateNum,afterDateNum){
-                    that.data.condition.searchDateScope.beforeDateNum = beforeDateNum*-1;
+                    that.data.condition.searchDateScope.beforeDateNum = beforeDateNum;
                     that.data.condition.searchDateScope.afterDateNum = afterDateNum;
 
                     that._updateDate(beforeDateNum,afterDateNum);
