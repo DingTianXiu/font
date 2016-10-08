@@ -885,6 +885,14 @@
 		this.label = options.label ? options.label : "请选择信息来源：";
 		this.data = options.data;
 		this.selectedData = [];
+		if(options.infoSource){
+			for(var i = 0; i < options.infoSource.length;i++){
+				this.selectedData.push({
+					"srcKey" : options.infoSource[i].srcKey,
+					"srcName": options.infoSource[i].srcName,
+				});
+			}
+		}
 		this._init(element,options);
 	};
 	SelectorPlusSource.prototype = {
@@ -915,6 +923,14 @@
 					})
 				}
 				this.$source.select('data', arr);
+			}
+			for(var i = 0;i < this.selectedData.length;i++) {
+				var item = this.selectedData[i];
+				this.$proWrapper = $("<div class='proWrapper'></div>").appendTo(this.$rBox);
+				this.$pro = $("<div class='pro clearfix'>").appendTo(this.$proWrapper);
+				this.$proInfo = $("<div class='info clearfix'><p>"+ item.srcName +"</p></div>").appendTo(this.$pro);
+
+				this.$proDelBtn = $("<i class='icon iconfont icon-icondel' data-id="+ item.srcKey +"></i>").appendTo(this.$pro);
 			}
 		},
 		_addSourceTpl : function(){

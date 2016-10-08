@@ -42,7 +42,6 @@
                 iframe: true,
                 success: function (r) {
                     var data = r.data.data;
-                    console.log(data);
                     that.getSceneListList(data);
                     that.getIndustryList(data,"0");
                 }

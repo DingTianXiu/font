@@ -30,5 +30,6 @@ var URL = {
     GET_SOURCE_DATA : "/Yishang/config/selectNetInfoSource",
     GET_INST_ATTR_GROUP : "/Yishang/component/inst/groupAttr",         //获取模块关联构件组
     UPDATE_SYNC_TYPE : "/Yishang/cptInst/updateSyncType",               //设置属性实例同步信息
-    UPDATE_PWD : "/Yishang/user/updatePwd"
+    UPDATE_PWD : "/Yishang/user/updatePwd",
+    UPDATE_INST_CPT_SYNC : "/Yishang/component/inst/updateInstCptSyncType"
 };

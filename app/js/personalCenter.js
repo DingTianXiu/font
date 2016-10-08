@@ -196,7 +196,6 @@
                     $(".resetSuccess").css("display","block");
                 },
                 fail : function (data) {
-                    console.log(data);
                     if(data.msg == "密码不正确"){
                         that.showErr();
                         $("#messageTip").html("密码不正确").addClass("err");

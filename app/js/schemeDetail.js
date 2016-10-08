@@ -87,8 +87,8 @@
 						that._renderComponent();
 					}else{
 						openComponentDialog();
-						that.setBtnStatus();
 					}
+					that.setBtnStatus();
 				}
 			});
 		},
@@ -157,7 +157,10 @@
 			$('.btnbox').delegate("#publish","click",function(){
 				that.publish(0);
 			});
-			//
+			//获取模块关联构件组
+			$(".moduleData").on("click",function(){
+				that.getRelatedCptGroup();
+			});
 		},
 		preview : function(flag){
 			this.moduleChain[this.currentModuleId] = flag ? -1 : 0;
@@ -270,7 +273,13 @@
 									}
 								}
 							} else {
-								that.moduleData.push(r.data);
+								that.moduleData.push({
+									"modId": r.data.id,
+									"modName": r.data.modName,
+									"sltId": r.data.sltId,
+									"status": r.data.status,
+									"createTime": r.data.createTime
+								});
 							}
 							that._renderModule();
 							$("#addModulePopup").addClass("hide");
@@ -302,6 +311,7 @@
 					},
 					//创建关联构件
 					onRelatedWidget : function(data){
+						if(that.hasEditedComponent()) return;
 						that.createWidget(data,0);
 					}
 				});
@@ -322,6 +332,7 @@
 					},
 					//创建关联构件
 					onRelatedWidget : function(data){
+						if(that.hasEditedComponent()) return;
 						that.createWidget(data,0);
 					}
 				});
@@ -339,6 +350,7 @@
 					conCptInstId : param.conCptInstId ? param.conCptInstId : null,
 					onComplete: function (data) {
 						that.updateComponentChain(data);
+						that.setBtnStatus();
 					},
 					//同步关联属性
 					onUpdateAttr : function(data){
@@ -346,7 +358,7 @@
 					},
 					//创建关联构件
 					onRelatedWidget : function(data){
-						console.log(data);
+						if(that.hasEditedComponent()) return;
 						that.createWidget(data,0);
 					}
 				});
@@ -368,6 +380,7 @@
 					},
 					//创建关联构件
 					onRelatedWidget : function(data){
+						if(that.hasEditedComponent()) return;
 						that.createWidget(data,0);
 					}
 				});
@@ -389,10 +402,25 @@
 					},
 					//创建关联构件
 					onRelatedWidget : function(data){
+						if(that.hasEditedComponent()) return;
 						that.createWidget(data,0);
 					}
 				});
 			}
+			document.body.scrollTop = document.body.scrollHeight;
+		},
+		hasEditedComponent : function(){
+			var flag = false;
+			$(".component").each(function(){
+				if(!$(this).attr("id")){
+					$.msg({
+						modal : true,
+						msg : "当前构件未创建完成，不能创建构件"
+					});
+					flag = true;
+				}
+			});
+			return flag;
 		},
 		updateSyncData :　function(data){
             if(data.length == 0) return;
@@ -413,7 +441,6 @@
 		setBtnStatus : function(){
 			var that = this,
 				template = '';
-
 			if(this.moduleChain[this.currentModuleId] == 1){
 				if (this.componentChain[this.currentModuleId].length > 0) {
 					template = '<a href="javascript:;" id="addWidgetBtn">添加新构件</a>';
@@ -456,6 +483,109 @@
 						break;
 					}
 				}
+			}
+		},
+		getRelatedCptGroup : function(){
+			var that = this;
+			$.ajaxJSON({
+				name: "获取模块关联构件组",
+				url: URL.GET_INST_ATTR_GROUP,
+				data: {"modId" : that.currentModuleId},
+				type: 'post',
+				iframe: true,
+				success: function (r) {
+					that.renderCptGroup(r.data);
+				}
+			});
+		},
+		renderCptGroup : function(data,modId){
+			var that = this;
+			var tpl = "<table class='attrGroup'><tr><td width='20'></td>";
+			var attrTpl = "<tr><th>属性</th>";
+			var groupCount = 1;
+			var item;
+
+			for(var i = 0; i <data.baseAttrNameGroup.length;i++){
+				attrTpl += "<th class='"+ data.baseAttrNameGroup[i].baseAttrKey +"'><a href='javascript:;' class='delAttr' key='"+ data.baseAttrNameGroup[i].baseAttrKey +"'>"+ data.baseAttrNameGroup[i].baseAttrName +"<i class='icon iconfont icon-icondel '></i></a></th>";
+				tpl += "<th class='"+ data.baseAttrNameGroup[i].baseAttrKey +"'>属性"+ (i+1) +"同步构件组</th>";
+			}
+			attrTpl += "</tr>";
+			tpl += attrTpl;
+
+			for(var j = 0; j < data.attrInstGroupList.length;j++) {
+				if (groupCount < data.attrInstGroupList[j].attrInstGroups.length){
+					groupCount = data.attrInstGroupList[j].attrInstGroups.length;
+				}
+			}
+			for(var k = 0; k < groupCount;k++){
+				tpl += "<tr><th>关联构件组"+ (k+1) +"</th>";
+				for(var m = 0; m < data.attrInstGroupList.length;m++){
+					item = data.attrInstGroupList[m].attrInstGroups[k];
+					if(item) {
+						tpl += "<td class='"+ item.baseAttrKey +"' attrInstGroupId = '"+ item.attrInstGroupId +"'>";
+						for (var n = 0; n < item.attrInsts.length ; n++) {
+							tpl += "<a href='javascript:;' class='delAttrCpt' attrInstId='"+ item.attrInsts[n].attrInstId +"' key='"+ item.attrInsts[n].baseAttrKey +"'>" + item.attrInsts[n].baseCptName +"<i class='icon iconfont icon-icondel'></i></a>";
+						}
+						tpl += "</td>";
+					}else{
+						tpl += "<td></td>";
+					}
+				}
+				tpl += "</tr>";
+			}
+			tpl += "</table>";
+			this.attrGroupDialog = $(tpl).dialog({
+				title : '当前模块引用数据',
+				resizable : false,
+				minHeight : 14,
+				width:1200,
+				modal : true,
+				close : function() {
+					$(this).dialog("destroy").remove();
+				}
+			});
+			this.attrGroupDialog.find(".delAttr").on("click",function(){
+				that.updateAttrGroup($(this));
+			});
+			this.attrGroupDialog.find(".delAttrCpt").on("click",function(){
+				that.updateAttrGroup($(this));
+			});
+		},
+		updateAttrGroup : function($ele){
+			var that = this;
+			var key = $ele.attr("key");
+			var attrInstId = $ele.attr("attrInstId");
+			var param = {};
+			if($ele.attr("class") == "delAttr") {
+				param = {
+					"modId": that.currentModuleId,
+					"syncType": 1,
+					"baseAttrKey": key,
+				};
+				$.ajaxJSON({
+					name: "修改模块内的构件的属性同步类型",
+					url: URL.UPDATE_INST_CPT_SYNC,
+					data: param,
+					type: 'post',
+					iframe: true,
+					success: function (r) {
+						that.attrGroupDialog.find("." + key).remove();
+					}
+				});
+			}else if($ele.attr("class") == "delAttrCpt"){
+				param = {
+					"attrInstId" : attrInstId,
+					"syncType" : 1
+				};
+				$.ajaxJSON({
+					name: '设置属性实例同步信息',
+					url: URL.UPDATE_SYNC_TYPE,
+					data: param,
+					iframe: true,
+					success: function (r) {
+						$ele.remove();
+					}
+				});
 			}
 		},
 		init : function(){

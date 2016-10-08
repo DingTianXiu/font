@@ -166,13 +166,19 @@
                     iframe: true,
                     success: function (r) {
                         that._initBrand(r.data.phoneModel.value);
+                        if(r.data.infoSource) {
+                            that._initInfoSource(r.data.infoSource.value);
+                            that.data.condition.infoSource = r.data.infoSource;
+                        }else{
+                            that._initInfoSource();
+                        }
                         that.data.condition.phoneModel = r.data.phoneModel;
                     }
                 });
             }else{
                 this._initBrand();
+                this._initInfoSource();
             }
-            this._initInfoSource();
             this._initSlider(this.$element.find(".firstMultiAttr").find(".sliderBox"));
         },
         _initBrand : function(phoneModelValue){
@@ -192,7 +198,7 @@
                 }
             });
         },
-        _initInfoSource : function(){
+        _initInfoSource : function(infoSourceValue){
             var that = this;
             $.ajaxJSON({
                 name : "来源信息",
@@ -201,7 +207,11 @@
                 type : 'get',
                 iframe : true,
                 success: function (r) {
-                    that.$element.find(".infoContainer").selectorPlusSource({"data":r.data});
+                    if(infoSourceValue) {
+                        that.$element.find(".infoContainer").selectorPlusSource({"data": r.data,"infoSource":infoSourceValue});
+                    }else {
+                        that.$element.find(".infoContainer").selectorPlusSource({"data": r.data});
+                    }
                 }
             });
         },
@@ -271,7 +281,6 @@
             var template = Handlebars.compile(source);
             var html = template(this.data);
             this.$element.html(html).attr("id", that.data.condition.cptInstId);
-            console.log(that.data.condition);
             this.$element.find(".dateBox").datePicker({
                 beforeDateNum : that.data.condition.compareDateScope.value["beforeDateNum"]*-1,
                 afterDateNum : that.data.condition.compareDateScope.value["afterDateNum"],

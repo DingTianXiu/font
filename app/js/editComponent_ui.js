@@ -162,7 +162,8 @@
                 $(".generateBtn").remove();
             }
             var editContainer_dom =  $(ele).find($(".titleContainer"));
-            var dom = "<div class='tabContainer'><ul class='tab'></ul><div class='addShowBtnContainer'><button class='addShow'>&#xe602;</button></div><button class='delShow'>&#xe615;</button><div class='timeSelect'><button>按时查看</button><button class='btnSelected'>按日查看</button></div></div>"
+            var dom = "<div class='tabContainer'><ul class='tab'></ul><div class='addShowBtnContainer'><button class='addShow'>&#xe602;</button></div><button class='delShow'>&#xe615;</button></div>"
+                // <div class='timeSelect'><button>按时查看</button><button class='btnSelected'>按日查看</button></div>
             $(editContainer_dom).after(dom);
             $.each(data,function (i) {
                 var tabUl_dom = $(ele).find($(".tab"));

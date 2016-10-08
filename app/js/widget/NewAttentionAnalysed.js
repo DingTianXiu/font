@@ -584,9 +584,9 @@
 
         _initConfigSync:function(){
             var that = this;
-            $.cptConfig({
-                data : that.data.condition,
-                onSwitchType : function(data){
+            if(that.data.condition.cptInstId){
+                var data = that.data.condition,
+                    fun = function(data){
                     var param = {
                         "attrInstId" : data.id,
                         "syncType" : data.syncType
@@ -600,7 +600,14 @@
                             that.data.condition[data.key]["syncType"] = data.syncType;
                         }
                     });
-                },
+                };
+            }else{
+                var data = "",
+                    fun = "";
+            }
+            $.cptConfig({
+                data : data,
+                onSwitchType : fun,
                 onDelete : function(){
                     that._deleteComponent();
                 }
@@ -610,22 +617,26 @@
         /*删除构件*/
         _deleteComponent : function () {
             var that = this;
-            $.msg({
-                type : "confirm",
-                msg : "确认删除？",
-                ok : function(){
-                    $.ajaxJSON({
-                        name: '删除构件实例',
-                        url: URL.DELETE_CPTINT,
-                        data: {"cptInstId": that.data.condition.cptInstId},
-                        iframe: true,
-                        success: function () {
-                            $.msg("删除成功");
-                            that._onComplete(that.data.condition.cptInstId);
-                        }
-                    });
-                }
-            })
+            if(that.data.condition.cptInstId){
+                $.msg({
+                    type : "confirm",
+                    msg : "确认删除？",
+                    ok : function(){
+                        $.ajaxJSON({
+                            name: '删除构件实例',
+                            url: URL.DELETE_CPTINT,
+                            data: {"cptInstId": that.data.condition.cptInstId},
+                            iframe: true,
+                            success: function () {
+                                $.msg("删除成功");
+                                that._onComplete(that.data.condition.cptInstId);
+                            }
+                        });
+                    }
+                })
+            }else{
+                that.$element.remove();
+            }
         },
 
         _bindEvent : function ()  {
@@ -676,7 +687,7 @@
             /*生成构件事件监听*/
             $(".generateBtn button").on("click",function () {
                 var queryOptions = {
-                        "baseCptId" : that.data.condition.baseCptId,  //基础构件ID
+                    "baseCptId" : that.data.condition.baseCptId,  //基础构件ID
                     "moduleId" : that.data.condition.moduleId,    //模块ID
                     "conCptInstId" : that.data.condition.conCptInstId,   //新增构件实例ID
                     "compareDateScope" : {

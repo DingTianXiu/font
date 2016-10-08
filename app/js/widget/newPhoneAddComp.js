@@ -9,16 +9,15 @@
                 "cptInstId" : options.cptInstId,
                 "conCptInstId" : options.conCptInstId,
                 "compareDateScope" : {
-                    "beforeDateNum": options.beforeDateNum ? options.beforeDateNum : 28,
-                    "afterDateNum": options.afterDateNum ? options.afterDateNum : 30
-                }
+                    "value" : {
+                        "beforeDateNum": options.beforeDateNum ? options.beforeDateNum : 28,
+                        "afterDateNum": options.afterDateNum ? options.afterDateNum : 30
+                    }
+                },
+                "phoneModel" : {}
             },
             "result" : {},
             "related" : [],
-			// "titleTarProd":"选择目标产品",
-			// "chooBrand":"选择品牌",
-			// "chooType":"选择型号",
-			// "brands" :[]
         };
         this.$element = $(element);
         if(options.onComplete){
@@ -49,14 +48,13 @@
             }
             this._bindEvent();
         },
+        //事件绑定
         _bindEvent : function(){
 			var that = this;
         	this.$element.on('click','.configBtn',function(){
-				that._deleComponent();
+                // that._initConfigSync($(this));
+				that._initConfigSync($(this));
 			});
-			// this.$element.on('change','.btnCompare',function(){
-			// 	that._phoneInfo();
-			// });
 			this.$element.on("click",".btnCompare",function(){
                 that._createWidget();
             });
@@ -71,17 +69,23 @@
                 };
                 that._onRelatedWidget(param);
             });
-            this.$element.on("click",".addBtn",function(){
+            this.$element.on("click",".addLegendBtn",function(){
                 that._openPhoneDialog();
                 that._getPhoneList();
             });
             this.$element.on("click",".addBtn_updata",function () {
                 that._addProduct();
-                if(that.data.condition.phoneModel.length == that.$element.find(".phoneModel").length){
+                if(that.data.condition.phoneModel.value.length == that.$element.find(".phoneModel").length){
                     return;
                 }
                 that.$element.find($(".legend").find($(".legendBtn:first-child"))).addClass("active");
                 that._updatePhoneModel();
+            });
+            this.$element.on("click",".delLegendBtn",function(){
+                that.$element.find(".legendBtn").find("i").show();
+            });
+            this.$element.on("click",".delLegendIcon",function(){
+               that._delPhoneModel($(this));
             });
         },
         _renderResult : function(){
@@ -91,8 +95,8 @@
             var html = template(this.data);
             this.$element.html(html).attr("id", that.data.condition.cptInstId);
             this.$element.find(".dateBox").datePicker({
-                beforeDateNum : that.data.condition.compareDateScope["beforeDateNum"],
-                afterDateNum : that.data.condition.compareDateScope["afterDateNum"],
+                beforeDateNum : that.data.condition.compareDateScope.value["beforeDateNum"]*-1,
+                afterDateNum : that.data.condition.compareDateScope.value["afterDateNum"],
                 onSaveDate : function(beforeDateNum,afterDateNum){
                     that._updateDate(beforeDateNum,afterDateNum);
                 }
@@ -100,32 +104,103 @@
             this.$second = this.$element.find(".second");
             this.$legend = $("<div class='legend'></div>").prependTo(this.$second);
             var tpl = "";
-            for(var i = 0; i < this.data.condition.phoneModel.length;i++){
-                var item = this.data.condition.phoneModel[i];
-                tpl += "<a href='javascript:;' class='legendBtn' modelCode='"+ item.id +"'>"+ item.brandName + " " + item.modelName +"<i>x</i></a>"
+            for(var i = 0; i < this.data.condition.phoneModel.value.length;i++){
+                var item = this.data.condition.phoneModel.value[i];
+                tpl += "<a href='javascript:;' class='legendBtn' modelCode='"+ item.id +"'>"+ item.brandName + " " + item.modelName +"<i class='icon iconfont icon-iconclouse delLegendIcon'></i></a>";
             }
             this.$legend.html(tpl);
-            this.$addBtn = $("<div class='addShowBtnContainer'><a href='javascript:;' class='addBtn'><i class='icon iconfont icon-iconadd'></i></a></div>").appendTo(this.$legend);
-            this.delBtn = $("<a href='javascript:;' class='delBtn'><i class='icon iconfont icon-icondel'></i></a>").appendTo(this.$legend);
+            this.$addBtn = $("<div class='addShowBtnContainer'><a href='javascript:;' class='addBtn addLegendBtn'><i class='icon iconfont icon-iconadd'></i></a></div>").appendTo(this.$legend);
+            this.delBtn = $("<a href='javascript:;' class='delBtn delLegendBtn'><i class='icon iconfont icon-icondel'></i></a>").appendTo(this.$legend);
             this.$hrLline = $("<hr class='hrLine'>").appendTo(this.$legend);
             if(!this.data.result) return;
             var defaultModelCode = this.$legend.find(".legendBtn").eq(0).attr("modelCode");
-            this._renderChart(that.data.result[defaultModelCode]);
+            this._renderChart(that.data.result.volumeData[defaultModelCode]);
             // this._renderChart(that.data.result.volumeData[defaultModelCode]);
             this.$legend.find(".legendBtn").eq(0).addClass("active");
         },
+        //曲线图
+        _renderChart : function(data){
+            if(!data){
+                this.$element.find(".lineChart").html("");
+                return;
+            }
+            var xList = [],
+                seriesList = [],
+                data = [];
+            var dom = document.getElementById("containerChart1");
+            var lineChart = echarts.init(dom);
+            for(var i = 0; i < data.length;i++){
+                xList.push(data[i]);
+                // negativeList.push(data[i].result.negative);
+                // neutralList.push(data[i].result.neutral);
+                // sumList.push(data[i].result.sum);
+            };
+            var settings = {
+                type: 'bar',
+                stack: '总量',
+                barWidth: '60%',
+                label: {
+                    normal: {
+                        show: true,
+                        position: 'insideRight'
+                    }
+                }
+            };
+            var option = {
+                color : ['#5f97fb','#87b1fc','#afcbfd'],
+                tooltip : {
+                    trigger: 'axis',
+                },
+                grid: {
+                    left: '3%',
+                    right: '4%',
+                    bottom: '3%',
+                    containLabel: true
+                },
+                xAxis:  {
+                    type: 'category',
+                    data: xList,
+                    axisTick : {show:false}
+                },
+                yAxis: {
+                    type: 'value',
+                    splitLine:{
+                        show:true,
+                        lineStyle: {     
+                            color: ['#ddd'],
+                            width: 1,
+                            type: 'solid'
+                        }
+                    }
+                },
+                series: [
+                    // {data : negativeList},
+                    // {data : neutralList},
+                    // {data : sumList}
+                    {name:1,data:data.data}
+                ]
+            };
+            var lineChart = echarts.init(this.$element.find(".lineChart")[0]);
+            lineChart.setOption(option);
+            // var myChart = echarts.init(document.getElementById('containerChart1'));
+            // if (option && typeof option === "object") {
+            //     myChart.setOption(option, true);
+            // }
+            // myChart.setOption(option);
+        },
+        //组件内tab切换
         _switchLegendBtn : function($ele){
             var code = $ele.attr("modelCode");
-            // console.log(code);
             $ele.addClass("active");
             $ele.siblings().removeClass("active");
-            this._renderChart(this.data.result[code]);
+            this._renderChart(this.data.result.volumeData[code]);
             // this._renderChart(this.data.result.volumeData[code]);
         },
+        //更改时间 重新加载结果
         _updateDate : function(beforeDateNum,afterDateNum){
             var that = this;
-            that.data.condition.compareDateScope.beforeDateNum = beforeDateNum;
-            that.data.condition.compareDateScope.afterDateNum = afterDateNum;
+            that.data.condition.compareDateScope.value.beforeDateNum = beforeDateNum;
+            that.data.condition.compareDateScope.value.afterDateNum = afterDateNum;
             var param = {
                 "cptInstId" : that.data.condition.cptInstId,
                 "compareDateScope" : {
@@ -141,14 +216,14 @@
                 success:function(r){
                     that.data.result = r.data.cptData;
                     that._renderResult();
-                    that._onComplete(that.data);
                 }
             });
         },
+        //获取时间列表
         _getPhoneList : function () {
             var that = this;
             $.ajaxJSON({
-                name: "手机列表、型号",
+                name: "手机列表",
                 url: URL.GET_PHONE_LIST,
                 data: {
                     industry: "mobile"
@@ -189,7 +264,8 @@
                 }
             })
         },
-        _phoneInfo :function(phoneModel){
+        //获取手机型号列表
+        _phoneInfo :function(phoneModelValue){
             var _this = this;
 		    var $phoneList = $(".phoneList"),
 				$btnAddPhone = $(".tarPro .btnAdd"),
@@ -206,14 +282,15 @@
 				type : 'get',
 				iframe : true,
 				success: function (i) {
-					if(phoneModel) {
-                        _this.$element.find(".proContraIn").selectorPlusPro({"data": i.data, "phoneModel": phoneModel});
+					if(phoneModelValue) {
+                        _this.$element.find(".proContainer").selectorPlusPro({"data": i.data, "phoneModel": phoneModelValue});
                     }else{
-                        _this.$element.find(".proContraIn").selectorPlusPro({"data": i.data});
+                        _this.$element.find(".proContainer").selectorPlusPro({"data": i.data});
                     }
 				}
 			});
         },
+        //获取构件实例属性
         _getData : function(){
             var that = this;
             var param = {"cptInstId" : this.data.condition.cptInstId};
@@ -223,9 +300,9 @@
                 data: param,
                 iframe: true,
                 success: function (r) {
-                    that.data.condition["compareDateScope"] = r.data.compareDateScope.value;
-                    that.data.condition["infoSource"] = r.data.infoSource.value;
-                    that.data.condition["phoneModel"] = r.data.phoneModel.value;
+                    that.data.condition["compareDateScope"] = r.data.compareDateScope;
+                    that.data.condition["infoSource"] = r.data.infoSource;
+                    that.data.condition["phoneModel"] = r.data.phoneModel;
                     $.ajaxJSON({
                         name : '获取构件实例数据',
                         url :URL.GET_CPTINST_DATA,
@@ -234,12 +311,12 @@
                         success : function(r){
                             that.data.result = r.data;
                             that._renderResult();
-                            that._onComplete(this.data);
                         }
                     });
                 }
             });
         },
+        //或缺信息来源
         _getInfoSource : function(){
             var that = this;
             $.ajaxJSON({
@@ -253,7 +330,7 @@
                 }
             });
         },
-        /*step2弹框 - 添加手机品牌及型号*/
+        //step2弹框 - 添加手机品牌及型号
         _openPhoneDialog : function(){
             var that = this;
             if(this.$element.find(".selectProduct_updata").length==0){
@@ -274,6 +351,7 @@
                 this.$element.find(".addShowBtnContainer").append(dom);
             }
         },
+        //step2 - 添加手机信息
         _addProduct : function () {
             var that = this;
             var id = $(".model").val(),
@@ -291,28 +369,23 @@
                                 "picUrl": models[j].logoUrl,
                                 "releaseDate": models[j].pubDate
                             };
-                            if(!that.data.condition.phoneModel){
-                                that.data.condition.phoneModel = [];
-                                that.data.condition.phoneModel.push(model);
-                                //that.addComponent.addProductList(that.data.condition.phoneModel);
-                            }else{
-                                $.each(that.data.condition.phoneModel,function (i) {
-                                    if(that.data.condition.phoneModel[i].id==model.id){
-                                        $.msg("该型号手机已存在");
-                                        return false;
-                                    }else if(i==that.data.condition.phoneModel.length-1){
-                                        that.data.condition.phoneModel.push(model);
-                                    }
-                                });
-                            }
+                            $.each(that.data.condition.phoneModel['value'],function (i) {
+                                if(that.data.condition.phoneModel['value'][i].id==model.id){
+                                    $.msg("该型号手机已存在");
+                                    return false;
+                                }else if(i==that.data.condition.phoneModel.value.length-1){
+                                    that.data.condition.phoneModel.value.push(model);
+                                }
+                            });
                         }
                     })
                 }
             });
         },
+        //新建组件验证
         _createWidget : function(){
 			var params = this.data.condition;
-            var phoneModel = this.$element.find(".proContraIn").selectorPlusPro("getData");
+            var phoneModel = this.$element.find(".proContainer").selectorPlusPro("getData");
             var infoSource = this.$element.find(".infoSource").selectorPlusSource("getData");
             if(phoneModel.length == 0){
                 $.msg("不选择品牌就想添加数据？哪有那么好的事情");
@@ -335,6 +408,7 @@
                 });
             }
             params["infoSource"] = infoSource;
+            params["compareDateScope"] = this.data.condition.compareDateScope.value;
             if(this.data.condition.conCptInstId){
                 params["conCptInstId"] = this.data.condition.conCptInstId;
             }
@@ -347,6 +421,11 @@
                 contentType : 'application/json; charset=UTF-8',
                 success: function (r) {
                     that.data.condition.cptInstId = r.data.cptInstId;
+                    that._onComplete({
+                        "baseCptId" : that.data.condition.baseCptId,
+                        "cptInstId" : that.data.condition.cptInstId,
+                        "cptKey" : "phoneReleaseVolumeCompareCpt"
+                    });
                     $.ajaxJSON({
                         name: '获取构件的关联构件',
                         url: URL.GET_REL_CPT,
@@ -360,11 +439,12 @@
                 }
             });
         },
+        //更新实例属性
         _updatePhoneModel : function() {
             var that = this;
             var param = {
                 "cptInstId": this.data.condition.cptInstId,
-                "phoneModel": that.data.condition.phoneModel
+                "phoneModel": that.data.condition.phoneModel.value
             };
 
             $.ajaxJSON({
@@ -380,6 +460,7 @@
                 }
             });
         },
+        //
         _filterRelData : function(baseCptId,relData){
             for(var i = 0; i < relData.length;i++){
                 if(baseCptId != relData[i]["baseCptId"]){
@@ -391,6 +472,7 @@
                 }
             }
         },
+        //获取关联组件
         _getAttr : function(){
         	var that = this;
             var param = {"cptInstId" : this.data.condition.cptInstId};
@@ -400,29 +482,75 @@
                 data: {baseCptId: that.data.condition.baseCptId},
                 iframe:true,
                 success: function (relData) {
-                    that.data.related = relData.data;
+                    // that.data.related = relData.data;
+                    that._filterRelData(that.data.condition.baseCptId,relData.data);
                     that._getData();
                 }
             });
         },
-        _deleComponent : function(){
+        //设置属性实例同步信息
+        _initConfigSync : function($ele){
             var that = this;
-        	$.msg({
-                type : "confirm",
-                msg : "确认删除？",
-                ok : function(){
+        	if(!this.data.condition.cptInstId){
+                $.msg({
+                    type : "confirm",
+                    msg : "确认删除？",
+                    ok : function(){
+                        $ele.parents(".component").remove();
+                    }
+                });
+                return;
+            }
+            $.cptConfig({
+                data : that.data.condition,
+                onSwitchType : function(data){
+                    var param = {
+                        "attrInstId" : data.id,
+                        "syncType" : data.syncType
+                    };
                     $.ajaxJSON({
-                        name: '删除已选的手机',
-                        url: URL.DELETE_CPTINT,
-                        data: {"cptInstId": that.data.condition.cptInstId},
+                        name: '设置属性实例同步信息',
+                        url: URL.UPDATE_SYNC_TYPE,
+                        data: param,
                         iframe: true,
                         success: function (r) {
-                            $.msg("删除成功");
+                            that.data.condition[data.key]["syncType"] = data.syncType;
                         }
                     });
-                        return;
+                },
+                onDelete : function(){
+                    that._delCpt();
                 }
             });
+        },
+        //删除构件
+        _delCpt : function(){
+            var that = this;
+            $.ajaxJSON({
+                name: '删除构件实例',
+                url: URL.DELETE_CPTINT,
+                data: {"cptInstId": that.data.condition.cptInstId},
+                iframe: true,
+                success: function (r) {
+                    $.msg("删除成功");
+                    that._onComplete(that.data.condition.cptInstId);
+                }
+            });
+        },
+        //构件内删除手机信息
+        _delPhoneModel : function($ele){
+            if(this.data.condition.phoneModel.value.length <= 1){
+                $.msg({modal : true,msg : "型号手机不能为空"});
+                return;
+            }
+            var modelcode = $ele.parent().attr("modelcode");
+            for(var i = 0; i < this.data.condition.phoneModel.value.length;i++){
+                if(modelcode == this.data.condition.phoneModel.value[i].id){
+                    this.data.condition.phoneModel.value.splice(i,1);
+                }
+            }
+            this.$element.find($(".legend").find($(".legendBtn:first-child"))).addClass("active");
+            this._updatePhoneModel();
         },
         _initSlider : function($ele){
             var that = this;
@@ -430,19 +558,20 @@
                 range: true,
                 min: -90,
                 max: 30,
-                values: [that.data.condition.compareDateScope["beforeDateNum"]*-1 , that.data.condition.compareDateScope["afterDateNum"] ],
+                values: [that.data.condition.compareDateScope.value["beforeDateNum"]*-1 , that.data.condition.compareDateScope.value["afterDateNum"] ],
                 slide: function( event, ui ) {
-                    that.data.condition.compareDateScope["beforeDateNum"] = ui.values[ 0 ] * -1;
-                    that.data.condition.compareDateScope["afterDateNum"] = ui.values[ 1 ];
+                    that.data.condition.compareDateScope.value["beforeDateNum"] = ui.values[ 0 ] * -1;
+                    that.data.condition.compareDateScope.value["afterDateNum"] = ui.values[ 1 ];
                 }
             });
         },
+        //获取关联构件实例属性
         _renderCondition : function(){
             var that = this,
             	source = $("#addPhoneCompent0").html(),
             	template = Handlebars.compile(source),
             	html = template(this.data);
-            $('.proContraIn').html(html);
+            // $('.proContainer').html(html);
             this.$element.html(html);
             if(that.data.condition.conCptInstId) {
                 $.ajaxJSON({
@@ -452,6 +581,7 @@
                     iframe: true,
                     success: function (r) {
                         that._phoneInfo(r.data.phoneModel.value);
+                        that.data.condition.phoneModel = r.data.phoneModel;
                     }
                 });
             }else{
@@ -460,77 +590,6 @@
             this._getInfoSource();
             this._initSlider(this.$element.find(".firstMultiAttr").find(".sliderBox"));
         },
-		_renderChart : function(data){
-            // console.log(data);
-            if(!data){
-                this.$element.find(".lineChart").html("");
-                return;
-            }
-            var xList = [],
-                negativeList = [],
-                neutralList = [],
-                positiveList = [];
-            var dom = document.getElementById("containerChart1");
-            var myChart = echarts.init(dom);
-            for(var i = 0; i < data.length;i++){
-                xList.push(data[i].attr);
-                negativeList.push(data[i].negative);
-                neutralList.push(data[i].neutral);
-                sumList.push(data[i].sum);
-            };
-
-            var settings = {
-                type: 'bar',
-                stack: '总量',
-                barWidth: '60%',
-                label: {
-                    normal: {
-                        show: true,
-                        position: 'insideRight'
-                    }
-                }
-            };
-            
-            var option = {
-                color : ['#5f97fb','#87b1fc','#afcbfd'],
-                tooltip : {
-                    trigger: 'axis',
-                },
-                grid: {
-                    left: '3%',
-                    right: '4%',
-                    bottom: '3%',
-                    containLabel: true
-                },
-                xAxis:  {
-                    type: 'category',
-                    data: xList,
-                    axisTick : {show:false}
-                },
-                yAxis: {
-                    type: 'value',
-                    splitLine:{
-                        show:true,
-                        lineStyle: {     
-                            color: ['#ddd'],
-                            width: 1,
-                            type: 'solid'
-                        }
-                    }
-                },
-                series: [
-                    { name : '正面', data : negativeList},
-                    { name : '中性', data : neutralList},
-                    { name : '负面', data : sumList},
-                ]
-            };
-            var myChart = echarts.init(document.getElementById('containerChart1'));
-            // if (option && typeof option === "object") {
-            //     myChart.setOption(option, true);
-            // }
-            myChart.setOption(option);
-        },
-
        	getData : function(){
           this._getData();
         },
