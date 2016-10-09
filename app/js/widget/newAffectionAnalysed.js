@@ -315,16 +315,6 @@
                 this.$element.find(".chart").html("");
                 return;
             }
-            var selectData_sum = [],
-                selectData_positive = [],
-                selectData_negative = [];
-            var phoneId = that.data.condition.phoneModel.value[0].id;
-            var selectData = that.data.result&&that.data.result.volumeData[phoneId]?that.data.result.volumeData[phoneId]:null;
-            if(selectData){
-                selectData_sum.push(selectData.sum);
-                selectData_positive.push(selectData.positive);
-                selectData_negative.push(selectData.negative);
-            }
             var afterDateNum = that.data.condition.compareDateScope.value.afterDateNum,
                 beforeDateNum = that.data.condition.compareDateScope.value.beforeDateNum*-1;
             var dateList = [];
@@ -358,19 +348,19 @@
                         name:'声量总量',
                         type:'line',
                         // stack: '总量',
-                        data: selectData_sum[0]
+                        data: data.sum
                     },
                     {
                         name:'正面总量',
                         type:'line',
                         // stack: '总量',
-                        data: selectData_positive[0]
+                        data: data.positive
                     },
                     {
                         name:'负面总量',
                         type:'line',
                         // stack: '总量',
-                        data: selectData_negative[0]
+                        data: data.negative
                     }
                 ]
             };
