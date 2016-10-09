@@ -282,7 +282,7 @@
             var html = template(this.data);
             this.$element.html(html).attr("id", that.data.condition.cptInstId);
             this.$element.find(".dateBox").datePicker({
-                beforeDateNum : that.data.condition.compareDateScope.value["beforeDateNum"]*-1,
+                beforeDateNum : that.data.condition.compareDateScope.value["beforeDateNum"],
                 afterDateNum : that.data.condition.compareDateScope.value["afterDateNum"],
                 onSaveDate : function(beforeDateNum,afterDateNum){
                     that._updateDate(beforeDateNum,afterDateNum);
@@ -384,7 +384,7 @@
                 contentType : 'application/json; charset=UTF-8',
                 iframe:true,
                 success:function(r){
-                    //that._onUpdateAttr(r.data.syncCptInstIdList);
+                    that._onUpdateAttr(r.data.syncCptInstIdList);
                     that.data.result = r.data.cptData;
                     that._renderResult();
                     //that._onComplete(that.data);

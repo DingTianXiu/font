@@ -421,6 +421,28 @@ body {
   height: 400px;
   margin: 30px 90px;
 }
+.componentListWrapper .componentList .second .chart svg {
+  position: absolute;
+  left: 50px;
+  top: 200px;
+}
+.componentListWrapper .componentList .second .chart svg text {
+  cursor: pointer;
+}
+.componentListWrapper .componentList .second .chart .tipsContainer {
+  width: 170px;
+  position: absolute;
+  left: 850px;
+  top: 200px;
+  padding: 10px;
+  background-color: rgba(0, 0, 0, 0.7);
+  border-radius: 4px;
+}
+.componentListWrapper .componentList .second .chart .tipsContainer li {
+  height: 20px;
+  font-size: 14px;
+  color: #fff;
+}
 .componentListWrapper .componentList .second .lineChart {
   height: 400px;
   margin: 30px 90px;
@@ -1112,4 +1134,56 @@ body {
   padding: 0 8px;
   float: right;
   margin-left: 5px;
+}
+.attrGroup {
+  border: 1px solid #fff;
+  border-collapse: collapse;
+  width: 100%!important;
+}
+.attrGroup td,
+.attrGroup th {
+  border: 1px solid #f4f4f4;
+  border-collapse: collapse;
+  padding: 12px 12px 2px 12px;
+  vertical-align: top;
+  text-align: center;
+}
+.attrGroup td a,
+.attrGroup th a {
+  display: inline-block;
+  background: #fff;
+  width: 258px;
+  height: 36px;
+  line-height: 36px;
+  text-align: center;
+  margin-bottom: 10px;
+  border-radius: 4px;
+  border: 1px solid #e5e5e5;
+  color: #3f4044;
+  position: relative;
+  outline: 0;
+}
+.attrGroup td a i,
+.attrGroup th a i {
+  position: absolute;
+  top: 0;
+  right: 10px;
+  display: none;
+}
+.attrGroup td a:hover,
+.attrGroup th a:hover {
+  background: #fff9f9;
+  border-color: #b9bcc4;
+  font-weight: bold;
+}
+.attrGroup td a:hover i,
+.attrGroup th a:hover i {
+  font-weight: normal;
+  color: #f25e61;
+  display: block;
+}
+.attrGroup th {
+  font-weight: normal;
+  vertical-align: middle;
+  padding: 12px;
 }

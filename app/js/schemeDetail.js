@@ -134,6 +134,9 @@
 				if($el.parents("#addModulePopup").length == 0 && ($el[0].id != 'addModulePopup') && ($el[0].className.indexOf('moduleListItem') == -1) && ($el[0].className.indexOf('editModuleName') == -1)){
 					$("#addModulePopup").addClass("hide");
 				}
+				if($el.parents(".selectProduct_updata").length == 0 && !($el[0].className == 'selectProduct_updata') &&  $el[0].className != "addBtn addLegendBtn" && $el[0].className != "icon iconfont icon-iconadd"){
+					$(".selectProduct_updata").remove();
+				}
 			});
 			//预览
 			$('.btnbox').delegate("#preview","click",function(){

@@ -8,31 +8,22 @@
         that.data = {
             "title" : "产品用户关注点分析",
             "condition" : {
-                "baseCptId" : options.baseCptId,  //基础构件ID
-                "moduleId" : options.moduleId,    //模块ID
-                "cptInstId" : options.cptInstId,   //新增构件实例ID
-                "conCptInstId" : options.conCptInstId?options.conCptInstId:null,
+                "baseCptId" : options.baseCptId,
+                "moduleId" : options.moduleId,
+                "cptInstId" : options.cptInstId,
+                "conCptInstId" : options.conCptInstId,
                 "compareDateScope" : {
                     "value" : {
                         "beforeDateNum": options.beforeDateNum ? options.beforeDateNum : 28,
                         "afterDateNum": options.afterDateNum ? options.afterDateNum : 30
                     }
                 },
-                "phoneModel" : {
-                    "value" : []
-                },
-                "infoSource" : {
-                    "value" : []
-                }
+                "phoneModel" : {}
             },
             "result" : {},
             "related" : []
         };
-        if(options && options.step){
-            that.step = options.step;
-        }else{
-            that.step = 0;
-        }
+        that.step = options.step;
         if(options.onComplete){
             if(typeof options.onComplete == "function"){
                 that._onComplete = options.onComplete;
@@ -55,223 +46,284 @@
     NewAttentionAnalysed.prototype = {
 
         Constructor : NewAttentionAnalysed,
-
-        _init : function () {
-            var that = this;
-            if(this.step==0){
-                if(that.data.condition.conCptInstId){
-                    that._getRelateComponentData();
-                }else{
-                    that._createComponentEdit();
-                }
+        _init : function(element,options){
+            if(this.step == 0){
+                this._renderCondition();
             }else{
-                this._createComponent();
+                this._getRelData();
             }
             this._bindEvent();
         },
-
-        /*step=0,创建编辑选项*/
-        _createComponentEdit : function () {
+        _bindEvent : function(){
             var that = this;
-            that.addComponent = that.$element.editComponent(that.$element,that.data.condition,that.data.title);
-            that.addComponent.addSelectProduct();
-            that._getPhoneList();
-            that.addComponent.addSelectResource();
-            that._getSourceList();
-            that.addComponent.addSelectTime();
-            that._initSlider($("#addTime"));
-            that._getStyleList();
-            if(that.data.condition.phoneModel&&that.data.condition.phoneModel.value.length>0){
-                that.addComponent.addProductList(that.data.condition.phoneModel.value);
-            }
-            if(that.data.condition.infoSource&&that.data.condition.infoSource.value.length>0){
-                that.addComponent.addResourceList(that.data.condition.infoSource.value);
-            }
-            that._bindEvent(that.addComponent);
-        },
-
-        /*创建构件*/
-        _createComponent : function () {
-            var that = this;
-            if(that.step == 0){
-                var option = {
-                    "baseCptId" : that.data.condition.baseCptId,  //基础构件ID
-                    "moduleId" : that.data.condition.moduleId,    //模块ID
-                    "cptInstId" : that.data.condition.cptInstId,   //新增构件实例ID
-                    "conCptInstId" : that.data.condition.conCptInstId,
-                    "compareDateScope" : {
-                        "beforeDateNum": that.data.condition.compareDateScope.value.beforeDateNum,
-                        "afterDateNum": that.data.condition.compareDateScope.value.afterDateNum
-                    },
-                    "phoneModel" : that.data.condition.phoneModel.value,
-                    "infoSource" : that.data.condition.infoSource.value
+            this.$element.delegate(".configBtn","click",function(){
+                //设置构件同步关系
+                that._initConfigSync($(this));
+            });
+            this.$element.delegate(".nextStep","click",function(){
+                that._createWidget();
+            });
+            this.$element.delegate(".legendBtn","click",function(){
+                that._switchLegendBtn($(this));
+            });
+            this.$element.delegate(".addLegendBtn","click",function(){
+                that._openPhoneDialog();
+                that._getPhoneList();
+            });
+            this.$element.delegate(".delLegendBtn","click",function(){
+                that.$element.find(".legendBtn").find("i").show();
+            });
+            this.$element.delegate(".delLegendIcon","click",function(){
+                that._delPhoneModel($(this));
+            });
+            this.$element.delegate(".addBtn_updata","click",function () {
+                that._addProduct();
+                if(that.data.condition.phoneModel.value.length == that.$element.find(".phoneModel").length){
+                    return;
+                }
+                that.$element.find($(".legend").find($(".legendBtn:first-child"))).addClass("active");
+                that._updatePhoneModel();
+            });
+            this.$element.delegate(".relatedBtn","click",function(){
+                var param = {
+                    baseCptId: $(this).attr("baseCptId"),
+                    cptKey: $(this).attr("type"),
+                    conCptInstId : that.data.condition.cptInstId
                 };
-                $.ajaxJSON({
-                    name : "保存构建实例",
-                    url: URL.CREATE_CPTINST,
-                    data: JSON.stringify(option),
-                    contentType : 'application/json; charset=UTF-8',
-                    type : 'post',
-                    iframe: true,
-                    success: function (i) {
-                        that.data.result = i.data;
-                        that.data.condition.cptInstId = i.data.cptInstId;
-                        that.addComponent.addTab(that.$element,that.data.condition.phoneModel.value);
-                        that.$element.find($(".tab")).find($(".phoneModel:first-child")).addClass("tabSelected");
-                        that._getData(that.addComponent);
-                        that._bindEvent(that.addComponent);
-                        that._onComplete({
-                            "baseCptId" : that.data.condition.baseCptId,
-                            "cptInstId" : that.data.condition.cptInstId,
-                            "cptKey" : "customerFocusAnalyzeCpt"
-                        });
+                that._onRelatedWidget(param);
+            });
+        },
+        _initConfigSync:function($ele){
+            var that = this;
+            if(!this.data.condition.cptInstId){
+                $.msg({
+                    type : "confirm",
+                    msg : "确认删除？",
+                    ok : function(){
+                        $ele.parents(".component").remove();
                     }
                 });
-            }else {
-                var option = {
-                    "baseCptId" : that.data.condition.baseCptId,  //基础构件ID
-                    "moduleId" : that.data.condition.moduleId,    //模块ID
-                    "cptInstId" : that.data.condition.cptInstId,   //新增构件实例ID
-                    "conCptInstId" : that.data.condition.conCptInstId,
-                    "compareDateScope" : {
-                        "beforeDateNum": that.data.condition.compareDateScope.value.beforeDateNum,
-                        "afterDateNum": that.data.condition.compareDateScope.value.afterDateNum
-                    },
-                    "phoneModel" : that.data.condition.phoneModel.value,
-                    "infoSource" : that.data.condition.infoSource.value,
-                    "step" : "1"
-                };
-                that.addComponent = that.$element.editComponent(that.$element,option,that.data.title);
-                that.index = 0;
-                that._getComponentAttr(that.addComponent);
+                return;
             }
-            if(that.$element.find(".dateBox").length==0){
-                that.$element.find(".dateBox_in").addClass("dateBox");
-            }
+            $.cptConfig({
+                data : that.data.condition,
+                onSwitchType : function(data){
+                    var param = {
+                        "attrInstId" : data.id,
+                        "syncType" : data.syncType
+                    };
+                    $.ajaxJSON({
+                        name: '设置属性实例同步信息',
+                        url: URL.UPDATE_SYNC_TYPE,
+                        data: param,
+                        iframe: true,
+                        success: function (r) {
+                            that.data.condition[data.key]["syncType"] = data.syncType;
+                        }
+                    });
+                },
+                onDelete : function(){
+                    that._delCpt();
+                }
+            });
         },
-
-        /*获取关联构建属性,创建构件*/
-        _getRelateComponentData : function () {
+        _delCpt : function(){
             var that = this;
             $.ajaxJSON({
-                name: "获取关联实例构件属性",
-                url: URL.GET_CPTINST_ATTR,
-                data: {"cptInstId": that.data.condition.conCptInstId},
-                type: 'post',
+                name: '删除构件实例',
+                url: URL.DELETE_CPTINT,
+                data: {"cptInstId": that.data.condition.cptInstId},
                 iframe: true,
-                success: function (data) {
-                    that.data.condition.phoneModel = data.data.phoneModel;
-                    that.data.condition.infoSource = data.data.infoSource;
-                    if(data.data.compareDateScope){
-                        that.data.condition.compareDateScope = data.data.compareDateScope;
-                    }
-                    that._createComponentEdit();
-                }
-            })
-        },
-
-        /*获取构建数据*/
-        _getData : function(){
-            var that = this;
-            that.$element.attr("id",that.data.condition.cptInstId);
-            $.ajaxJSON({
-                name : "获取构建实例数据",
-                url: URL.GET_CPTINST_DATA,
-                data: {"cptInstId":that.data.condition.cptInstId},
-                type : 'post',
-                iframe : true,
-                success: function (data) {
-                    if(!data){
-                        that.$element.find(".echartsContainer").html("");
-                        return
-                    }
-                    that.data.result = data.data;
-                    that.addComponent.addEcharts(that.$element,that.data.condition.cptInstId);
-
-                    that._renderResult();
+                success: function (r) {
+                    $.msg("删除成功");
+                    that._onComplete(that.data.condition.cptInstId);
                 }
             });
         },
-
-        /*更新构建数据*/
-        _updata : function (beforeDateNum,afterDateNum) {
+        _initSlider : function($ele){
             var that = this;
-            if(beforeDateNum||afterDateNum){
-                that.data.condition.compareDateScope.value.beforeDateNum = beforeDateNum;
-                that.data.condition.compareDateScope.value.afterDateNum = afterDateNum;
-                var option = {
-                    "cptInstId" : that.data.condition.cptInstId,   //新增构件实例ID
-                    "compareDateScope" : {
-                        "beforeDateNum" : beforeDateNum,
-                        "afterDateNum" : afterDateNum
+            $ele.slider({
+                range: true,
+                min: -90,
+                max: 30,
+                values: [that.data.condition.compareDateScope.value["beforeDateNum"]*-1 , that.data.condition.compareDateScope.value["afterDateNum"] ],
+                slide: function( event, ui ) {
+                    that.data.condition.compareDateScope.value["beforeDateNum"] = ui.values[ 0 ] * -1;
+                    that.data.condition.compareDateScope.value["afterDateNum"] = ui.values[ 1 ];
+                }
+            });
+        },
+        _renderCondition : function(){
+            var that = this;
+            var source = $("#proUserAnalysis0").html();
+            var template = Handlebars.compile(source);
+            var html = template(this.data);
+            this.$element.html(html);
+            if(that.data.condition.conCptInstId) {
+                $.ajaxJSON({
+                    name: '获取关联构件实例属性',
+                    url: URL.GET_CPTINST_ATTR,
+                    data: {"cptInstId": that.data.condition.conCptInstId},
+                    iframe: true,
+                    success: function (r) {
+                        that._initBrand(r.data.phoneModel.value);
+                        if(r.data.infoSource) {
+                            that._initInfoSource(r.data.infoSource.value);
+                            that.data.condition.infoSource = r.data.infoSource;
+                        }else{
+                            that._initInfoSource();
+                        }
+                        that.data.condition.phoneModel = r.data.phoneModel;
                     }
-                };
+                });
             }else{
-                var option = {
-                    "cptInstId" : that.data.condition.cptInstId,   //新增构件实例ID
-                    "phoneModel" : that.data.condition.phoneModel.value
-                };
+                this._initBrand();
+                this._initInfoSource();
             }
+            this._initSlider(this.$element.find(".firstMultiAttr").find(".sliderBox"));
+        },
+        _initBrand : function(phoneModelValue){
+            var that = this;
             $.ajaxJSON({
-                name : "更新实例属性",
-                url: URL.UPDATE_GET_DATA,
-                data: JSON.stringify(option),
-                contentType : 'application/json; charset=UTF-8',
-                type : 'post',
-                iframe : true,
-                success: function (data) {
-                    if(!data){
-                        that.$element.find(".echartsContainer").html("");
-                        return
+                name: "手机品牌及型号",
+                url: URL.GET_PHONE_LIST,
+                data: {"industry" : "mobile"},
+                type: 'get',
+                iframe: true,
+                success: function (r) {
+                    if(phoneModelValue) {
+                        that.$element.find(".proContainer").selectorPlusPro({"data": r.data, "phoneModel": phoneModelValue});
+                    }else{
+                        that.$element.find(".proContainer").selectorPlusPro({"data": r.data});
                     }
-                    that.data.result = data.data.cptData;
-                    that.addComponent.addEcharts(that.$element,that.data.condition.cptInstId);
-                    that._renderResult();
-                    that._onUpdateAttr(data.data.syncCptInstIdList);
                 }
             });
         },
-
-        /*渲染构件*/
-        _renderResult : function () {
+        _initInfoSource : function(infoSourceValue){
             var that = this;
-            if(that.$element.find(".dateHoverBox").length){
-                that.$element.find(".dateBox").data("datePicker","");
-                that.$element.find(".dateBox").html("");
+            $.ajaxJSON({
+                name : "来源信息",
+                url : URL.GET_SOURCE_DATA,
+                data: {},
+                type : 'get',
+                iframe : true,
+                success: function (r) {
+                    if(infoSourceValue) {
+                        that.$element.find(".infoContainer").selectorPlusSource({"data": r.data,"infoSource":infoSourceValue});
+                    }else {
+                        that.$element.find(".infoContainer").selectorPlusSource({"data": r.data});
+                    }
+                }
+            });
+        },
+        _createWidget : function(){
+            var params = this.data.condition;
+            var phoneModel = this.$element.find(".proContainer").selectorPlusPro("getData");
+            var infoSource = this.$element.find(".infoContainer").selectorPlusSource("getData");
+            if(phoneModel.length == 0){
+                $.msg("请选择目标产品");
+                return;
             }
-            that.$element.find(".dateBox").datePicker({
+            if(infoSource.length == 0){
+                $.msg("请选择信息来源");
+                return;
+            }
+            params["phoneModel"] = [];
+            for(var i = 0; i < phoneModel.length;i++) {
+                params["phoneModel"].push({
+                    "id": phoneModel[i].id,
+                    "brandName" : phoneModel[i].brandName,
+                    "modelName" : phoneModel[i].modelName,
+                    "releaseDate" : phoneModel[i].releaseDate,
+                    "picUrl" : phoneModel[i].logoUrl
+                });
+            }
+            params["infoSource"] = infoSource;
+            params["compareDateScope"] = this.data.condition.compareDateScope.value;
+            if(this.data.condition.conCptInstId){
+                params["conCptInstId"] = this.data.condition.conCptInstId;
+            }
+            var that = this;
+            $.ajaxJSON({
+                name: '新增构件实例',
+                url: URL.CREATE_CPTINST,
+                data: JSON.stringify(params),
+                iframe:true,
+                contentType : 'application/json; charset=UTF-8',
+                success: function (r) {
+                    that.data.condition.cptInstId = r.data.cptInstId;
+                    that._onComplete({
+                        "baseCptId" : that.data.condition.baseCptId,
+                        "cptInstId" : that.data.condition.cptInstId,
+                        "cptKey" : "phoneReleaseVolumeEmotionAnalyzeCpt"
+                    });
+                    $.ajaxJSON({
+                        name: '获取构件的关联构件',
+                        url: URL.GET_REL_CPT,
+                        data: {baseCptId: that.data.condition.baseCptId},
+                        iframe:true,
+                        success: function (relData) {
+                            that._filterRelData(that.data.condition.baseCptId,relData.data);
+                            that._getData();
+                        }
+                    });
+                }
+            });
+        },
+        _switchLegendBtn : function($ele){
+            var code = $ele.attr("modelCode");
+            $ele.addClass("active");
+            $ele.siblings().removeClass("active");
+            this._renderChart(this.data.result[code]);
+        },
+        _renderResult : function(){
+            var that = this;
+            var source = $("#affectionAnalysed1").html();
+            var template = Handlebars.compile(source);
+            var html = template(this.data);
+            this.$element.html(html).attr("id", that.data.condition.cptInstId);
+            this.$element.find(".dateBox").datePicker({
                 afterDateNum : that.data.condition.compareDateScope.value.afterDateNum,
                 beforeDateNum : that.data.condition.compareDateScope.value.beforeDateNum,
                 onSaveDate : function(beforeDateNum,afterDateNum){
                     if(that.data.condition.compareDateScope.value.beforeDateNum!=beforeDateNum||that.data.condition.compareDateScope.value.afterDateNum != afterDateNum){
-                        that.data.condition.compareDateScope.value.beforeDateNum = beforeDateNum;
-                        that.data.condition.compareDateScope.value.afterDateNum = afterDateNum;
-                        that.$element.find(".echartsContainer").remove();
-                        that._updata(beforeDateNum,afterDateNum);
+                        that._updateDate(beforeDateNum,afterDateNum);
                     }
                 }
             });
-
-            if(!that.index){
-                that.index = 0;
+            this.$second = this.$element.find(".second");
+            this.$legend = $("<div class='legend'></div>").prependTo(this.$second);
+            var tpl = "";
+            for(var i = 0; i < this.data.condition.phoneModel.value.length;i++){
+                var item = this.data.condition.phoneModel.value[i];
+                tpl += "<a href='javascript:;' class='legendBtn' modelCode='"+ item.id +"'>"+ item.brandName + " " + item.modelName +"<i class='icon iconfont icon-iconclouse delLegendIcon'></i></a>"
             }
-            var phoneId = that.data.condition.phoneModel.value[that.index].id;
-            var selectData = that.data.result&&that.data.result[phoneId]?that.data.result[phoneId]:null;
+            this.$legend.html(tpl);
+            this.$addBtn = $("<div class='addShowBtnContainer'><a href='javascript:;' class='addBtn addLegendBtn'><i class='icon iconfont icon-iconadd'></i></a></div>").appendTo(this.$legend);
+            this.delBtn = $("<a href='javascript:;' class='delBtn delLegendBtn'><i class='icon iconfont icon-icondel'></i></a>").appendTo(this.$legend);
+            this.$hrLline = $("<hr class='hrLine'>").appendTo(this.$legend);
+            if(!this.data.result) return;
+            var defaultModelCode = this.$legend.find(".legendBtn").eq(0).attr("modelCode");
+            this._renderChart(that.data.result[defaultModelCode]);
+            this.$legend.find(".legendBtn").eq(0).addClass("active");
+        },
+        _renderChart : function(data){
+            var that = this;
+            if(that.$element.find("#echarts"+that.data.condition.cptInstId).length){
+                that.$element.find("#echarts"+that.data.condition.cptInstId).remove();
+                that.$element.find(".second").append("<div class='chart' id="+"echarts"+that.data.condition.cptInstId+"></div>")
+            }
+            if(!data){
+                this.$element.find(".chart").html("");
+                return;
+            }
             that.foucsWordList = [];
-            if(selectData&&selectData.length>0){
-                $.each(selectData,function (i) {
-                    that.foucsWordList.push(selectData[i].focusWord);
+            if(data&&data.length>0){
+                $.each(data,function (i) {
+                    that.foucsWordList.push(data[i].focusWord);
                 })
             }
-            that._renderEcharts();
-            if(that.$element.find('.relateCompanentContainer').length==0){
-                that._getRelatedComponent();
-            }
-            that._bindEvent();
-        },
-
-        _renderEcharts : function () {
-            var that = this;
+            that.$element.find(".chart").attr("id","echarts"+that.data.condition.cptInstId);
             var layout = d3.layout.cloud()
                 .size([800, 300])
                 .words(that.foucsWordList.map(function(d) {
@@ -318,56 +370,147 @@
                         d3.selectAll("text").style("outline","none");
                         d3.select(this).style("outline","solid");
                         if(that.$element.find(".tipsContainer").length>0){
-                            that.$element.find(".tipsContainer").remove()
+                            that.$element.find(".tipsContainer").remove();
                         }
-                        var phoneId = that.data.condition.phoneModel.value[that.index].id;
-                        var selectData = that.data.result[phoneId];
-                        for(var i=0;i<selectData.length;i++){
-                            if(selectData[i].focusWord == $(this).html()){
-                                that.addComponent.addTips(that.$element, selectData[i]);
+                        for(var i=0;i<data.length;i++){
+                            if(data[i].focusWord == $(this).html()){
+                                that._addTips(data[i]);
                                 return false
                             }
                         }
                     });
             }
         },
-
-        /*获取构建属性*/
-        _getComponentAttr : function () {
+        _addTips : function (data) {
             var that = this;
+            var dom_tipsContainer = "<ul class='tipsContainer'><li>"+data.focusWord+"</li></ul>";
+            that.$element.find("#echarts"+that.data.condition.cptInstId).append(dom_tipsContainer);
+            $.each(data.srcList,function (i) {
+                var dom_tip = "<li>"+data.srcList[i].srcName+":"+data.srcList[i].volumn+"</li>"
+                that.$element.find(".tipsContainer").append(dom_tip);
+            })
+        },
+        _updateDate : function(beforeDateNum,afterDateNum){
+            var that = this;
+            that.data.condition.compareDateScope.value.beforeDateNum = beforeDateNum;
+            that.data.condition.compareDateScope.value.afterDateNum = afterDateNum;
+            var param = {
+                "cptInstId" : that.data.condition.cptInstId,
+                "compareDateScope" : {
+                    "beforeDateNum" : beforeDateNum,
+                    "afterDateNum" : afterDateNum
+                }
+            };
             $.ajaxJSON({
-                name: "获取构件实例属性",
-                url: URL.GET_CPTINST_ATTR,
-                data: {"cptInstId" : that.data.condition.cptInstId},
-                type : "post",
-                iframe : true,
-                success : function (data) {
-                    that.data.condition.phoneModel = data.data.phoneModel;
-                    that.data.condition.infoSource = data.data.infoSource;
-                    that.data.condition.compareDateScope = data.data.compareDateScope;
-                    that.addComponent.addTab(that.$element,that.data.condition.phoneModel.value);
-                    that.$element.find($(".tab").find($(".phoneModel:first-child"))).addClass("tabSelected");
-                    that._getData();
-                    that._bindEvent()
+                url: URL.UPDATE_GET_DATA,
+                data : JSON.stringify(param),
+                contentType : 'application/json; charset=UTF-8',
+                iframe:true,
+                success:function(r){
+                    that._onUpdateAttr(r.data.syncCptInstIdList);
+                    that.data.result = r.data.cptData;
+                    that._renderResult();
                 }
             });
         },
-
-        /*对比监测时间*/
-        _initSlider : function($ele){
+        _getRelData : function(){
             var that = this;
-            $ele.slider({
-                range: true,
-                min: -90,
-                max: 30,
-                values: [that.data.condition.compareDateScope.value["beforeDateNum"]*-1 , that.data.condition.compareDateScope.value["afterDateNum"]],
-                slide: function( event, ui ) {
-                    that.data.condition.compareDateScope.value["beforeDateNum"] = ui.values[ 0 ] * -1;
-                    that.data.condition.compareDateScope.value["afterDateNum"] = ui.values[ 1 ];
+            var param = {"cptInstId" : this.data.condition.cptInstId};
+            $.ajaxJSON({
+                name: '获取构件的关联构件',
+                url: URL.GET_REL_CPT,
+                data: {baseCptId: that.data.condition.baseCptId},
+                iframe:true,
+                success: function (relData) {
+                    that._filterRelData(that.data.condition.baseCptId,relData.data);
+                    that._getData();
                 }
             });
         },
-
+        _getData : function(){
+            var that = this;
+            var param = {"cptInstId" : this.data.condition.cptInstId};
+            $.ajaxJSON({
+                name: '获取构件实例属性',
+                url: URL.GET_CPTINST_ATTR,
+                data: param,
+                iframe: true,
+                success: function (r) {
+                    that.data.condition["compareDateScope"] = r.data.compareDateScope;
+                    that.data.condition["infoSource"] = r.data.infoSource;
+                    that.data.condition["phoneModel"] = r.data.phoneModel;
+                    $.ajaxJSON({
+                        name : '获取构件实例数据',
+                        url :URL.GET_CPTINST_DATA,
+                        data : param,
+                        iframe:true,
+                        success : function(r){
+                            that.data.result = r.data;
+                            that._renderResult();
+                        }
+                    });
+                }
+            });
+        },
+        getData : function(){
+            this._getData();
+        },
+        _close : function(){
+            this.$element.remove();
+        },
+        /*添加手机型号*/
+        _addProduct : function () {
+            var that = this;
+            var id = $(".model").val(),
+                brandCode = $(".brand").val();
+            $.each(that.modelData,function (i) {
+                if(that.modelData[i].brandCode == brandCode){
+                    var models = that.modelData[i].models,
+                        brandName = that.modelData[i].brandName;
+                    $.each(models,function (j) {
+                        if(models[j].modelCode == id){
+                            var model = {
+                                "id": models[j].modelCode,
+                                "brandName": brandName,
+                                "modelName": models[j].modelName,
+                                "picUrl": models[j].logoUrl,
+                                "releaseDate": models[j].pubDate
+                            };
+                            $.each(that.data.condition.phoneModel['value'],function (i) {
+                                if(that.data.condition.phoneModel['value'][i].id==model.id){
+                                    $.msg("该型号手机已存在");
+                                    return false;
+                                }else if(i==that.data.condition.phoneModel.value.length-1){
+                                    that.data.condition.phoneModel.value.push(model);
+                                }
+                            });
+                        }
+                    })
+                }
+            });
+        },
+        _openPhoneDialog : function(){
+            var that = this;
+            if(this.$element.find(".selectProduct_updata").length==0){
+                var dom = "<ul class='selectProduct_updata'>" +
+                    "<li>选择目标产品:</li>" +
+                    "<li>" +
+                    "<select class='select brand'>" +
+                    "<option>选择品牌</option>" +
+                    "</select>" +
+                    "</li>" +
+                    "<li>" +
+                    "<select class='select model'>" +
+                    "<option>选择型号</option>" +
+                    "</select>" +
+                    "</li>" +
+                    "<li><button class='addBtn_updata'><i class='icon iconfont icon-iconadd'></i></button></li>" +
+                    "</ul>";
+                this.$element.find(".addShowBtnContainer").append(dom);
+            }else{
+                that.$element.find(".selectProduct_updata").remove();
+            }
+        },
         /*获取手机型号列表*/
         _getPhoneList : function () {
             var that = this;
@@ -424,78 +567,40 @@
                 })
             }
         },
-
-        /*获取信息来源列表*/
-        _getSourceList : function () {
+        _updatePhoneModel : function() {
             var that = this;
-            $.ajaxJSON({
-                name : "信息来源",
-                url: URL.GET_SOURCE_DATA,
-                data: {},
-                type : 'post',
-                iframe : true,
-                success: function (data) {
-                    that.resourceData = data.data;
-                    var list = data.data,
-                        departments = [],
-                        len = list.length,
-                        i=0;
-                    for(;i<len;i++){
-                        departments.push(
-                            {
-                                "text" : list[i].srcName,
-                                "value" : list[i].srcKey
-                            }
-                        )
-                    }
-                    $("#resource").select("data",departments).select("trigger");
-                }
-            })
-        },
+            var param = {
+                "cptInstId": this.data.condition.cptInstId,
+                "phoneModel": that.data.condition.phoneModel.value
+            };
 
-        /*获取构件样式列表*/
-        _getStyleList : function () {
-            var that = this;
             $.ajaxJSON({
-                name : "构件样式列表",
-                url: URL.GET_STYLE_LIST,
-                data: {
-                    "baseCptId" : that.data.condition.baseCptId
-                },
-                type : 'post',
-                iframe : true,
-                success: function (i) {
-                    if(i.data.length>0){
-                        that.addComponent.addSelectStyle(i.data);
-                    }else {
-                        var data = [{"cptStyId":"","url":"../img/1.jpg"}];
-                        that.addComponent.addSelectStyle(data);
-                    }
+                name: "更新实例属性",
+                url: URL.UPDATE_CPTiNST_ATTR,
+                data: param,
+                data: JSON.stringify(param),
+                contentType: 'application/json; charset=UTF-8',
+                iframe: true,
+                success: function (r) {
+                    that._onUpdateAttr(r.data.syncCptInstIdList);
+                    that._renderResult();
                 }
-            })
+            });
         },
-
-        /*获取关联构件*/
-        _getRelatedComponent : function () {
-            var that = this;
-            $.ajaxJSON({
-                name : "关联构建",
-                url: URL.GET_REL_CPT,
-                data: {
-                    "baseCptId" : that.data.condition.baseCptId
-                },
-                type : 'post',
-                iframe : true,
-                success: function (i) {
-                    if(i.data.length>0){
-                        that._filterRelData(that.data.condition.baseCptId,i.data);
-                        that.addComponent.addRelateComponent(that.$element,that.data.related);
-                        that._bindEvent();
-                    }
+        _delPhoneModel : function($ele){
+            if(this.data.condition.phoneModel.value.length <= 1){
+                $.msg({modal : true,msg : "型号手机不能为空"});
+                return;
+            }
+            var modelcode = $ele.parent().attr("modelcode");
+            for(var i = 0; i < this.data.condition.phoneModel.value.length;i++){
+                if(modelcode == this.data.condition.phoneModel.value[i].id){
+                    this.data.condition.phoneModel.value.splice(i,1);
                 }
-            })
+            }
+            this.$element.find($(".legend").find($(".legendBtn:first-child"))).addClass("active");
+            this._updatePhoneModel();
         },
-
         _filterRelData : function(baseCptId,relData){
             for(var i = 0; i < relData.length;i++){
                 if(baseCptId != relData[i]["baseCptId"]){
@@ -506,291 +611,6 @@
                     });
                 }
             }
-        },
-
-        /*添加手机型号*/
-        _addProduct : function () {
-            var that = this;
-            var id = $(".model").val(),
-                brandCode = $(".brand").val();
-            $.each(that.modelData,function (i) {
-                if(that.modelData[i].brandCode == brandCode){
-                    var models = that.modelData[i].models,
-                        brandName = that.modelData[i].brandName;
-                    $.each(models,function (j) {
-                        if(models[j].modelCode == id){
-                            var model = {
-                                "id": models[j].modelCode,
-                                "brandName": brandName,
-                                "modelName": models[j].modelName,
-                                "picUrl": models[j].logoUrl,
-                                "releaseDate": models[j].pubDate
-                            };
-                            if(!that.data.condition.phoneModel.value||that.data.condition.phoneModel.value.length==0){
-                                that.data.condition.phoneModel.value = [];
-                                that.data.condition.phoneModel.value.push(model);
-                                that.addComponent.addProductList(that.data.condition.phoneModel.value);
-                                that._bindEvent();
-                            }else{
-                                $.each(that.data.condition.phoneModel.value,function (i) {
-                                    if(that.data.condition.phoneModel.value[i].id==model.id){
-                                        $.msg("该型号手机已存在");
-                                        return false
-                                    }else if(i==that.data.condition.phoneModel.value.length-1){
-                                        that.data.condition.phoneModel.value.push(model);
-                                        that.addComponent.addProductList(that.data.condition.phoneModel.value);
-                                        that._bindEvent();
-                                    }
-                                });
-                            }
-                        }
-                    })
-                }
-            });
-        },
-
-        /*添加信息来源*/
-        _addResource : function () {
-            var that = this;
-            var srcKey = $("#resource").val();
-            $.each(that.resourceData,function (i) {
-                if(that.resourceData[i].srcKey == srcKey){
-                    var resource = {
-                        "srcName" : that.resourceData[i].srcName,
-                        "srcKey" : that.resourceData[i].srcKey
-                    };
-                    if(!that.data.condition.infoSource||that.data.condition.infoSource.value.length==0){
-                        that.data.condition.infoSource = {
-                            "value" : []
-                        };
-                        that.data.condition.infoSource.value.push(resource);
-                        that.addComponent.addResourceList(that.data.condition.infoSource.value);
-                        that._bindEvent();
-                    }else{
-                        $.each(that.data.condition.infoSource.value,function (j) {
-                            if(that.data.condition.infoSource.value[j].srcName==that.resourceData[i].srcName){
-                                $.msg("该型号信息来源已存在");
-                                return false
-                            }else if(j==that.data.condition.infoSource.value.length-1){
-                                that.data.condition.infoSource.value.push(resource);
-                                that.addComponent.addResourceList(that.data.condition.infoSource.value);
-                                that._bindEvent();
-                            }
-                        });
-                    }
-                }
-            });
-        },
-
-        _initConfigSync:function(){
-            var that = this;
-            if(that.data.condition.cptInstId){
-                var data = that.data.condition,
-                    fun = function(data){
-                    var param = {
-                        "attrInstId" : data.id,
-                        "syncType" : data.syncType
-                    };
-                    $.ajaxJSON({
-                        name: '设置属性实例同步信息',
-                        url: URL.UPDATE_SYNC_TYPE,
-                        data: param,
-                        iframe: true,
-                        success: function (r) {
-                            that.data.condition[data.key]["syncType"] = data.syncType;
-                        }
-                    });
-                };
-            }else{
-                var data = "",
-                    fun = "";
-            }
-            $.cptConfig({
-                data : data,
-                onSwitchType : fun,
-                onDelete : function(){
-                    that._deleteComponent();
-                }
-            });
-        },
-
-        /*删除构件*/
-        _deleteComponent : function () {
-            var that = this;
-            if(that.data.condition.cptInstId){
-                $.msg({
-                    type : "confirm",
-                    msg : "确认删除？",
-                    ok : function(){
-                        $.ajaxJSON({
-                            name: '删除构件实例',
-                            url: URL.DELETE_CPTINT,
-                            data: {"cptInstId": that.data.condition.cptInstId},
-                            iframe: true,
-                            success: function () {
-                                $.msg("删除成功");
-                                that._onComplete(that.data.condition.cptInstId);
-                            }
-                        });
-                    }
-                })
-            }else{
-                that.$element.remove();
-            }
-        },
-
-        _bindEvent : function ()  {
-            var that = this;
-
-            /*清除绑定监听*/
-            $("#addProductBtn").unbind("click");
-            $("#addResourceBtn").unbind("click");
-            $(".deleteProductBtn").unbind("click");
-            $(".deleteResourceBtn").unbind("click");
-            $(".generateBtn button").unbind("click");
-            that.$element.find(".addShow").unbind("click");
-            that.$element.find(".delShow").unbind("click");
-            that.$element.find(".set").unbind("click");
-
-            /*添加手机型号事件监听*/
-            $("#addProductBtn").on("click",function () {
-                that._addProduct();
-            });
-
-            /*删除手机型号事件监听*/
-            $(".deleteProductBtn").on("click",function () {
-                var index = $(this).parents("li").attr("index");
-                that.data.condition.phoneModel.value.splice(index,1);
-                that.addComponent.addProductList(that.data.condition.phoneModel.value);
-                that._bindEvent();
-            });
-
-            /*添加信息来源事件监听*/
-            $("#addResourceBtn").on("click",function () {
-                that._addResource();
-            });
-
-            /*删除信息来源事件监听*/
-            $(".deleteResourceBtn").on("click",function () {
-                var index = $(this).parents("li").attr("index");
-                that.data.condition.infoSource.value.splice(index,1);
-                that.addComponent.addResourceList(that.data.condition.infoSource.value);
-                that._bindEvent();
-            });
-
-            /*选择构件样式事件监听*/
-            $(".styleImg").on("click",function () {
-                $(this).parents("li").addClass("selectStyle");
-                $(this).parents("li").siblings().removeClass("selectStyle");
-            });
-
-            /*生成构件事件监听*/
-            $(".generateBtn button").on("click",function () {
-                var queryOptions = {
-                    "baseCptId" : that.data.condition.baseCptId,  //基础构件ID
-                    "moduleId" : that.data.condition.moduleId,    //模块ID
-                    "conCptInstId" : that.data.condition.conCptInstId,   //新增构件实例ID
-                    "compareDateScope" : {
-                        "beforeDateNum": that.data.condition.compareDateScope.value.beforeDateNum ? that.data.condition.compareDateScope.value.beforeDateNum : 28,
-                        "afterDateNum": that.data.condition.compareDateScope.value.afterDateNum ? that.data.condition.compareDateScope.value.afterDateNum : 30
-                    },
-                    "phoneModel" : that.data.condition.phoneModel.value,
-                    "infoSource" : that.data.condition.infoSource.value,
-                    "cptStyId": ""
-                };
-                that._createComponent(queryOptions,that.step);
-            });
-
-            /*切换构件tab*/
-            that.$element.find($(".phoneModel")).on("click",function () {
-                $(this).addClass("tabSelected");
-                $(this).siblings().removeClass("tabSelected");
-                var index = $(this).attr("index");
-                if(index!=that.index){
-                    that.index = index;
-                    that.$element.find("svg").remove();
-                    if(that.$element.find(".tipsContainer").length>0){
-                        that.$element.find(".tipsContainer").remove();
-                    }
-                    that._renderResult();
-                }
-            });
-
-            /*在已生成构件删除手机型号事件监听*/
-            that.$element.find(".delShow").on("click",function () {
-                if(that.data.condition.phoneModel.value.length<=1){
-                    $.msg("型号手机不能为空");
-                    return
-                }
-                that.addComponent.addDelectedIco(that.$element);
-                if(that.$element.find(".deleteBtn").length>0){
-                    that.$element.find(".deleteBtn").on("click",function () {
-                        var index = $($(this).parent()).attr("index");
-                        if(that.index==index){
-                            that.index = 0;
-                        }
-                        that.data.condition.phoneModel.value.splice(index,1);
-                        that.$element.find(".tabContainer").remove();
-                        that.$element.find(".echartsContainer").remove();
-                        that.addComponent.addTab(that.$element,that.data.condition.phoneModel.value);
-                        that.$element.find($(".tab").find($(".phoneModel:first-child"))).addClass("tabSelected");
-                        that._updata();
-                        that._bindEvent();
-                    })
-                }
-            });
-
-            /*在已生成构件添加手机型号事件监听*/
-            that.$element.find(".addShow").on("click",function () {
-                if(that.$element.find(".selectProduct_updata").length==0){
-                    that.addComponent.addProduct(that.$element);
-                    that._getPhoneList();
-                    that.$element.find(".addBtn_updata").on("click",function () {
-                        that._addProduct();
-                        if(that.data.condition.phoneModel.value.length == that.$element.find(".phoneModel").length){
-                            return
-                        }
-                        that.$element.find($(".tabContainer")).remove();
-                        that.$element.find($(".echartsContainer")).remove();
-                        that.addComponent.addTab(that.$element,that.data.condition.phoneModel.value);
-                        that.$element.find($(".tab").find($(".phoneModel:first-child"))).addClass("tabSelected");
-                        that._updata();
-                        that._bindEvent();
-                    })
-                }else{
-                    that.$element.find(".selectProduct_updata").remove();
-                }
-            });
-
-            /*创建关联构件*/
-            that.$element.find(".creatRelateComponentBtn").on("click",function () {
-                var param = {
-                    baseCptId: $(this).attr("baseCptId"),
-                    cptKey: $(this).attr("type"),
-                    conCptInstId : that.data.condition.cptInstId
-                };
-                that._onRelatedWidget(param);
-            });
-
-            /*设置数据同步*/
-            that.$element.find(".set").on("click",function () {
-                that._initConfigSync();
-            });
-
-            $("body").on("click",function (e) {
-                var $el = $(e.target);
-                if($el.parents(".selectProduct_updata").length == 0 && !($el[0].className == 'selectProduct_updata') &&  $el[0].className != "addShow"){
-                    $(".selectProduct_updata").remove();
-                }
-            })
-        },
-
-        /*更新数据*/
-        getData : function () {
-            var that = this;
-            that.$element.find(".tabContainer").remove();
-            that.$element.find(".echartsContainer").remove();
-            that._getComponentAttr(that.addComponent);
         }
     };
     $.fn.newAttentionAnalysed = function(option, value) {

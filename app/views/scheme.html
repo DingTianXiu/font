@@ -211,6 +211,27 @@
 		</div>
 		</div>
 	</script>
+	<script type="text/x-handlebars-template" id="affectionAnalysed1">
+		<div class='header clearfix'>
+			<h1>{{title}}</h1>
+			<a href="javascript:;" class='icon iconfont icon-iconset configBtn'></a>
+			<div class="dateBox"></div>
+		</div>
+		<div class='second'>
+			{{#if result}}
+			<div class="chart"></div>
+			{{else}}
+			<div class="noData">无数据</div>
+			{{/if}}
+		</div>
+		<div class='related'>
+			<h1>关联构件：</h1>
+			{{#each related}}
+			<a href="javascript:;" class="relatedBtn" type="{{this.baseCptKey}}" baseCptId="{{this.baseCptId}}">{{this.baseCptName}}</a>
+			{{/each}}
+		</div>
+		</div>
+	</script>
 	
 
 	<script type="text/javascript" src="/bower_components/jquery/dist/jquery.min.js"></script>
