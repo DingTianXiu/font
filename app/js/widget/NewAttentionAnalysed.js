@@ -6,7 +6,7 @@
         var that  = this;
         that.$element = $(element);
         that.data = {
-            "title" : "产品用户关注点分析构件",
+            "title" : "产品用户关注点分析",
             "condition" : {
                 "baseCptId" : options.baseCptId,  //基础构件ID
                 "moduleId" : options.moduleId,    //模块ID

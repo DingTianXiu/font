@@ -7,7 +7,7 @@
         var that  = this;
         that.$element = $(element);
         that.data = {
-            "title" : "手机新品声量情感分析",
+            "title" : "新品发布声量情感分析",
             "condition" : {
                 "baseCptId" : options.baseCptId,  //基础构件ID
                 "moduleId" : options.moduleId,    //模块ID

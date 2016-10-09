@@ -369,7 +369,6 @@
 					moduleId: that.currentModuleId,
 					cptInstId: param.cptInstId,
 					conCptInstId : param.conCptInstId ? param.conCptInstId : null,
-					name: "新品发布声量情感分析构件",
                     onComplete: function (data) {
                         that.updateComponentChain(data);
                         that.setBtnStatus();
@@ -391,7 +390,6 @@
 					moduleId: that.currentModuleId,
 					cptInstId: param.cptInstId,
 					conCptInstId : param.conCptInstId ? param.conCptInstId : null,
-					name: "产品用户关注点分析构件",
 					onComplete: function (data) {
                         that.updateComponentChain(data);
                         that.setBtnStatus();
