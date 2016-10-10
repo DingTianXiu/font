@@ -80,7 +80,7 @@
             });
             this.$element.delegate(".addBtn_updata","click",function () {
                 that._addProduct();
-                if(that.data.condition.phoneModel.value.length == that.$element.find(".phoneModel").length){
+                if(that.data.condition.phoneModel.value.length == that.$element.find(".legendBtn").length){
                     return;
                 }
                 that.$element.find($(".legend").find($(".legendBtn:first-child"))).addClass("active");
@@ -438,6 +438,10 @@
         /*添加手机型号*/
         _addProduct : function () {
             var that = this;
+            if(that.data.condition.phoneModel.value.length>=8){
+                $.msg("最多只能添加8个手机型号")
+                return
+            }
             var id = $(".model").val(),
                 brandCode = $(".brand").val();
             $.each(that.modelData,function (i) {

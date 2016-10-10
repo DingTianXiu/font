@@ -52,7 +52,6 @@
         _bindEvent : function(){
 			var that = this;
         	this.$element.on('click','.configBtn',function(){
-                // that._initConfigSync($(this));
 				that._initConfigSync($(this));
 			});
 			this.$element.on("click",".btnCompare",function(){
@@ -95,8 +94,8 @@
             var html = template(this.data);
             this.$element.html(html).attr("id", that.data.condition.cptInstId);
             this.$element.find(".dateBox").datePicker({
-                beforeDateNum : that.data.condition.compareDateScope.value["beforeDateNum"]*-1,
-                afterDateNum : that.data.condition.compareDateScope.value["afterDateNum"],
+                beforeDateNum : that.data.condition.compareDateScope.value.beforeDateNum,
+                afterDateNum : that.data.condition.compareDateScope.value.afterDateNum,
                 onSaveDate : function(beforeDateNum,afterDateNum){
                     that._updateDate(beforeDateNum,afterDateNum);
                 }
@@ -120,20 +119,17 @@
         },
         //曲线图
         _renderChart : function(data){
+            var that = this;
             if(!data){
                 this.$element.find(".lineChart").html("");
                 return;
             }
-            var xList = [],
-                seriesList = [],
-                data = [];
-            var dom = document.getElementById("containerChart1");
-            var lineChart = echarts.init(dom);
-            for(var i = 0; i < data.length;i++){
-                xList.push(data[i]);
-                // negativeList.push(data[i].result.negative);
-                // neutralList.push(data[i].result.neutral);
-                // sumList.push(data[i].result.sum);
+            var afterDateNum = that.data.condition.compareDateScope.value.afterDateNum,
+                beforeDateNum = that.data.condition.compareDateScope.value.beforeDateNum,
+                xList = [];
+                // data = [];
+            for(var i = beforeDateNum; i < afterDateNum; i++){
+                xList.push(i);
             };
             var settings = {
                 type: 'bar',
@@ -173,15 +169,17 @@
                         }
                     }
                 },
-                series: [
-                    // {data : negativeList},
-                    // {data : neutralList},
-                    // {data : sumList}
-                    {name:1,data:data.data}
+                series :[
+                    {
+                        name:'声量总量',
+                        type:'line',
+                        data: data
+                    }
                 ]
             };
             var lineChart = echarts.init(this.$element.find(".lineChart")[0]);
             lineChart.setOption(option);
+            
             // var myChart = echarts.init(document.getElementById('containerChart1'));
             // if (option && typeof option === "object") {
             //     myChart.setOption(option, true);
@@ -194,6 +192,9 @@
             $ele.addClass("active");
             $ele.siblings().removeClass("active");
             this._renderChart(this.data.result.volumeData[code]);
+            if($("#containerChart1").html()==''){
+                this.$element.find(".lineChart").append("<div class='noData'>暂无数据</div>");
+            }
             // this._renderChart(this.data.result.volumeData[code]);
         },
         //更改时间 重新加载结果
@@ -214,12 +215,13 @@
                 contentType : 'application/json; charset=UTF-8',
                 iframe:true,
                 success:function(r){
+                    that._onUpdateAttr(r.data.syncCptInstIdList);
                     that.data.result = r.data.cptData;
                     that._renderResult();
                 }
             });
         },
-        //获取时间列表
+        //获取手机列表
         _getPhoneList : function () {
             var that = this;
             $.ajaxJSON({
@@ -266,7 +268,7 @@
         },
         //获取手机型号列表
         _phoneInfo :function(phoneModelValue){
-            var _this = this;
+            var that = this;
 		    var $phoneList = $(".phoneList"),
 				$btnAddPhone = $(".tarPro .btnAdd"),
 				$phoBraVal = $("#phoneBrand").val(),
@@ -283,9 +285,9 @@
 				iframe : true,
 				success: function (i) {
 					if(phoneModelValue) {
-                        _this.$element.find(".proContainer").selectorPlusPro({"data": i.data, "phoneModel": phoneModelValue});
+                        that.$element.find(".proContainer").selectorPlusPro({"data": i.data, "phoneModel": phoneModelValue});
                     }else{
-                        _this.$element.find(".proContainer").selectorPlusPro({"data": i.data});
+                        that.$element.find(".proContainer").selectorPlusPro({"data": i.data});
                     }
 				}
 			});
@@ -316,7 +318,7 @@
                 }
             });
         },
-        //或缺信息来源
+        //获取信息来源
         _getInfoSource : function(){
             var that = this;
             $.ajaxJSON({
@@ -581,13 +583,19 @@
                     iframe: true,
                     success: function (r) {
                         that._phoneInfo(r.data.phoneModel.value);
+                        if(r.data.infoSource) {
+                            that._getInfoSource(r.data.infoSource.value);
+                            that.data.condition.infoSource = r.data.infoSource;
+                        }else{
+                            that._getInfoSource();
+                        }
                         that.data.condition.phoneModel = r.data.phoneModel;
                     }
                 });
             }else{
                 that._phoneInfo;
+                this._getInfoSource();
             };
-            this._getInfoSource();
             this._initSlider(this.$element.find(".firstMultiAttr").find(".sliderBox"));
         },
        	getData : function(){
