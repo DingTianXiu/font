@@ -5,7 +5,7 @@
 			$.ajaxJSON({
 				name: '获取方案列表',
 				url: URL.SOLUTION_LIST,
-				data: {"userId" : that.userInfo.userId},
+				data: {"userId" : that.custId},
 				type : 'post',
 				iframe : true,
 				cache:false,
@@ -66,7 +66,10 @@
 			$.ajaxJSON({
 				name : "获取模块下的实例构件",
 				url: URL.COMPONENT_LIST,
-				data: {"modId" : that.currentModuleId},
+				data: {
+					"modId" : that.currentModuleId,
+					"userId" : 17706
+				},
 				type : 'post',
 				iframe : true,
 				cache:false,
@@ -607,7 +610,10 @@
 			if(parent.window.schemeData.length > 0){
 				this.getModuleList(parent.window.currentSchemeId);
 			}else {
-				this.getSchemeList();
+				if(localStorage.custId){
+					that.custId = localStorage.custId;
+					this.getSchemeList();
+				}
 			}
 			//this.createWidget({"baseCptId":4,"cptKey":"customerInterestAnalyzeCpt"},0);
 		}

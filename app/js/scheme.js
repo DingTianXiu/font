@@ -22,11 +22,11 @@
 			});
 			return isValid;
 		},
-		addScheme : function(){
+		initScheme : function(){
 			var that = this;
 			if(this.validate("#add-scheme-popup")){
 				var param = {};
-				param["userId"] = this.userInfo.userId;
+				param["userId"] = that.custId;
 				$("#add-scheme-popup input:text").each(function(i){
 					var name = "";
 					if(i == 0){
@@ -55,6 +55,54 @@
 					}
 				});
 			}
+		},
+		addScheme : function () {
+			var that = this;
+			var param = {
+				"userId" : that.custId,
+				"sltName" : "方案"+(schemeData.length+1),
+				"modules[0].modName" : "模块一"
+			};
+			$.ajaxJSON({
+				name: '新建方案',
+				url: URL.CREATE_SCHEME,
+				data: param,
+				success: function (r) {
+					schemeData.push({
+						"sltId" : r.data.id,
+						"sltName" : r.data.sltName,
+						"userId" : r.data.userId,
+						"status" : r.data.status
+					});
+					window.currentSchemeId = r.data.id;
+					$(".container").removeClass("hide");
+					$(".customerListContainer").addClass("hide");
+					that._renderPage();
+
+				}
+			});
+		},
+		getCustomerList : function (param) {
+			if(param){
+
+			}else {
+				param={
+					"pageSize" : 30
+				}
+			}
+			$.ajaxJSON({
+				name: '客户列表',
+				url: URL.GET_CUSTOMER_LIST,
+				data: param,
+				success: function (data) {
+					console.log(data)
+					var customerList = data.data.customers;
+					$.each(data.data.customers,function (i) {
+						var dom = "<li id="+data.data.customers[i].id+">"+data.data.customers[i].custName+"</li>"
+						$(".customerList").append(dom);
+					})
+				}
+			});
 		},
 		updateSchemeName : function(){
 			var that = this;
@@ -105,16 +153,17 @@
 		bindEvent : function(){
 			var that = this;
 			$("#addSchemeBtn").on("click",function(){
-				$('#add-scheme-popup').removeClass("hide");
-				var h = document.documentElement.clientHeight - $(".head").height();
-				$("#add-scheme-popup").height(h);
-				$("#add-scheme-popup .title").text(that.userInfo.realName);
+				// $('#add-scheme-popup').removeClass("hide");
+				// var h = document.documentElement.clientHeight - $(".head").height();
+				// $("#add-scheme-popup").height(h);
+				// $("#add-scheme-popup .title").text(that.userInfo.realName);
+				that.addScheme();
 			});
 			$("#addModuleBtn").on("click",function(){
 				that.addModuleItem();
 			});
 			$("#confirm-btn").on("click",function(){
-				that.addScheme();
+				that.initScheme();
 			});
 			$(".side").delegate("a","click",function(){
 				$(".side a").removeClass("active");
@@ -124,7 +173,11 @@
 					$('#add-scheme-popup').addClass("hide");
 				}
 			});
-																	
+			$(".customerList").delegate("li","click",function () {
+				that.custId = $(this).attr("id");
+				localStorage.setItem("custId",that.custId);
+				document.getElementById("mainIframe").contentWindow.location.reload(true);
+			});
 			$(".prevBtn").on("click",function(){
 				var menuTop = parseInt($(".menu").css("top"));
 				var menuBoxHeight = $(".menuBox").height() + 2;
@@ -200,6 +253,14 @@
 				$(".realName").html(this.userInfo.realName);
 				$(".email").html(this.userInfo.email);
 			}
+			if(localStorage.custId){
+				$('.customerListContainer').addClass("hide");
+				$('.container').removeClass("hide");
+				$('#add-scheme-popup').addClass("hide");
+				this.custId = localStorage.custId;
+			}else{
+				this.getCustomerList();
+			}
 			this.bindEvent();
 			this.setLayout();
 			$(window).resize(function(){
@@ -212,6 +273,5 @@
 			})
 		}
 	}.init();
-
 
 //})(window);
