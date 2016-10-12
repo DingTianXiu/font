@@ -13,8 +13,33 @@
 					if(r.data.length > 0){
 						parent.window.schemeData = r.data;
 						parent.window.currentSchemeId = r.data[0]["sltId"];
+						$(".customerListContainer",parent.document).remove();
+						$(".side",parent.document).after(
+						"<div class='customerListContainerIn'>" +
+							"<div class='container'>"+
+							"<p class='customerTitle'>选择配置用户<span class='closeList'>x</span></p>"+
+							"<div class='customerContainer'>"+
+							"<div class='search'>"+
+							"<input class='searchInfo' type='text' placeholder='输入客户名、用户名、开户人搜索'>"+
+							"<em href='#' class='delete' style='display: none'>x</em>"+
+							"</div>"+
+							"<ul class='customerList'></ul>"+
+							"</div>"+
+							"</div>"+
+						"</div>"
+						);
+						var h = parent.document.documentElement.clientHeight - $(".head",parent.document).height();
+						$(".customerListContainerIn",parent.document).find(".customerList").css("height",(h-131)+"px");
+						$(".container",parent.document).removeClass("hide");
+						$("#add-scheme-popup",parent.document).addClass("hide");
+						$(".custName",parent.document).html(that.custName);
 						that._renderPage();
 						that.getModuleList();
+					}else{
+						$(".title",parent.document).html(that.custName);
+						$(".customerListContainer",parent.document).addClass("hide");
+						$(".container",parent.document).addClass("hide");
+						$("#add-scheme-popup",parent.document).removeClass("hide");
 					}
 				}
 			});
@@ -607,14 +632,15 @@
 			}else{
 				parent.location.href = window.ROOT + '/login.html';
 			}
-			if(parent.window.schemeData.length > 0){
-				this.getModuleList(parent.window.currentSchemeId);
-			}else {
-				if(localStorage.custId){
-					that.custId = localStorage.custId;
-					this.getSchemeList();
-				}
+			// if(parent.window.schemeData.length > 0){
+			// 	this.getModuleList(parent.window.currentSchemeId);
+			// }else {
+			if(localStorage.custId){
+				that.custId = localStorage.custId;
+				that.custName = localStorage.custName;
+				this.getSchemeList();
 			}
+			// }
 			//this.createWidget({"baseCptId":4,"cptKey":"customerInterestAnalyzeCpt"},0);
 		}
 	},

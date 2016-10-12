@@ -54,7 +54,7 @@ iframe{
 end reset
 **/
 
-body{overflow:hidden;}
+body{overflow:hidden;background-color: #cad3df}
 .ui-loading:after {
     background: url("../img/loading2.png") center center no-repeat rgba(0, 0, 0, 0.25);
     content: '';
@@ -183,11 +183,19 @@ body{overflow:hidden;}
     position: absolute;
     left: 0;
     top: 25px;
+    z-index: 2;
     min-height: 500px;
     background:#3f4044;
     .logo{
         height:68px;
         background:#f25e61 url(../img/logo.png) no-repeat center center;
+    }
+    .custName{
+        padding-bottom: 10px;
+        background-color: #f25e61;
+        color: #fff;
+        text-align: center;
+        cursor: pointer;
     }
     .menuBox {
         position:relative;
@@ -353,7 +361,6 @@ body{overflow:hidden;}
 }
 .form{
     position:absolute;
-    left:95px;
     top:0;
     width:100%;
     background:#f4f4f4;
@@ -442,6 +449,302 @@ body{overflow:hidden;}
             }
             .btn{
                 width:100%;
+            }
+        }
+    }
+}
+/* 用户列表 */
+.customerListContainer{
+    width: 600px;
+    margin: 50px auto 0;
+    .container{
+        padding: 0 10px 10px;
+        background-color: #fff;
+        -webkit-border-radius: 4px;
+        -moz-border-radius: 4px;
+        border-radius: 4px;
+        .customerTitle{
+            height: 39px;
+            line-height: 39px;
+            font-size: 14px;
+            color : #282828;
+            font-weight: bold;
+        }
+        .customerContainer{
+            //height: 430px;
+            border: 1px solid #cccccc;
+            .search{
+                height: 32px;
+                padding: 10px;
+                background-color: #e6e6e6;
+                position: relative;
+                input{
+                    height: 32px;
+                    width: 550px;
+                    padding-left: 10px;
+                    background-color: #fff;
+                    -webkit-border-radius: 32px;
+                    -moz-border-radius: 32px;
+                    border-radius: 32px;
+                    outline: none;
+                    border: none;
+                }
+                em{
+                    display: inline-block;
+                    width: 18px;
+                    height: 18px;
+                    background-color: #CCCCCC;
+                    -webkit-border-radius: 18px;
+                    -moz-border-radius: 18px;
+                    border-radius: 18px;
+                    position: absolute;
+                    right: 20px;
+                    top: 17px;
+                    cursor: pointer;
+                    text-align: center;
+                    line-height: 15px;
+                    color: #fff;
+                }
+            }
+            .customerList{
+                height: 369px;
+                overflow-y: auto;
+                .custName{
+                    height: 24px;
+                    padding-left: 10px;
+                    margin-top: -1px;
+                    background-color: #f5f5f5;
+                    border-top: 1px solid #cccccc;
+                    line-height: 24px;
+                    color: #999999;
+                }
+                .userInfo{
+                    height: 35px;
+                    color: #333333;
+                    cursor: pointer;
+                    p{
+                        padding: 11px 0;
+                        margin-left: 20px;
+                        border-bottom: 1px solid #CCCCCC;
+                    }
+                    span{
+                        height: 12px;
+                        display: inline-block;
+                        text-align: center;
+                        border-right: 1px solid #CCCCCC;
+                    }
+                    span:first-child{
+                        width: 127px;
+                    }
+                    span:nth-child(2){
+                        width: 86px;
+                    }
+                    span:last-child{
+                        margin-left: 20px;
+                        border-right: none;
+                    }
+                }
+            }
+        }
+        .pagesContainer{
+            text-align: center;
+            border:1px solid #CCCCCC;
+            border-top: none;
+            p{
+                display: inline-block;
+                line-height: 30px;
+                cursor: pointer;
+            }
+            .left{
+                height: 30px;
+                width: 30px;
+                border-left:1px solid #CCCCCC;
+                border-right:1px solid #CCCCCC;
+            }
+            .right{
+                height: 30px;
+                width: 30px;
+                border-right:1px solid #CCCCCC;
+                border-left: none;
+            }
+            .pages{
+                span{
+                    display: inline-block;
+                    height: 30px;
+                    width: 30px;
+                    border-right:1px solid #CCCCCC;
+                    line-height: 30px;
+                    cursor: pointer;
+                }
+                .active{
+                    background-color: #247ba0;
+                    color: #fff;
+                }
+            }
+        }
+
+    }
+    .btnContainer{
+        width: 600px;
+        background-color: #cad3df;
+        margin-top: 10px;
+        text-align: center;
+        button{
+            width: 200px;
+            height: 37px;
+            background-color: #247ba0;
+            font-size: 14px;
+            color: #fff;
+            border: none;
+            outline: none;
+            -webkit-border-radius: 4px;
+            -moz-border-radius: 4px;
+            border-radius: 4px;
+        }
+    }
+}
+.move{
+    transform: translateX(320px);/*left比较耗性能,造成卡顿*/
+    transition:transform 0.6s linear;
+    -moz-transition:transform 0.6s linear;/* Firefox 4 */
+    -webkit-transition: transform 0.6s linear;/* Safari 和 Chrome */
+    -o-transition: transform 0.6s linear;/* Opera */
+}
+.customerListContainerIn{
+    display: block;
+    position: absolute;
+    left: -225px;
+    z-index: 1;
+    width: 320px;
+    height: 100%;
+    background-color: #fff;
+    .container {
+        padding: 0 10px 10px;
+        background-color: #fff;
+        .customerTitle {
+            height: 39px;
+            line-height: 39px;
+            font-size: 14px;
+            color: #282828;
+            font-weight: bold;
+            .closeList{
+                float: right;
+                color: #afafb1;
+                font-weight: normal;
+                font-size: 20px;
+                cursor: pointer;
+            }
+        }
+        .customerContainer{
+            //height: 430px;
+            border: 1px solid #cccccc;
+            .search{
+                height: 32px;
+                padding: 10px;
+                background-color: #e6e6e6;
+                position: relative;
+                input{
+                    height: 32px;
+                    width: 270px;
+                    padding-left: 10px;
+                    background-color: #fff;
+                    -webkit-border-radius: 32px;
+                    -moz-border-radius: 32px;
+                    border-radius: 32px;
+                    outline: none;
+                    border: none;
+                }
+                em{
+                    display: inline-block;
+                    width: 18px;
+                    height: 18px;
+                    background-color: #CCCCCC;
+                    -webkit-border-radius: 18px;
+                    -moz-border-radius: 18px;
+                    border-radius: 18px;
+                    position: absolute;
+                    right: 20px;
+                    top: 17px;
+                    cursor: pointer;
+                    text-align: center;
+                    line-height: 15px;
+                    color: #fff;
+                }
+            }
+            .customerList{
+                height: 369px;
+                overflow-y: auto;
+                .custName{
+                    height: 24px;
+                    padding-left: 10px;
+                    margin-top: -1px;
+                    background-color: #f5f5f5;
+                    border-top: 1px solid #cccccc;
+                    line-height: 24px;
+                    color: #999999;
+                }
+                .userInfo{
+                    height: 35px;
+                    color: #333333;
+                    cursor: pointer;
+                    p{
+                        padding: 11px 0;
+                        margin-left: 20px;
+                        border-bottom: 1px solid #CCCCCC;
+                    }
+                    span{
+                        height: 12px;
+                        display: inline-block;
+                        text-align: center;
+                        border-right: 1px solid #CCCCCC;
+                    }
+                    span:first-child{
+                        width: 103px;
+                    }
+                    span:nth-child(2){
+                        width: 65px;
+                    }
+                    span:last-child{
+                        margin-left: 10px;
+                        border-right: none;
+                    }
+                }
+            }
+        }
+        .pagesContainer{
+            text-align: center;
+            border:1px solid #CCCCCC;
+            border-top: none;
+            p{
+                display: inline-block;
+                line-height: 30px;
+                cursor: pointer;
+            }
+            .left{
+                height: 30px;
+                width: 30px;
+                border-left:1px solid #CCCCCC;
+                border-right:1px solid #CCCCCC;
+            }
+            .right{
+                height: 30px;
+                width: 30px;
+                border-right:1px solid #CCCCCC;
+                border-left: none;
+            }
+            .pages{
+                span{
+                    display: inline-block;
+                    height: 30px;
+                    width: 30px;
+                    border-right:1px solid #CCCCCC;
+                    line-height: 30px;
+                    cursor: pointer;
+                }
+                .active{
+                    background-color: #247ba0;
+                    color: #fff;
+                }
             }
         }
     }

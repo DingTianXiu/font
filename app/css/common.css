@@ -123,6 +123,7 @@ end reset
 **/
 body {
   overflow: hidden;
+  background-color: #cad3df;
 }
 .ui-loading:after {
   background: url("../img/loading2.png") center center no-repeat rgba(0, 0, 0, 0.25);
@@ -245,12 +246,20 @@ body {
   position: absolute;
   left: 0;
   top: 25px;
+  z-index: 2;
   min-height: 500px;
   background: #3f4044;
 }
 .side .logo {
   height: 68px;
   background: #f25e61 url(../img/logo.png) no-repeat center center;
+}
+.side .custName {
+  padding-bottom: 10px;
+  background-color: #f25e61;
+  color: #fff;
+  text-align: center;
+  cursor: pointer;
 }
 .side .menuBox {
   position: relative;
@@ -413,7 +422,6 @@ body {
 }
 .form {
   position: absolute;
-  left: 95px;
   top: 0;
   width: 100%;
   background: #f4f4f4;
@@ -504,4 +512,285 @@ body {
 }
 #edit-scheme-popup .box .fm-row .btn {
   width: 100%;
+}
+/* 用户列表 */
+.customerListContainer {
+  width: 600px;
+  margin: 50px auto 0;
+}
+.customerListContainer .container {
+  padding: 0 10px 10px;
+  background-color: #fff;
+  border-radius: 4px;
+}
+.customerListContainer .container .customerTitle {
+  height: 39px;
+  line-height: 39px;
+  font-size: 14px;
+  color: #282828;
+  font-weight: bold;
+}
+.customerListContainer .container .customerContainer {
+  border: 1px solid #cccccc;
+}
+.customerListContainer .container .customerContainer .search {
+  height: 32px;
+  padding: 10px;
+  background-color: #e6e6e6;
+  position: relative;
+}
+.customerListContainer .container .customerContainer .search input {
+  height: 32px;
+  width: 550px;
+  padding-left: 10px;
+  background-color: #fff;
+  border-radius: 32px;
+  outline: none;
+  border: none;
+}
+.customerListContainer .container .customerContainer .search em {
+  display: inline-block;
+  width: 18px;
+  height: 18px;
+  background-color: #CCCCCC;
+  border-radius: 18px;
+  position: absolute;
+  right: 20px;
+  top: 17px;
+  cursor: pointer;
+  text-align: center;
+  line-height: 15px;
+  color: #fff;
+}
+.customerListContainer .container .customerContainer .customerList {
+  height: 369px;
+  overflow-y: auto;
+}
+.customerListContainer .container .customerContainer .customerList .custName {
+  height: 24px;
+  padding-left: 10px;
+  margin-top: -1px;
+  background-color: #f5f5f5;
+  border-top: 1px solid #cccccc;
+  line-height: 24px;
+  color: #999999;
+}
+.customerListContainer .container .customerContainer .customerList .userInfo {
+  height: 35px;
+  color: #333333;
+  cursor: pointer;
+}
+.customerListContainer .container .customerContainer .customerList .userInfo p {
+  padding: 11px 0;
+  margin-left: 20px;
+  border-bottom: 1px solid #CCCCCC;
+}
+.customerListContainer .container .customerContainer .customerList .userInfo span {
+  height: 12px;
+  display: inline-block;
+  text-align: center;
+  border-right: 1px solid #CCCCCC;
+}
+.customerListContainer .container .customerContainer .customerList .userInfo span:first-child {
+  width: 127px;
+}
+.customerListContainer .container .customerContainer .customerList .userInfo span:nth-child(2) {
+  width: 86px;
+}
+.customerListContainer .container .customerContainer .customerList .userInfo span:last-child {
+  margin-left: 20px;
+  border-right: none;
+}
+.customerListContainer .container .pagesContainer {
+  text-align: center;
+  border: 1px solid #CCCCCC;
+  border-top: none;
+}
+.customerListContainer .container .pagesContainer p {
+  display: inline-block;
+  line-height: 30px;
+  cursor: pointer;
+}
+.customerListContainer .container .pagesContainer .left {
+  height: 30px;
+  width: 30px;
+  border-left: 1px solid #CCCCCC;
+  border-right: 1px solid #CCCCCC;
+}
+.customerListContainer .container .pagesContainer .right {
+  height: 30px;
+  width: 30px;
+  border-right: 1px solid #CCCCCC;
+  border-left: none;
+}
+.customerListContainer .container .pagesContainer .pages span {
+  display: inline-block;
+  height: 30px;
+  width: 30px;
+  border-right: 1px solid #CCCCCC;
+  line-height: 30px;
+  cursor: pointer;
+}
+.customerListContainer .container .pagesContainer .pages .active {
+  background-color: #247ba0;
+  color: #fff;
+}
+.customerListContainer .btnContainer {
+  width: 600px;
+  background-color: #cad3df;
+  margin-top: 10px;
+  text-align: center;
+}
+.customerListContainer .btnContainer button {
+  width: 200px;
+  height: 37px;
+  background-color: #247ba0;
+  font-size: 14px;
+  color: #fff;
+  border: none;
+  outline: none;
+  border-radius: 4px;
+}
+.move {
+  transform: translateX(320px);
+  /*left比较耗性能,造成卡顿*/
+  transition: transform 0.6s linear;
+  -moz-transition: transform 0.6s linear;
+  /* Firefox 4 */
+  -webkit-transition: transform 0.6s linear;
+  /* Safari 和 Chrome */
+  -o-transition: transform 0.6s linear;
+  /* Opera */
+}
+.customerListContainerIn {
+  display: block;
+  position: absolute;
+  left: -225px;
+  z-index: 1;
+  width: 320px;
+  height: 100%;
+  background-color: #fff;
+}
+.customerListContainerIn .container {
+  padding: 0 10px 10px;
+  background-color: #fff;
+}
+.customerListContainerIn .container .customerTitle {
+  height: 39px;
+  line-height: 39px;
+  font-size: 14px;
+  color: #282828;
+  font-weight: bold;
+}
+.customerListContainerIn .container .customerTitle .closeList {
+  float: right;
+  color: #afafb1;
+  font-weight: normal;
+  font-size: 20px;
+  cursor: pointer;
+}
+.customerListContainerIn .container .customerContainer {
+  border: 1px solid #cccccc;
+}
+.customerListContainerIn .container .customerContainer .search {
+  height: 32px;
+  padding: 10px;
+  background-color: #e6e6e6;
+  position: relative;
+}
+.customerListContainerIn .container .customerContainer .search input {
+  height: 32px;
+  width: 270px;
+  padding-left: 10px;
+  background-color: #fff;
+  border-radius: 32px;
+  outline: none;
+  border: none;
+}
+.customerListContainerIn .container .customerContainer .search em {
+  display: inline-block;
+  width: 18px;
+  height: 18px;
+  background-color: #CCCCCC;
+  border-radius: 18px;
+  position: absolute;
+  right: 20px;
+  top: 17px;
+  cursor: pointer;
+  text-align: center;
+  line-height: 15px;
+  color: #fff;
+}
+.customerListContainerIn .container .customerContainer .customerList {
+  height: 369px;
+  overflow-y: auto;
+}
+.customerListContainerIn .container .customerContainer .customerList .custName {
+  height: 24px;
+  padding-left: 10px;
+  margin-top: -1px;
+  background-color: #f5f5f5;
+  border-top: 1px solid #cccccc;
+  line-height: 24px;
+  color: #999999;
+}
+.customerListContainerIn .container .customerContainer .customerList .userInfo {
+  height: 35px;
+  color: #333333;
+  cursor: pointer;
+}
+.customerListContainerIn .container .customerContainer .customerList .userInfo p {
+  padding: 11px 0;
+  margin-left: 20px;
+  border-bottom: 1px solid #CCCCCC;
+}
+.customerListContainerIn .container .customerContainer .customerList .userInfo span {
+  height: 12px;
+  display: inline-block;
+  text-align: center;
+  border-right: 1px solid #CCCCCC;
+}
+.customerListContainerIn .container .customerContainer .customerList .userInfo span:first-child {
+  width: 103px;
+}
+.customerListContainerIn .container .customerContainer .customerList .userInfo span:nth-child(2) {
+  width: 65px;
+}
+.customerListContainerIn .container .customerContainer .customerList .userInfo span:last-child {
+  margin-left: 10px;
+  border-right: none;
+}
+.customerListContainerIn .container .pagesContainer {
+  text-align: center;
+  border: 1px solid #CCCCCC;
+  border-top: none;
+}
+.customerListContainerIn .container .pagesContainer p {
+  display: inline-block;
+  line-height: 30px;
+  cursor: pointer;
+}
+.customerListContainerIn .container .pagesContainer .left {
+  height: 30px;
+  width: 30px;
+  border-left: 1px solid #CCCCCC;
+  border-right: 1px solid #CCCCCC;
+}
+.customerListContainerIn .container .pagesContainer .right {
+  height: 30px;
+  width: 30px;
+  border-right: 1px solid #CCCCCC;
+  border-left: none;
+}
+.customerListContainerIn .container .pagesContainer .pages span {
+  display: inline-block;
+  height: 30px;
+  width: 30px;
+  border-right: 1px solid #CCCCCC;
+  line-height: 30px;
+  cursor: pointer;
+}
+.customerListContainerIn .container .pagesContainer .pages .active {
+  background-color: #247ba0;
+  color: #fff;
 }

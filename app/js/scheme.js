@@ -82,10 +82,9 @@
 				}
 			});
 		},
+		/*获取配置用户列表*/
 		getCustomerList : function (param) {
-			if(param){
-
-			}else {
+			if(!param){
 				param={
 					"pageSize" : 30
 				}
@@ -95,12 +94,42 @@
 				url: URL.GET_CUSTOMER_LIST,
 				data: param,
 				success: function (data) {
-					console.log(data)
-					var customerList = data.data.customers;
+					if(!data.data.customers){
+						$(".customerList").html("当前账号没有用户");
+						return
+					}
+					if($(".customerList li").length){
+						$(".customerList li").remove();
+						$(".customerList p").remove();
+					}
 					$.each(data.data.customers,function (i) {
-						var dom = "<li id="+data.data.customers[i].id+">"+data.data.customers[i].custName+"</li>"
+						if(i==0||data.data.customers[i].custName!=data.data.customers[i-1].custName){
+							var dom = "<p class='custName'>"+data.data.customers[i].custName+"</p>" +
+								"<li class='userInfo' custname="+data.data.customers[i].custName+" custid="+data.data.customers[i].id+"><p><span>"+data.data.customers[i].loginName+"</span><span>"+data.data.customers[i].realName+"</span><span>"+data.data.customers[i].custName+"</span></p></li>"						}else {
+							var dom = "<li class='userInfo' custname="+data.data.customers[i].custName+" custid="+data.data.customers[i].id+"><p><span>"+data.data.customers[i].loginName+"</span><span>"+data.data.customers[i].realName+"</span><span>"+data.data.customers[i].custName+"</span></p></li>"
+						}
 						$(".customerList").append(dom);
-					})
+					});
+					if(param.paraName){
+						$(".pagesContainer").remove();
+					}
+					if(!$(".pagesContainer").length){
+						if(data.data.pageTotal>1){
+							$(".customerContainer").after("<div class='pagesContainer'><p class='left'><</p><p class='pages'></p><p class='right'>></p></div>");
+							for(var i=1;i<=data.data.pageTotal;i++){
+								if(i>4){
+									var dom = "<span>...</span>"
+									$(".pages").append(dom);
+									return false
+								}else if(i==1) {
+									var dom = "<span id="+i+" class='page active'>"+i+"</span>";
+								}else {
+									var dom = "<span id="+i+" class='page'>"+i+"</span>";
+								}
+								$(".pages").append(dom);
+							}
+						}
+					}
 				}
 			});
 		},
@@ -173,9 +202,101 @@
 					$('#add-scheme-popup').addClass("hide");
 				}
 			});
-			$(".customerList").delegate("li","click",function () {
-				that.custId = $(this).attr("id");
+			/*选中配置用户*/
+			$(".container").delegate("li","click",function () {
+				that.custId = $(this).attr("custid");
+				that.custName = $(this).attr("custname");
+				$(".userInfo").css("backgroundColor","#fff");
+				$(this).css("backgroundColor","#f3ffbd");
+				if(localStorage.custId){
+					$.msg({
+						type : "切换配置用户",
+						msg : "确定要切换至该用户进行配置吗？,当前操作将会自动保存,以便继续配置。",
+						ok : function(){
+							localStorage.setItem("custId",that.custId);
+							localStorage.setItem("custName",that.custName);
+							document.getElementById("mainIframe").contentWindow.location.reload(true);
+						}
+					});
+				}
+			});
+			/*切换页码*/
+			$(".container").delegate(".page","click",function () {
+				$(".page").removeClass("active");
+				$(this).addClass("active");
+				var param={
+					"pageSize" : 1,
+					"pageNum" : $(this).html()
+				};
+				that.getCustomerList(param);
+			});
+			/*分页上一页*/
+			$(".container").delegate(".left","click",function () {
+				if($("span.page.active").html()>1){
+					var param={
+						"pageSize" : 1,
+						"pageNum" : $("span.page.active").html()-1
+					};
+					that.getCustomerList(param);
+					$(".page").removeClass("active");
+					$("#"+param.pageNum).addClass("active");
+				}else{
+					$.msg("已是第一页");
+
+				}
+			});
+			/*分页下一页*/
+			$(".container").delegate(".right","click",function () {
+				if($("span.page.active").html()<$(".page:last").html()){
+					var param={
+						"pageSize" : 1,
+						"pageNum" :parseInt($("span.page.active").html())+1
+					};
+					that.getCustomerList(param);
+					$(".page").removeClass("active");
+					$("#"+param.pageNum).addClass("active");
+				}else{
+					$.msg("已是最后一页");
+				}
+			});
+			/*搜索*/
+			$(".container").delegate(".searchInfo","keyup",function (event) {
+				if($(this).val()==""){
+					$("em.delete").css("display","none");
+				}else {
+					$("em.delete").css("display","block");
+					if(event.keyCode==13){
+						var param={
+							"pageSize" : 1,
+							"paraName" : $(this).val()
+						};
+						that.getCustomerList(param);
+					}
+				}
+			});
+			/*重置搜索*/
+			$(".container").delegate("em","click",function () {
+				$(".searchInfo").val("");
+				$(this).css("display","block");
+				that.getCustomerList();
+			});
+			/*显示配置用户列表*/
+			$(".container").delegate(".custName","click",function () {
+				that.getCustomerList()
+				$(".customerListContainerIn").addClass("move");
+			});
+			/*隐藏配置用户列表*/
+			$(".container").delegate(".closeList","click",function () {
+				$(".customerListContainerIn").removeClass("move");
+			});
+			/*选择配置用户进入主页*/
+			$(".btnContainer").delegate("button","click",function () {
+				if(!that.custId){
+					$.msg("请选择用户")
+					return
+				}
 				localStorage.setItem("custId",that.custId);
+				localStorage.setItem("custName",that.custName);
 				document.getElementById("mainIframe").contentWindow.location.reload(true);
 			});
 			$(".prevBtn").on("click",function(){
@@ -245,6 +366,7 @@
 			$("iframe").height(h-3);
 			$(".menuBox").css("height",(menuBoxH + "px"));
 			$(".menuBox").css("box-shadow","0 5px 5px 0 #333");
+			$(".customerListContainerIn").find(".customerList").css("height",(h-131)+"px");
 		},
 		init : function(){
 			var that = this;

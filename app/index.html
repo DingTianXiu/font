@@ -11,7 +11,7 @@
 <body>
 	<div class="head">
 		<ul>
-			<li><a href="./views/test.html">亿商</a></li>
+			<li><a href="#">亿商</a></li>
 			<li><a href="#">物料工坊</a></li>
 			<li><a href="#">报表系统</a></li>
 			<li><a href="#">舆情</a></li>
@@ -42,6 +42,7 @@
 	<div class="container hide">
 		<div class="side">
 			<div class="logo"></div>
+			<p class="custName"></p>
 			<div class="menuBox">
 				<ul class="menu"></ul>
 				<a href="javascript:;" id="addSchemeBtn"><i class="icon iconfont icon-iconprojectadd"></i><p>添加方案</p></a>
@@ -52,10 +53,20 @@
 		<div class="main"><iframe id="mainIframe" name="mainIframe" width="100%" height="500" src="views/scheme.html"></iframe></div>
 	</div>
 	<div class="editSchemeName hide">修改方案名</div>
-	<div class="customerListContainer" style="margin-top: 100px">
-		<ul class="customerList">
-
-		</ul>
+	<div class="customerListContainer">
+		<div class="container">
+			<p class="customerTitle">选择配置用户</p>
+			<div class="customerContainer">
+				<div class="search">
+					<input class="searchInfo" type="text" placeholder="输入客户名、用户名、开户人搜索">
+					<em href="#" class="delete" style="display: none">x</em>
+				</div>
+				<ul class="customerList"></ul>
+			</div>
+		</div>
+		<div class="btnContainer">
+			<button>下一步</button>
+		</div>
 	</div>
 	<div id="edit-scheme-popup" class="form hide">
 		<div class="box">
@@ -76,7 +87,7 @@
 		</div>
 	</div>
 	<div id="add-scheme-popup" class="form hide">
-		<div class="title">华为</div>
+		<div class="title"></div>
 		<div class="box">
 			<h1>新建方案</h1>
 			<div class="fm-row">
