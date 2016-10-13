@@ -325,6 +325,7 @@ body {
 .componentListWrapper .componentList .second .phoneList .left li a {
   display: block;
   padding: 18px 0 18px 83px;
+  position: relative;
 }
 .componentListWrapper .componentList .second .phoneList .left li a span {
   float: left;
@@ -355,8 +356,23 @@ body {
   margin: 20px 32px 0 0;
   background: url(../img/icon_selected.png) no-repeat left top;
 }
+.componentListWrapper .componentList .second .phoneList .left li a .otherAttr {
+  position: absolute;
+  left: 270px;
+  top: 80px;
+  width: 200px;
+  padding: 10px;
+  border: 1px solid #efeeec;
+  z-index: 9;
+  display: none;
+  color: #999;
+  background: #fff;
+}
 .componentListWrapper .componentList .second .phoneList .left li a:hover {
   background: #fff9f9;
+}
+.componentListWrapper .componentList .second .phoneList .left li a:hover .otherAttr {
+  display: block;
 }
 .componentListWrapper .componentList .second .noData {
   content: "无数据";
@@ -426,7 +442,7 @@ body {
 .componentListWrapper .componentList .second .chart svg {
   position: absolute;
   left: 50px;
-  top: 200px;
+  top: 100px;
 }
 .componentListWrapper .componentList .second .chart svg text {
   cursor: pointer;

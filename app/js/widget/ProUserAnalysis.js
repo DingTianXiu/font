@@ -512,6 +512,8 @@
                     "<li><button class='addBtn_updata'><i class='icon iconfont icon-iconadd'></i></button></li>" +
                     "</ul>";
                 this.$element.find(".addShowBtnContainer").append(dom);
+            }else{
+                that.$element.find(".selectProduct_updata").remove();
             }
         },
         /*获取手机型号列表*/

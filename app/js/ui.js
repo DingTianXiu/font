@@ -813,18 +813,26 @@
 			var brandsIndex = this.$brands[0].selectedIndex;
 			var modelsIndex = this.$models[0].selectedIndex;
 			var item = this.data.brands[brandsIndex].models[modelsIndex];
-			var isExist = false;
+			var isExist = false,
+				index = 0;
+			//当选择一个已添加的内容时，点击添加按钮后，没有实质效果，界面表现，将已添加的内容置于已选内容的最后面，表示添加成功。不再提示，已添加。
 			for(var i = 0; i < this.selectedData.length;i++){
 				if(item.modelCode == this.selectedData[i]["id"]){
 					isExist = true;
+					index = i;
 					break;
 				}
 			}
 			if(isExist){
-				$.msg(this.data.brands[brandsIndex].brandName + " - " + item.modelName + "已存在，请勿重复添加");
-				return;
+				if(index < (this.selectedData.length-1)){
+					this.$rBox.find(".proWrapper").eq(index).remove();
+					this.selectedData.splice(index,1);
+				}else if(index == this.selectedData.length-1){
+					return;
+				}
 			}
 			this.$proWrapper = $("<div class='proWrapper'></div>").appendTo(this.$rBox);
+			console.log(item.logoUrl);
 			this.$pro = $("<div class='pro clearfix'><img src='" + item.logoUrl +"' class='phoneThumb'/></div>").appendTo(this.$proWrapper);
 			this.$proInfo = $("<div class='info'><p>"+ this.data.brands[brandsIndex].brandName +" - "+ item.modelName +"</p><p class='pubDate'>"+ item.pubDate +"</p></div>").appendTo(this.$pro);
 			this.$proDelBtn = $("<i class='icon iconfont icon-icondel' modelCode='"+ item.modelCode +"'></i>").appendTo(this.$pro);
@@ -936,16 +944,22 @@
 		_addSourceTpl : function(){
 			var sourceId = this.$source.val();
 			var sourceIndex = this.$source[0].selectedIndex;
-			var isExist = false;
+			var isExist = false,
+				index = 0;
 			for(var i = 0; i < this.selectedData.length;i++){
 				if(sourceId == this.selectedData[i]["srcKey"]){
 					isExist = true;
 					break;
 				}
 			}
+			//当选择一个已添加的内容时，点击添加按钮后，没有实质效果，界面表现，将已添加的内容置于已选内容的最后面，表示添加成功。不再提示，已添加。
 			if(isExist){
-				$.msg(this.data[sourceIndex].srcName + "已存在，请勿重复添加");
-				return;
+				if(index < (this.selectedData.length-1)){
+					this.$rBox.find(".proWrapper").eq(index).remove();
+					this.selectedData.splice(index,1);
+				}else if(index == this.selectedData.length-1){
+					return;
+				}
 			}
 			this.$proWrapper = $("<div class='proWrapper'></div>").appendTo(this.$rBox);
 			this.$pro = $("<div class='pro clearfix'>").appendTo(this.$proWrapper);

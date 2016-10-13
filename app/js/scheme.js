@@ -305,8 +305,11 @@
 				if(!that.userInfo.isStaff){
 					return
 				}
-				that.getCustomerList()
+				if($(".move").length){
+					return
+				}
 				$(".customerListContainerIn").addClass("move");
+				that.getCustomerList()
 			});
 			/*隐藏配置用户列表*/
 			$(".container").delegate(".closeList","click",function () {

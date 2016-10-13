@@ -80,6 +80,11 @@
 									{{/if}}
 									<span class="brandName">{{this.brandName}} {{this.modelName}}</span>
 									<span class="checkBoxIcon {{this.selected}}"></span>
+									{{#if this.otherAttr}}
+									<div class="otherAttr">{{this.otherAttr}}</div>
+									{{else}}
+									<div class="otherAttr">暂无其他手机品牌数据</div>
+									{{/if}}
 								</a>
 							</li>
 						{{/each}}
@@ -94,6 +99,11 @@
 								<img src="{{this.picUrl}}"/>
 								<span class="brandName">{{this.brandName}} {{this.modelName}}</span>
 								<span class="checkBoxIcon"></span>
+								{{#if this.otherAttr}}
+								<div class="otherAttr">{{this.otherAttr}}</div>
+								{{else}}
+								<div class="otherAttr">暂无其他手机品牌数据</div>
+								{{/if}}
 							</a>
 						</li>
 						{{/each}}
