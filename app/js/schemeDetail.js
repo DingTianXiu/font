@@ -178,13 +178,10 @@
 			});
 			//撤销发布
 			$('.btnbox').delegate("#cancelPublish","click",function(){
-				that.publish(1);
+				that.publishConfirm();
 			});
-			//$("#cancelPublish").on("click",function(){
-			//	that.publish(0);
-			//});
 			$(".publishTip a").on("click",function(){
-				that.publish(1);
+				that.publishConfirm();
 			});
 			//发布
 			$('.btnbox').delegate("#publish","click",function(){
@@ -202,11 +199,21 @@
 			$(".addModuleBtn").parent()[flag ? "hide" : "show"]();
 			$(".related")[flag ? "hide" : "show"]();
 		},
+		publishConfirm : function(){
+			var that = this;
+			$.msg({
+				type:"confirm",
+				msg : "撤销发布后，用户将无法查看和使用该模块构件。确定撤销发布？",
+				ok : function(){
+					that.publish(1);
+				}
+			});
+		},
 		publish : function(status){
 			/**
 			 * 0:已发布
 			 * 1:未发布
-			 * 2：已删除
+			 * 9：已删除
 			 * */
 			var that = this;
 			var param = {
@@ -551,7 +558,7 @@
 			var item;
 
 			for(var i = 0; i <data.baseAttrNameGroup.length;i++){
-				attrTpl += "<th class='"+ data.baseAttrNameGroup[i].baseAttrKey +"'><a href='javascript:;' class='delAttr' key='"+ data.baseAttrNameGroup[i].baseAttrKey +"'>"+ data.baseAttrNameGroup[i].baseAttrName +"<i class='icon iconfont icon-icondel '></i></a></th>";
+				attrTpl += "<td class='"+ data.baseAttrNameGroup[i].baseAttrKey +"'><a href='javascript:;' class='delAttr' key='"+ data.baseAttrNameGroup[i].baseAttrKey +"'>"+ data.baseAttrNameGroup[i].baseAttrName +"<i class='icon iconfont icon-icondel '></i></a></td>";
 				tpl += "<th class='"+ data.baseAttrNameGroup[i].baseAttrKey +"'>属性"+ (i+1) +"同步构件组</th>";
 			}
 			attrTpl += "</tr>";

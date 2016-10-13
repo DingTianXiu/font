@@ -6,6 +6,7 @@
         var that  = this;
         that.userInfo = JSON.parse(localStorage.userInfo);
         that.custId = localStorage.custId;
+        that.delLegendIconShow = false;
         that.$element = $(element);
         that.data = {
             "title" : "产品用户关注点分析",
@@ -73,7 +74,13 @@
                 that._getPhoneList();
             });
             this.$element.delegate(".delLegendBtn","click",function(){
-                that.$element.find(".legendBtn").find("i").show();
+                if(!that.delLegendIconShow){
+                    that.$element.find(".legendBtn").find("i").show();
+                    that.delLegendIconShow = true;
+                }else {
+                    that.$element.find(".legendBtn").find("i").hide();
+                    that.delLegendIconShow = false;
+                }
             });
             this.$element.delegate(".delLegendIcon","click",function(){
                 that._delPhoneModel($(this));
@@ -93,6 +100,15 @@
                     conCptInstId : that.data.condition.cptInstId
                 };
                 that._onRelatedWidget(param);
+            });
+            $("body").on("click",function(e){
+                var $el = $(e.target);
+                if($el[0].className != "icon iconfont icon-iconclouse delLegendIcon"&&$el[0].className != "icon iconfont icon-icondel"){
+                    if(that.delLegendIconShow){
+                        that.$element.find(".legendBtn").find("i").hide();
+                        that.delLegendIconShow = false;
+                    }
+                }
             });
         },
         _initConfigSync:function($ele){
@@ -304,6 +320,9 @@
                 tpl += "<a href='javascript:;' class='legendBtn' modelCode='"+ item.id +"'>"+ item.brandName + " " + item.modelName +"<i class='icon iconfont icon-iconclouse delLegendIcon'></i></a>"
             }
             this.$legend.html(tpl);
+            if(that.delLegendIconShow){
+                that.$element.find(".legendBtn").find("i").show();
+            }
             this.$addBtn = $("<div class='addShowBtnContainer'><a href='javascript:;' class='addBtn addLegendBtn'><i class='icon iconfont icon-iconadd'></i></a></div>").appendTo(this.$legend);
             this.delBtn = $("<a href='javascript:;' class='delBtn delLegendBtn'><i class='icon iconfont icon-icondel'></i></a>").appendTo(this.$legend);
             this.$hrLline = $("<hr class='hrLine'>").appendTo(this.$legend);
@@ -318,8 +337,9 @@
                 that.$element.find("#echarts"+that.data.condition.cptInstId).remove();
                 that.$element.find(".second").append("<div class='chart' id="+"echarts"+that.data.condition.cptInstId+"></div>")
             }
-            if(!data){
-                this.$element.find(".chart").html("");
+            if(!data || data.length == 0){
+                this.$element.find(".chart").html("<div class='noData'><h3>暂无数据</h3><p>有疑问请联系客服</p></div>");
+                this.$element.find(".chartLabel").hide();
                 return;
             }
             that.foucsWordList = [];
@@ -608,6 +628,7 @@
                 }
             }
             this.$element.find($(".legend").find($(".legendBtn:first-child"))).addClass("active");
+            this.delLegendIconShow = true;
             this._updatePhoneModel();
         },
         _filterRelData : function(baseCptId,relData){

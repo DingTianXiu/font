@@ -3,6 +3,10 @@
  */
 (function($) {
     var ProUserAnalysis = function(element,options){
+        var that = this;
+        that.userInfo = JSON.parse(localStorage.userInfo);
+        that.custId = localStorage.custId;
+        that.delLegendIconShow = false;
         this.step = options.step;
         this.data = {
             "title" : " 产品用户调性分析",
@@ -70,7 +74,13 @@
                 that._getPhoneList();
             });
             this.$element.delegate(".delLegendBtn","click",function(){
-                that.$element.find(".legendBtn").find("i").show();
+                if(!that.delLegendIconShow){
+                    that.$element.find(".legendBtn").find("i").show();
+                    that.delLegendIconShow = true;
+                }else {
+                    that.$element.find(".legendBtn").find("i").hide();
+                    that.delLegendIconShow = false;
+                }
             });
             this.$element.delegate(".delLegendIcon","click",function(){
                that._delPhoneModel($(this));
@@ -90,6 +100,15 @@
                     conCptInstId : that.data.condition.cptInstId
                 };
                 that._onRelatedWidget(param);
+            });
+            $("body").on("click",function(e){
+                var $el = $(e.target);
+                if($el[0].className != "icon iconfont icon-iconclouse delLegendIcon"&&$el[0].className != "icon iconfont icon-icondel"){
+                    if(that.delLegendIconShow){
+                        that.$element.find(".legendBtn").find("i").hide();
+                        that.delLegendIconShow = false;
+                    }
+                }
             });
         },
         _initConfigSync:function($ele){
@@ -131,7 +150,10 @@
             $.ajaxJSON({
                 name: '删除构件实例',
                 url: URL.DELETE_CPTINT,
-                data: {"cptInstId": that.data.condition.cptInstId},
+                data: {
+                    "cptInstId": that.data.condition.cptInstId,
+                    "userId": that.custId
+                },
                 iframe: true,
                 success: function (r) {
                     $.msg("删除成功");
@@ -296,6 +318,9 @@
                 tpl += "<a href='javascript:;' class='legendBtn' modelCode='"+ item.id +"'>"+ item.brandName + " " + item.modelName +"<i class='icon iconfont icon-iconclouse delLegendIcon'></i></a>"
             }
             this.$legend.html(tpl);
+            if(that.delLegendIconShow){
+                that.$element.find(".legendBtn").find("i").show();
+            }
             this.$addBtn = $("<div class='addShowBtnContainer'><a href='javascript:;' class='addBtn addLegendBtn'><i class='icon iconfont icon-iconadd'></i></a></div>").appendTo(this.$legend);
             this.delBtn = $("<a href='javascript:;' class='delBtn delLegendBtn'><i class='icon iconfont icon-icondel'></i></a>").appendTo(this.$legend);
             this.$hrLline = $("<hr class='hrLine'>").appendTo(this.$legend);
@@ -305,10 +330,12 @@
             this.$legend.find(".legendBtn").eq(0).addClass("active");
         },
         _renderChart : function(data){
-            if(!data){
-                this.$element.find(".chart").html("");
+            if(!data || data.length == 0){
+                this.$element.find(".chart").html("<div class='noData'><h3>暂无数据</h3><p>有疑问请联系客服</p></div>");
+                this.$element.find(".chartLabel").hide();
                 return;
             }
+            this.$element.find(".chartLabel").show();
             var xList = [],
                 seriesList = [],
                 negativeList = [],

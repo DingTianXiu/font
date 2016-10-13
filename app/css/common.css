@@ -566,7 +566,7 @@ body {
   height: 369px;
   overflow-y: auto;
 }
-.customerListContainer .container .customerContainer .customerList .custName {
+.customerListContainer .container .customerContainer .customerList .userName {
   height: 24px;
   padding-left: 10px;
   margin-top: -1px;
@@ -725,7 +725,7 @@ body {
   height: 369px;
   overflow-y: auto;
 }
-.customerListContainerIn .container .customerContainer .customerList .custName {
+.customerListContainerIn .container .customerContainer .customerList .userName {
   height: 24px;
   padding-left: 10px;
   margin-top: -1px;

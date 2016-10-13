@@ -107,7 +107,7 @@
 					}
 					$.each(data.data.customers,function (i) {
 						if(i==0||data.data.customers[i].custName!=data.data.customers[i-1].custName){
-							var dom = "<p class='custName'>"+data.data.customers[i].custName+"</p>" +
+							var dom = "<p class='userName'>"+data.data.customers[i].custName+"</p>" +
 								"<li class='userInfo' custname="+data.data.customers[i].custName+" custid="+data.data.customers[i].id+"><p><span>"+data.data.customers[i].loginName+"</span><span>"+data.data.customers[i].realName+"</span><span>"+data.data.customers[i].custName+"</span></p></li>"						}else {
 							var dom = "<li class='userInfo' custname="+data.data.customers[i].custName+" custid="+data.data.customers[i].id+"><p><span>"+data.data.customers[i].loginName+"</span><span>"+data.data.customers[i].realName+"</span><span>"+data.data.customers[i].custName+"</span></p></li>"
 						}

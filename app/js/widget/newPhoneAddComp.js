@@ -1,5 +1,9 @@
  $(function(){
 	var newPhoAddComp = function(element,options){
+        var that = this;
+        that.userInfo = JSON.parse(localStorage.userInfo);
+        that.custId = localStorage.custId;
+        that.delLegendIconShow = false;
         this.step = options.step;
 		this.data = {
             "title":"新品声量对比（监测）",
@@ -17,7 +21,7 @@
                 "phoneModel" : {}
             },
             "result" : {},
-            "related" : [],
+            "related" : []
         };
         this.$element = $(element);
         if(options.onComplete){
@@ -81,10 +85,25 @@
                 that._updatePhoneModel();
             });
             this.$element.on("click",".delLegendBtn",function(){
-                that.$element.find(".legendBtn").find("i").show();
+                if(!that.delLegendIconShow){
+                    that.$element.find(".legendBtn").find("i").show();
+                    that.delLegendIconShow = true;
+                }else {
+                    that.$element.find(".legendBtn").find("i").hide();
+                    that.delLegendIconShow = false;
+                }
             });
             this.$element.on("click",".delLegendIcon",function(){
                that._delPhoneModel($(this));
+            });
+            $("body").on("click",function(e){
+                var $el = $(e.target);
+                if($el[0].className != "icon iconfont icon-iconclouse delLegendIcon"&&$el[0].className != "icon iconfont icon-icondel"){
+                    if(that.delLegendIconShow){
+                        that.$element.find(".legendBtn").find("i").hide();
+                        that.delLegendIconShow = false;
+                    }
+                }
             });
         },
         _renderResult : function(){
@@ -108,6 +127,9 @@
                 tpl += "<a href='javascript:;' class='legendBtn' modelCode='"+ item.id +"'>"+ item.brandName + " " + item.modelName +"<i class='icon iconfont icon-iconclouse delLegendIcon'></i></a>";
             }
             this.$legend.html(tpl);
+            if(that.delLegendIconShow){
+                that.$element.find(".legendBtn").find("i").show();
+            }
             this.$addBtn = $("<div class='addShowBtnContainer'><a href='javascript:;' class='addBtn addLegendBtn'><i class='icon iconfont icon-iconadd'></i></a></div>").appendTo(this.$legend);
             this.delBtn = $("<a href='javascript:;' class='delBtn delLegendBtn'><i class='icon iconfont icon-icondel'></i></a>").appendTo(this.$legend);
             this.$hrLline = $("<hr class='hrLine'>").appendTo(this.$legend);
@@ -531,7 +553,10 @@
             $.ajaxJSON({
                 name: '删除构件实例',
                 url: URL.DELETE_CPTINT,
-                data: {"cptInstId": that.data.condition.cptInstId},
+                data: {
+                    "cptInstId": that.data.condition.cptInstId,
+                    "userId": that.custId
+                },
                 iframe: true,
                 success: function (r) {
                     $.msg("删除成功");
