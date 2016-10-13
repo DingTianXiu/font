@@ -5,6 +5,8 @@
 (function ($) {
     var NewAffectionAnalysed = function (element,options) {
         var that  = this;
+        that.userInfo = JSON.parse(localStorage.userInfo);
+        that.custId = localStorage.custId;
         that.$element = $(element);
         that.step = options.step;
         that.data = {
@@ -134,7 +136,10 @@
             $.ajaxJSON({
                 name: '删除构件实例',
                 url: URL.DELETE_CPTINT,
-                data: {"cptInstId": that.data.condition.cptInstId},
+                data: {
+                    "cptInstId": that.data.condition.cptInstId,
+                    "userId": that.custId
+                },
                 iframe: true,
                 success: function (r) {
                     $.msg("删除成功");
