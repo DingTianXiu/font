@@ -1,16 +1,18 @@
 //(function(){
 	schemeData = [];
 	currentSchemeId = 0;
+	custId = "";
 	scheme = {
 		validate : function(id){
 			var isValid = true;
 			$(id + " input").each(function(){
-				if($(this).val() == ""){
-					$(id + " .errorTip").text("不能为空");
-					$(this).addClass("error");
-					isValid =  false;
-					return false;
-				}else if($(this).val().length > 8){
+				//if($(this).val() == ""){
+				//	$(id + " .errorTip").text("不能为空");
+				//	$(this).addClass("error");
+				//	isValid =  false;
+				//	return false;
+				//}else
+				if($(this).val().length > 8){
 					$(id + " .errorTip").text($(this).parent().prev().text()  + "长度不能超过8个字符");
 					$(this).addClass("error");
 					isValid =  false;
@@ -26,15 +28,16 @@
 			var that = this;
 			if(this.validate("#add-scheme-popup")){
 				var param = {};
-				param["userId"] = that.custId;
+				param["userId"] = custId;
 				$("#add-scheme-popup input:text").each(function(i){
-					var name = "";
+					var name = "",
+						value = $(this).val();
 					if(i == 0){
 						name = $(this).attr("name");
-						param[name] = $(this).val();
+						param[name] = value ? value : "方案一";
 					}else if(i > 0){
 						name = "modules[" + (i-1) + "].modName";
-						param[name] = $(this).val();
+						param[name] = value ? value : ("模块" + i);
 					}
 				});
 				$.ajaxJSON({
@@ -59,7 +62,7 @@
 		addScheme : function () {
 			var that = this;
 			var param = {
-				"userId" : that.custId,
+				"userId" : custId,
 				"sltName" : "方案"+(schemeData.length+1),
 				"modules[0].modName" : "模块一"
 			};
@@ -139,6 +142,14 @@
 				var param = {};
 				param["sltId"] = this.currentEditScheme.sltId;
 				param["sltName"] = $("#edit-scheme-popup input:text").val();
+				if(!param["sltName"]){
+					for(var i = 0; i < schemeData.length;i++){
+						if(schemeData[i].sltId == that.currentEditScheme.sltId){
+							param["sltName"] = "方案" + (i+1);
+							break;
+						}
+					}
+				}
 				$.ajaxJSON({
 					name: '修改方案名称',
 					url: URL.UPDATE_SCHEME,
@@ -147,11 +158,11 @@
 						for (var i = 0; i < schemeData.length; i++) {
 							if (schemeData[i].sltId == r.data.id) {
 								schemeData[i].sltName = r.data.sltName;
+								$(".menu li").eq(i).find("p").text(r.data.sltName);
 								break;
 							}
 						}
 						$("#edit-scheme-popup").dialog("close");
-						that._renderPage();
 					}
 				});
 			}
@@ -162,12 +173,17 @@
 				isActive;
 			$("#add-scheme-popup").addClass("hide");
 			$(".side a").removeClass("active");
-			for(var i = 0; i < schemeData.length;i++){
-				isActive = window.currentSchemeId ==schemeData[i]["sltId"] ? 'class="active"' : '';
-				template += '<li><a '+ isActive +' href="views/scheme.html?id='+ schemeData[i]["sltId"] +'" target="mainIframe"><i class="icon iconfont icon-iconproject'+ (i+1) +'"></i><p>'+ schemeData[i]["sltName"] +'</p></a></li>';
+			//当前用户创建第一个方案时渲染方案列表
+			if(schemeData.length == 1) {
+				isActive = window.currentSchemeId == schemeData[0]["sltId"] ? 'class="active"' : '';
+				template += '<li><a ' + isActive + ' href="views/scheme.html?id=' + schemeData[0]["sltId"] + '" target="mainIframe"><i class="icon iconfont icon-iconproject1"></i><p>' + schemeData[0]["sltName"] + '</p></a></li>';
+				$(".menu").html(template);
+				document.getElementById("mainIframe").contentWindow.schemeDetail.getModuleList();
+			}else if(schemeData.length > 1){
+				//当前用户在第一个方案的基础上创建方案时渲染方案列表
+				var index = schemeData.length - 1;
+				$(".menu").append('<li><a ' + isActive + ' href="views/scheme.html?id=' + schemeData[index]["sltId"] + '" target="mainIframe"><i class="icon iconfont icon-iconproject'+ index +'"></i><p>' + schemeData[index]["sltName"] + '</p></a></li>');
 			}
-			$(".menu").html(template);
-			document.getElementById("mainIframe").contentWindow.schemeDetail.getModuleList();
 		},
 		addModuleItem : function(){
 			if($("input.moduleName").length >= 8){
@@ -177,7 +193,7 @@
 				});
 				return;
 			}
-			$("#addModuleBtn").parent().parent().append('<div class="fm-ipt"><input class="moduleName" type="text"></div>');
+			$("#addModuleBtn").parent().parent().append('<div class="fm-ipt"><input class="moduleName" type="text" placeholder="输入模块名称"><i class="icon iconfont icon-icondel"></i></div>');
 		},
 		bindEvent : function(){
 			var that = this;
@@ -191,6 +207,9 @@
 			$("#addModuleBtn").on("click",function(){
 				that.addModuleItem();
 			});
+			$("#add-scheme-popup").delegate(".icon-icondel","click",function(){
+				$(this).parent().remove();
+			});
 			$("#confirm-btn").on("click",function(){
 				that.initScheme();
 			});
@@ -203,18 +222,19 @@
 				}
 			});
 			/*选中配置用户*/
-			$(".container").delegate("li","click",function () {
-				that.custId = $(this).attr("custid");
-				that.custName = $(this).attr("custname");
+			$(".container").delegate(".userInfo","click",function () {
+				custId = $(this).attr("custid");
+				custName = $(this).attr("custname");
 				$(".userInfo").css("backgroundColor","#fff");
 				$(this).css("backgroundColor","#f3ffbd");
 				if(localStorage.custId){
+					if(custId==localStorage.custId){
+						return
+					}
 					$.msg({
 						type : "切换配置用户",
 						msg : "确定要切换至该用户进行配置吗？,当前操作将会自动保存,以便继续配置。",
 						ok : function(){
-							localStorage.setItem("custId",that.custId);
-							localStorage.setItem("custName",that.custName);
 							document.getElementById("mainIframe").contentWindow.location.reload(true);
 						}
 					});
@@ -282,6 +302,9 @@
 			});
 			/*显示配置用户列表*/
 			$(".container").delegate(".custName","click",function () {
+				if(!that.userInfo.isStaff){
+					return
+				}
 				that.getCustomerList()
 				$(".customerListContainerIn").addClass("move");
 			});
@@ -290,13 +313,13 @@
 				$(".customerListContainerIn").removeClass("move");
 			});
 			/*选择配置用户进入主页*/
-			$(".btnContainer").delegate("button","click",function () {
-				if(!that.custId){
+			$(".btnContainer").delegate(".nextStep","click",function () {
+				if(!custId){
 					$.msg("请选择用户")
 					return
 				}
-				localStorage.setItem("custId",that.custId);
-				localStorage.setItem("custName",that.custName);
+				localStorage.setItem("custId",custId);
+				localStorage.setItem("custName",custName);
 				document.getElementById("mainIframe").contentWindow.location.reload(true);
 			});
 			$(".prevBtn").on("click",function(){
@@ -352,6 +375,8 @@
 		},
 		logout : function(){
 			localStorage.removeItem('userInfo');
+			localStorage.removeItem('custId');
+			localStorage.removeItem('custName');
 			$.cookie("acf_ticket",null);
 			window.location.href = logoutUrl;
 
@@ -379,9 +404,18 @@
 				$('.customerListContainer').addClass("hide");
 				$('.container').removeClass("hide");
 				$('#add-scheme-popup').addClass("hide");
-				this.custId = localStorage.custId;
+				custId = localStorage.custId;
 			}else{
-				this.getCustomerList();
+				if(this.userInfo.isStaff){
+					this.getCustomerList();
+				}else{
+					$(".addSchemeBtn").remove();
+					$('.customerListContainer').remove();
+					$('.container').removeClass("hide");
+					$('#add-scheme-popup').addClass("hide");
+					custId = this.userInfo.userId;
+					localStorage.setItem("custId",this.userInfo.userId)
+				}
 			}
 			this.bindEvent();
 			this.setLayout();

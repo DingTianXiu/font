@@ -147,7 +147,7 @@
             $ele.slider({
                 range: true,
                 min: -90,
-                max: 30,
+                max: 90,
                 values: [that.data.condition.compareDateScope.value["beforeDateNum"]*-1 , that.data.condition.compareDateScope.value["afterDateNum"] ],
                 slide: function( event, ui ) {
                     that.data.condition.compareDateScope.value["beforeDateNum"] = ui.values[ 0 ] * -1;

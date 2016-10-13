@@ -702,7 +702,7 @@
 			$ele.slider({
 				range: true,
 				min: -90,
-				max: 30,
+				max: 90,
 				values: [that.beforeDateNum*-1 , that.afterDateNum],
 				slide: function( event, ui ) {
 					that.beforeDateNum = ui.values[ 0 ] * -1;
@@ -1011,7 +1011,7 @@
 		var $syncBox = $("<ul class='syncBox clearfix'></ul>").appendTo($cptConfigBox);
 
 		for(var i in opts.data){
-			if(i == "phoneModel" || i == "infoSource" || i == "compareDateScope" || i == ""){
+			if(i == "phoneModel" || i == "infoSource" || i == "compareDateScope" || i == "searchDateScope"){
 				var sync = opts.data[i].syncType == 0 ? "checked" : "";
 				var unSync = opts.data[i].syncType == 1 ? "checked" : "";
 				var tpl = "<li><p>" + opts.data[i].name + ":</p><p class='radioBox'>";

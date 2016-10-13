@@ -8,8 +8,10 @@
                 "moduleId" : options.moduleId,
                 "cptInstId" : options.cptInstId,
                 "searchDateScope" : {
-                    "beforeDateNum": options.beforeDateNum ? options.beforeDateNum : 28,
-                    "afterDateNum": options.afterDateNum ? options.afterDateNum : 30
+                    value : {
+                        "beforeDateNum": options.beforeDateNum ? options.beforeDateNum : 28,
+                        "afterDateNum": options.afterDateNum ? options.afterDateNum : 30
+                    }
                 }
             },
             "result" : {},
@@ -42,7 +44,7 @@
             if(this.step == 0){
                 this._renderCondition();
             }else{
-                this._getAttr();
+                this._getRelData();
             }
             this._bindEvent();
         },
@@ -76,8 +78,12 @@
                 });
                 return;
             }
+            var syncAttr = {
+                "searchDateScope" : this.data.condition.searchDateScope,
+            };
+            syncAttr["phoneModel"] = this.data.condition.selectedPhone;
             $.cptConfig({
-                data : that.data.condition,
+                data : syncAttr,
                 onSwitchType : function(data){
                     var param = {
                         "attrInstId" : data.id,
@@ -117,10 +123,10 @@
                 range: true,
                 min: -90,
                 max: 30,
-                values: [that.data.condition.searchDateScope["beforeDateNum"]*-1 , that.data.condition.searchDateScope["afterDateNum"] ],
+                values: [that.data.condition.searchDateScope.value["beforeDateNum"]*-1 , that.data.condition.searchDateScope.value["afterDateNum"] ],
                 slide: function( event, ui ) {
-                    that.data.condition.searchDateScope["beforeDateNum"] = ui.values[ 0 ] * -1;
-                    that.data.condition.searchDateScope["afterDateNum"] = ui.values[ 1 ];
+                    that.data.condition.searchDateScope.value["beforeDateNum"] = ui.values[ 0 ] * -1;
+                    that.data.condition.searchDateScope.value["afterDateNum"] = ui.values[ 1 ];
                 }
             });
         },
@@ -137,7 +143,11 @@
 
         },
         _createWidget : function(){
-            var params = this.data.condition;
+            var params = {
+                "baseCptId" : this.data.condition.baseCptId,
+                "moduleId" : this.data.condition.moduleId,
+                "searchDateScope" : this.data.condition.searchDateScope.value
+            };
             var that = this;
             $.ajaxJSON({
                 name: '新增构件实例',
@@ -180,14 +190,27 @@
                 beforeDateNum : that.data.condition.searchDateScope["beforeDateNum"],
                 afterDateNum : that.data.condition.searchDateScope["afterDateNum"],
                 onSaveDate : function(beforeDateNum,afterDateNum){
-                    that.data.condition.searchDateScope.beforeDateNum = beforeDateNum;
-                    that.data.condition.searchDateScope.afterDateNum = afterDateNum;
+                    that.data.condition.searchDateScope.value.beforeDateNum = beforeDateNum;
+                    that.data.condition.searchDateScope.value.afterDateNum = afterDateNum;
 
                     that._updateDate(beforeDateNum,afterDateNum);
                 }
             });
         },
-        _getAttr : function(){
+        _getRelData : function(){
+            var that = this;
+            $.ajaxJSON({
+                name: '获取构件的关联构件',
+                url: URL.GET_REL_CPT,
+                data: {baseCptId: that.data.condition.baseCptId},
+                iframe:true,
+                success: function (relData) {
+                    that._filterRelData(that.data.condition.baseCptId,relData.data);
+                    that._getData();
+                }
+            });
+        },
+        _getData : function(){
             var that = this;
             var param = {"cptInstId" : this.data.condition.cptInstId};
             $.ajaxJSON({
@@ -198,39 +221,26 @@
                 success: function (r) {
                     var selectedData = [];
                     var list = r.data.phoneModel.value;
+                    that.data.condition.searchDateScope = r.data.searchDateScope;
+                    that.data.condition["selectedPhone"] = r.data.phoneModel;
                     if(list) {
                         for (var i = 0; i < list.length; i++) {
                             selectedData.push(list[i].id);
                         }
                         that.selectedIdStr = selectedData.join(",");
                     }else{
-                       that.selectedIdStr = "";
+                        that.selectedIdStr = "";
                     }
                     $.ajaxJSON({
-                        name: '获取构件的关联构件',
-                        url: URL.GET_REL_CPT,
-                        data: {baseCptId: that.data.condition.baseCptId},
+                        name : '获取构件实例数据',
+                        url :URL.GET_CPTINST_DATA,
+                        data : param,
                         iframe:true,
-                        success: function (relData) {
-                            that._filterRelData(that.data.condition.baseCptId,relData.data);
-                            that.data.condition["searchDateScope"] = r.data.searchDateScope.value;
-                            that._getData();
+                        success : function(r){
+                            that.data.result = r.data;
+                            that._renderResult();
                         }
                     });
-                }
-            });
-        },
-        _getData : function(){
-            var that = this;
-            var param = {"cptInstId" : this.data.condition.cptInstId};
-            $.ajaxJSON({
-                name : '获取构件实例数据',
-                url :URL.GET_CPTINST_DATA,
-                data : param,
-                iframe:true,
-                success : function(r){
-                    that.data.result = r.data;
-                    that._renderResult();
                 }
             });
         },
@@ -253,7 +263,7 @@
                     "picUrl" : item.picUrl
                 });
             });
-
+            this.data.condition.selectedPhone = param["phoneModel"];
             //console.log(JSON.stringify(param));
             $.ajaxJSON({
                 url: URL.UPDATE_CPTiNST_ATTR,
