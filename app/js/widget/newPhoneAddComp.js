@@ -201,7 +201,9 @@
             };
             var lineChart = echarts.init(this.$element.find(".lineChart")[0]);
             lineChart.setOption(option);
-            
+            window.addEventListener("resize",function(){
+                lineChart.resize();
+              });
             // var myChart = echarts.init(document.getElementById('containerChart1'));
             // if (option && typeof option === "object") {
             //     myChart.setOption(option, true);

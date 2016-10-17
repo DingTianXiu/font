@@ -509,6 +509,10 @@ body{overflow:hidden;background-color: #cad3df}
             .customerList{
                 height: 369px;
                 overflow-y: auto;
+                .noData {
+                    text-align: center;
+                    border-bottom: 1px solid #CCCCCC;
+                }
                 .userName{
                     height: 24px;
                     padding-left: 10px;
@@ -605,10 +609,10 @@ body{overflow:hidden;background-color: #cad3df}
 }
 .move{
     transform: translateX(320px)!important;/*left比较耗性能,造成卡顿*/
-    transition:transform 0.6s linear;
-    -moz-transition:transform 0.6s linear;/* Firefox 4 */
-    -webkit-transition: transform 0.6s linear;/* Safari 和 Chrome */
-    -o-transition: transform 0.6s linear;/* Opera */
+    transition:transform 0.2s linear;
+    -moz-transition:transform 0.2s linear;/* Firefox 4 */
+    -webkit-transition: transform 0.2s linear;/* Safari 和 Chrome */
+    -o-transition: transform 0.2s linear;/* Opera */
 }
 .customerListContainerIn{
     display: block;
@@ -619,10 +623,10 @@ body{overflow:hidden;background-color: #cad3df}
     height: 100%;
     background-color: #fff;
     transform: translateX(-320px);
-    transition:transform 0.6s linear;
-    -moz-transition:transform 0.6s linear;/* Firefox 4 */
-    -webkit-transition: transform 0.6s linear;/* Safari 和 Chrome */
-    -o-transition: transform 0.6s linear;/* Opera */
+    transition:transform 0.2s linear;
+    -moz-transition:transform 0.2s linear;/* Firefox 4 */
+    -webkit-transition: transform 0.2s linear;/* Safari 和 Chrome */
+    -o-transition: transform 0.2s linear;/* Opera */
     .container {
         padding: 0 10px 10px;
         background-color: #fff;
@@ -679,6 +683,10 @@ body{overflow:hidden;background-color: #cad3df}
             .customerList{
                 height: 369px;
                 overflow-y: auto;
+                .noData {
+                    text-align: center;
+                    border-bottom: 1px solid #CCCCCC;
+                }
                 .userName{
                     height: 24px;
                     padding-left: 10px;

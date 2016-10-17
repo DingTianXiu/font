@@ -10,41 +10,54 @@
 				iframe : true,
 				cache:false,
 				success: function (r) {
+					if(!that.userInfo.isStaff){
+						$("#addSchemeBtn",parent.document).remove()
+					}
 					if(r.data.length > 0){
 						parent.window.schemeData = r.data;
 						parent.window.currentSchemeId = r.data[0]["sltId"];
 						$(".customerListContainer",parent.document).remove();
-						$(".side",parent.document).after(
-						"<div class='customerListContainerIn'>" +
-							"<div class='container'>"+
-							"<p class='customerTitle'>选择配置用户<span class='closeList'>x</span></p>"+
-							"<div class='customerContainer'>"+
-							"<div class='search'>"+
-							"<input class='searchInfo' type='text' placeholder='输入客户名、用户名、开户人搜索'>"+
-							"<em href='#' class='delete' style='display: none'>x</em>"+
-							"</div>"+
-							"<ul class='customerList'></ul>"+
-							"</div>"+
-							"</div>"+
-						"</div>"
-						);
-						var h = parent.document.documentElement.clientHeight - $(".head",parent.document).height();
-						$(".customerListContainerIn",parent.document).find(".customerList").css("height",(h-131)+"px");
+						if(that.userInfo.isStaff){
+							$(".side",parent.document).after(
+								"<div class='customerListContainerIn'>" +
+								"<div class='container'>"+
+								"<p class='customerTitle'>选择配置用户<span class='closeList'>x</span></p>"+
+								"<div class='customerContainer'>"+
+								"<div class='search'>"+
+								"<input class='searchInfo' type='text' placeholder='输入客户名、用户名、开户人搜索'>"+
+								"<em href='#' class='delete' style='display: none'>x</em>"+
+								"</div>"+
+								"<ul class='customerList'></ul>"+
+								"</div>"+
+								"</div>"+
+								"</div>"
+							);
+							var h = parent.document.documentElement.clientHeight - $(".head",parent.document).height();
+							$(".customerListContainerIn",parent.document).find(".customerList").css("height",(h-131)+"px");
+							$(".custName",parent.document).html(that.custName);
+						}
 						$(".container",parent.document).removeClass("hide");
 						$("#add-scheme-popup",parent.document).addClass("hide");
-						$(".custName",parent.document).html(that.custName);
 						that._renderPage();
 						that.getModuleList();
 					}else{
-						$(".title",parent.document).html(that.custName);
-						$(".customerListContainer",parent.document).addClass("hide");
-						$(".container",parent.document).addClass("hide");
-						$("#add-scheme-popup",parent.document).removeClass("hide");
+						if(that.userInfo.isStaff){
+							$(".title",parent.document).html(that.custName);
+							$(".customerListContainer",parent.document).addClass("hide");
+							$(".container",parent.document).addClass("hide");
+							$("#add-scheme-popup",parent.document).removeClass("hide");
+						}else {
+							//TODO 用户登录无方案处理
+							// $(".container",parent.document).html("暂无配置,有疑问请与客服联系");
+						}
 					}
 				}
 			});
 		},
 		_renderPage : function(){
+			var h = parent.document.documentElement.clientHeight - $(".head",parent.document).height();
+			var menuBoxH = h - $(".componentBtn",parent.document)[0].clientHeight - $(".logo",parent.document).height()-$(".custName",parent.document).height();
+			$(".menuBox",parent.document).css("height",(menuBoxH + "px"));
 			var template = "",
 				code = "&#xe60",
 				schemeData = parent.window.schemeData,
@@ -95,7 +108,7 @@
 				url: URL.COMPONENT_LIST,
 				data: {
 					"modId" : that.currentModuleId,
-					"userId" : 17706
+					"userId" : that.custId
 				},
 				type : 'post',
 				iframe : true,

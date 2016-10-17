@@ -566,6 +566,10 @@ body {
   height: 369px;
   overflow-y: auto;
 }
+.customerListContainer .container .customerContainer .customerList .noData {
+  text-align: center;
+  border-bottom: 1px solid #CCCCCC;
+}
 .customerListContainer .container .customerContainer .customerList .userName {
   height: 24px;
   padding-left: 10px;
@@ -654,12 +658,12 @@ body {
 .move {
   transform: translateX(320px) !important;
   /*left比较耗性能,造成卡顿*/
-  transition: transform 0.6s linear;
-  -moz-transition: transform 0.6s linear;
+  transition: transform 0.2s linear;
+  -moz-transition: transform 0.2s linear;
   /* Firefox 4 */
-  -webkit-transition: transform 0.6s linear;
+  -webkit-transition: transform 0.2s linear;
   /* Safari 和 Chrome */
-  -o-transition: transform 0.6s linear;
+  -o-transition: transform 0.2s linear;
   /* Opera */
 }
 .customerListContainerIn {
@@ -671,12 +675,12 @@ body {
   height: 100%;
   background-color: #fff;
   transform: translateX(-320px);
-  transition: transform 0.6s linear;
-  -moz-transition: transform 0.6s linear;
+  transition: transform 0.2s linear;
+  -moz-transition: transform 0.2s linear;
   /* Firefox 4 */
-  -webkit-transition: transform 0.6s linear;
+  -webkit-transition: transform 0.2s linear;
   /* Safari 和 Chrome */
-  -o-transition: transform 0.6s linear;
+  -o-transition: transform 0.2s linear;
   /* Opera */
 }
 .customerListContainerIn .container {
@@ -732,6 +736,10 @@ body {
 .customerListContainerIn .container .customerContainer .customerList {
   height: 369px;
   overflow-y: auto;
+}
+.customerListContainerIn .container .customerContainer .customerList .noData {
+  text-align: center;
+  border-bottom: 1px solid #CCCCCC;
 }
 .customerListContainerIn .container .customerContainer .customerList .userName {
   height: 24px;

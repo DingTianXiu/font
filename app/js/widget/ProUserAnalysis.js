@@ -393,6 +393,9 @@
             };
             var stackChart = echarts.init(this.$element.find(".chart")[0]);
             stackChart.setOption(option);
+            window.addEventListener("resize",function(){
+              stackChart.resize();
+            });
         },
         _updateDate : function(beforeDateNum,afterDateNum){
             var that = this;
@@ -512,8 +515,6 @@
                     "<li><button class='addBtn_updata'><i class='icon iconfont icon-iconadd'></i></button></li>" +
                     "</ul>";
                 this.$element.find(".addShowBtnContainer").append(dom);
-            }else{
-                that.$element.find(".selectProduct_updata").remove();
             }
         },
         /*获取手机型号列表*/

@@ -97,9 +97,11 @@
 				url: URL.GET_CUSTOMER_LIST,
 				data: param,
 				success: function (data) {
-					if(!data.data.customers){
-						$(".customerList").html("当前账号没有用户");
+					if(!data.data){
+						$(".customerList").html("<p class='noData'>无匹配内容,请确认</p>");
 						return
+					}else {
+						$(".customerList").html("");
 					}
 					if($(".customerList li").length){
 						$(".customerList li").remove();
@@ -235,6 +237,7 @@
 						type : "切换配置用户",
 						msg : "确定要切换至该用户进行配置吗？,当前操作将会自动保存,以便继续配置。",
 						ok : function(){
+							$(".customerListContainerIn").removeClass("move");
 							document.getElementById("mainIframe").contentWindow.location.reload(true);
 						}
 					});
@@ -285,12 +288,16 @@
 					$("em.delete").css("display","none");
 				}else {
 					$("em.delete").css("display","block");
-					if(event.keyCode==13){
+				}
+				if(event.keyCode==13){
+					if($(this).val()){
 						var param={
-							"pageSize" : 1,
+							"pageSize" : 30,
 							"paraName" : $(this).val()
 						};
 						that.getCustomerList(param);
+					}else {
+						that.getCustomerList();
 					}
 				}
 			});
@@ -302,9 +309,6 @@
 			});
 			/*显示配置用户列表*/
 			$(".container").delegate(".custName","click",function () {
-				if(!that.userInfo.isStaff){
-					return
-				}
 				if($(".move").length){
 					return
 				}
@@ -380,14 +384,14 @@
 			localStorage.removeItem('userInfo');
 			localStorage.removeItem('custId');
 			localStorage.removeItem('custName');
-			$.cookie("acf_ticket",null);
+			$.cookie("acf_ticket",null,{"expires":0});
 			window.location.href = logoutUrl;
 
 
 		},
 		setLayout : function(){
 			var h = document.documentElement.clientHeight - $(".head").height();
-			var menuBoxH = h - $(".componentBtn")[0].clientHeight - $(".logo").height();
+			var menuBoxH = h - $(".componentBtn")[0].clientHeight - $(".logo").height()-$(".custName").height();
 			var menuH = $(".menu").height();
 			var itemHeight = $(".side a")[0].clientHeight;
 			$(".side").height(h);
@@ -412,12 +416,11 @@
 				if(this.userInfo.isStaff){
 					this.getCustomerList();
 				}else{
-					$(".addSchemeBtn").remove();
 					$('.customerListContainer').remove();
 					$('.container').removeClass("hide");
 					$('#add-scheme-popup').addClass("hide");
 					custId = this.userInfo.userId;
-					localStorage.setItem("custId",this.userInfo.userId)
+					localStorage.setItem("custId",this.userInfo.userId);
 				}
 			}
 			this.bindEvent();

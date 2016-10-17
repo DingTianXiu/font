@@ -26,6 +26,17 @@ $(function () {
                 if(r.data){
                     window.location.href = window.ROOT + "/index.html";
                 }
+            },
+            fail : function(r){
+                $.msg({
+                    modal : true,
+                    msg : "获取用户信息失败",
+                    buttons: {
+                        "重新获取": function () {
+                            getUserInfo();
+                        }
+                    }
+                });
             }
         });
     };

@@ -528,11 +528,15 @@
 			// TODO abort类型重新处理
 			//如果是401，表明登录状态过期需要重新登录
 			if(jqXHR.status == '401' || jqXHR.status == '402') {
+				localStorage.removeItem('userInfo');
+				localStorage.removeItem('custId');
+				localStorage.removeItem('custName');
+				$.cookie("acf_ticket",null,{"expires":0});
+
 				if(options.iframe) {
-					window.parent.location.href = window.ROOT + '/login.html';
-					return;
+					window.parent.location.href = logoutUrl;
 				}else{
-					location.href = window.ROOT + '/login.html';
+					window.location.href = logoutUrl;
 				}
 			}
 			if (!options.hideError) {

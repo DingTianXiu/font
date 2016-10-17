@@ -390,6 +390,9 @@
             };
             var stackChart = echarts.init(this.$element.find(".chart")[0]);
             stackChart.setOption(option);
+            window.addEventListener("resize",function(){
+                stackChart.resize();
+            });
         },
         _updateDate : function(beforeDateNum,afterDateNum){
             var that = this;
