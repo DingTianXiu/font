@@ -1,0 +1,106 @@
+.head {
+  background-color: #2d2d2d;
+}
+.head ul li a {
+  color: #aaa;
+}
+.head ul li.current a {
+  color: #fff;
+}
+.side {
+  background-image: url(../img/side_bg.png);
+  background-repeat: repeat-x;
+  background-color: #247ba0;
+}
+.side #addSchemeBtn {
+  color: #64a2bd;
+}
+.side #addSchemeBtn.active {
+  color: #fff;
+  background-color: #035477;
+}
+.side .componentBtn {
+  color: #fff;
+}
+.side .menuBox .menu li a {
+  background-color: #0e688e;
+  color: #64a2bd;
+}
+.side .menuBox .menu li a:hover {
+  color: #fff;
+  background-color: #16698d;
+}
+.side .menuBox .menu li a.active {
+  color: #fff;
+  background: #045577;
+}
+.side .menuBox::-webkit-scrollbar-button {
+  background-image: url(../img/side_bg.png);
+  background-repeat: repeat-x;
+  background-color: #247ba0;
+}
+.side .menuBox::-webkit-scrollbar-track {
+  background-image: url(../img/side_bg.png);
+  background-repeat: repeat-x;
+  background-color: #247ba0;
+}
+.side .menuBox::-webkit-scrollbar-track-piece {
+  background-image: url(../img/side_bg.png);
+  background-repeat: repeat-x;
+  background-color: #247ba0;
+}
+.side .menuBox::-webkit-scrollbar-corner {
+  background-image: url(../img/side_bg.png);
+  background-repeat: repeat-x;
+  background-color: #247ba0;
+}
+.side .menuBox::-webkit-scrollbar-resizer {
+  background-image: url(../img/side_bg.png);
+  background-repeat: repeat-x;
+  background-color: #247ba0;
+}
+.side .menuBox::-webkit-scrollbar-thumb {
+  background-image: url(../img/side_bg.png);
+  background-repeat: repeat-x;
+  background-color: #247ba0;
+}
+.componentListWrapper {
+  border-top: 1px solid #b5bdc8;
+  background-color: #cad3df;
+}
+.componentListWrapper .componentList .component .ui-state-default,
+.componentListWrapper .componentList .component .ui-widget-content .ui-state-default,
+.componentListWrapper .componentList .component .ui-widget-header .ui-state-default,
+.componentListWrapper .componentList .component .ui-button,
+.componentListWrapper .componentList .component .ui-button.ui-state-disabled:hover,
+.componentListWrapper .componentList .component .ui-button.ui-state-disabled:active {
+  background: url(../img/time_slider_block.png) no-repeat;
+  border: none;
+}
+.componentListWrapper .componentList .component .ui-widget-header {
+  background: #066087;
+}
+.componentListWrapper .componentList .component .ui-slider-horizontal {
+  height: 3px;
+}
+.componentListWrapper .componentList .component .ui-slider-horizontal .ui-slider-handle {
+  top: -14px;
+}
+.componentListWrapper .componentList .component .ui-slider .ui-slider-handle {
+  width: 20px;
+  height: 35px;
+}
+.componentListWrapper .componentList .component .related {
+  background: #e6e6e6;
+}
+.componentListWrapper .componentList .component .related a {
+  background: #fff;
+}
+.attrGroup a {
+  border: 1px solid #caced1;
+  background: #f4f4f4;
+}
+.attrGroup a:hover {
+  background: #eaf6f4;
+  border: 1px solid #737989;
+}

@@ -109,9 +109,10 @@
 					}
 					$.each(data.data.customers,function (i) {
 						if(i==0||data.data.customers[i].custName!=data.data.customers[i-1].custName){
-							var dom = "<p class='userName'>"+data.data.customers[i].custName+"</p>" +
-								"<li class='userInfo' custname="+data.data.customers[i].custName+" custid="+data.data.customers[i].id+"><p><span>"+data.data.customers[i].loginName+"</span><span>"+data.data.customers[i].realName+"</span><span>"+data.data.customers[i].custName+"</span></p></li>"						}else {
-							var dom = "<li class='userInfo' custname="+data.data.customers[i].custName+" custid="+data.data.customers[i].id+"><p><span>"+data.data.customers[i].loginName+"</span><span>"+data.data.customers[i].realName+"</span><span>"+data.data.customers[i].custName+"</span></p></li>"
+							var dom = "<p class='userName'><i class='icon iconfont icon-user'></i>"+data.data.customers[i].custName+"</p>" +
+								"<li class='userInfo' loginname="+data.data.customers[i].loginName+" custid="+data.data.customers[i].id+"><p><em class='first'></em><span>"+data.data.customers[i].loginName+"</span><span>"+data.data.customers[i].realName+"</span><span>"+data.data.customers[i].custName+"</span></p><i class='iconfont icon-xuanzhongsvg selectCust hide'></i></li>"
+						}else {
+							var dom = "<li class='userInfo' loginname="+data.data.customers[i].loginName+" custid="+data.data.customers[i].id+"><p><em></em><span>"+data.data.customers[i].loginName+"</span><span>"+data.data.customers[i].realName+"</span><span>"+data.data.customers[i].custName+"</span></p><i class='iconfont icon-xuanzhongsvg selectCust hide'></i></li>"
 						}
 						$(".customerList").append(dom);
 					});
@@ -175,16 +176,17 @@
 				isActive;
 			$("#add-scheme-popup").addClass("hide");
 			$(".side a").removeClass("active");
+
 			//当前用户创建第一个方案时渲染方案列表
 			if(schemeData.length == 1) {
 				isActive = window.currentSchemeId == schemeData[0]["sltId"] ? 'class="active"' : '';
-				template += '<li><a ' + isActive + ' href="views/scheme.html?id=' + schemeData[0]["sltId"] + '" target="mainIframe"><i class="icon iconfont icon-iconproject1"></i><p>' + schemeData[0]["sltName"] + '</p></a></li>';
+				template += '<li><a ' + isActive + ' href="views/scheme.html?id=' + schemeData[0]["sltId"] + '" target="mainIframe"><em class="sideBlock"></em><i class="icon iconfont icon-iconproject1">&#xe61a;</i><p>' + schemeData[0]["sltName"] + '</p><i class="iconfont icon-jiantou iconDropdown"></i></a></li>';
 				$(".menu").html(template);
 				document.getElementById("mainIframe").contentWindow.schemeDetail.getModuleList();
 			}else if(schemeData.length > 1){
 				//当前用户在第一个方案的基础上创建方案时渲染方案列表
 				var index = schemeData.length - 1;
-				$(".menu").append('<li><a ' + isActive + ' href="views/scheme.html?id=' + schemeData[index]["sltId"] + '" target="mainIframe"><i class="icon iconfont icon-iconproject'+ index +'"></i><p>' + schemeData[index]["sltName"] + '</p></a></li>');
+				$(".menu").append('<li><a ' + isActive + ' href="views/scheme.html?id=' + schemeData[index]["sltId"] + '" target="mainIframe"><i class="icon iconfont icon-iconproject'+ index +'"></i><p>' + schemeData[index]["sltName"] + '</p><i class="iconfont icon-jiantou iconDropdown"></i></a></li>');
 			}
 		},
 		addModuleItem : function(){
@@ -195,15 +197,11 @@
 				});
 				return;
 			}
-			$("#addModuleBtn").parent().parent().append('<div class="fm-ipt"><input class="moduleName" type="text" placeholder="输入模块名称"><i class="icon iconfont icon-icondel"></i></div>');
+			$("#addModuleBtn").parent().parent().parent().append('<div class="fm-ipt"><label class="fm-in">附属模块名称：</label><input class="moduleName" type="text" placeholder="输入模块名称"><i class="icon iconfont"></i></div>');
 		},
 		bindEvent : function(){
 			var that = this;
 			$("#addSchemeBtn").on("click",function(){
-				// $('#add-scheme-popup').removeClass("hide");
-				// var h = document.documentElement.clientHeight - $(".head").height();
-				// $("#add-scheme-popup").height(h);
-				// $("#add-scheme-popup .title").text(that.userInfo.realName);
 				that.addScheme();
 			});
 			$("#addModuleBtn").on("click",function(){
@@ -226,9 +224,11 @@
 			/*选中配置用户*/
 			$(".container").delegate(".userInfo","click",function () {
 				custId = $(this).attr("custid");
-				custName = $(this).attr("custname");
-				$(".userInfo").css("backgroundColor","#fff");
-				$(this).css("backgroundColor","#f3ffbd");
+				loginName = $(this).attr("loginname");
+				if(!localStorage.custId){
+					$(".userInfo").find(".selectCust").addClass("hide")
+					$(this).find(".selectCust").removeClass("hide")
+				}
 				if(localStorage.custId){
 					if(custId==localStorage.custId){
 						return
@@ -326,7 +326,7 @@
 					return
 				}
 				localStorage.setItem("custId",custId);
-				localStorage.setItem("custName",custName);
+				localStorage.setItem("loginName",loginName);
 				document.getElementById("mainIframe").contentWindow.location.reload(true);
 			});
 			$(".prevBtn").on("click",function(){
@@ -383,7 +383,7 @@
 		logout : function(){
 			localStorage.removeItem('userInfo');
 			localStorage.removeItem('custId');
-			localStorage.removeItem('custName');
+			localStorage.removeItem('loginName');
 			$.cookie("acf_ticket",null,{"expires":0});
 			window.location.href = logoutUrl;
 
@@ -414,6 +414,7 @@
 				custId = localStorage.custId;
 			}else{
 				if(this.userInfo.isStaff){
+					$(".customerListContainer").removeClass("hide");
 					this.getCustomerList();
 				}else{
 					$('.customerListContainer').remove();

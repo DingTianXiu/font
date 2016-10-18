@@ -13,7 +13,6 @@
 
 <body>
 <div class="login-bd">
-    <div class="head"><img src="img/logo1.png"/></div>
     <div class="wrap clearfix">
         <input type="hidden" name="forwardUrl" value="" id="forwardUrl"/>
         <form method="post" id="fm1" onsubmit="return sso.loginValidate();" action="" target="ssoLoginFrame">
@@ -26,6 +25,10 @@
             <input type="hidden" name="sysCode" value=""/>
 
             <div class="login-box">
+                <h3 class="loginLogo">
+                    <img src="img/login_logo.png" alt="">
+                    <p class="fontSty">亿商登录</p>
+                </h3>
                 <ul>
                     <li class="login-error-tip">
                         <div class="prompt" id="errorBox">
@@ -45,8 +48,8 @@
                         </li>
                         <li class="login-cap">
                             <input type="text" name="validateCode" class="inp-text inp-reg validate" id="validateCode"
-                                   placeholder="请输入验证码" value="" style="width:110px;" maxlength="16" required/>
-                            <img style="cursor:pointer;" id="capt" class="capt" width="120" height="50"
+                                   placeholder="请输入验证码" value="" maxlength="16" required/>
+                            <img style="cursor:pointer;" id="capt" class="capt" width="72" height="30"
                                  src="http://sso007.adt100.com/image?t=1449653442237" />
                         </li>
                         <li class="login-btn">
@@ -56,14 +59,6 @@
                 </ul>
             </div>
         </form>
-    </div>
-    <div class="foot">
-        <ul>
-            <li><a href="javascript:;">官方网站</a></li>
-            <li><a href="javascript:;">产品介绍</a></li>
-            <li><a href="javascript:;">热点分析</a></li>
-            <li><a href="javascript:;">关于我们</a></li>
-        </ul>
     </div>
 </div>
 </body>

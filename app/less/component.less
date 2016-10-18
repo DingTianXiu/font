@@ -14,11 +14,10 @@ body{
 }
 .moduleList{
   background:#fff;
-  padding:26px 200px 0 24px;
-  height:47px;
+  padding:0px 200px 0 24px;
+  height:44px;
   li{
     display:inline-block;
-    min-width:120px;
     height:44px;
     line-height:44px;
     text-align:center;
@@ -26,19 +25,32 @@ body{
     color:#737989;
     font-weight:bold;
     position:relative;
+    min-width:98px;
+    max-width:152px;
+    margin-left: -1px;
     a{
-      position:absolute;
-      width:90px;
+      min-width:58px;
+      max-width:112px;
+      padding:0 19px;
       height:44px;
       left:0;
       top:4px;
       color:#737989;
-      text-align:right;
-      padding-right:35px;
+      text-align:center;
+      border:1px solid #b5bdc8;
+      border-top:0;
+      border-bottom:0;
+      display: inline-block;
+      vertical-align: top;
+      zoom:1;
+      word-break: keep-all;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
     }
     a.active{
-       background:url(../img/tab_bg.png) no-repeat right top;
-      color:#f25e61;
+      background:#cad3df;
+      color:#3d4d65;
     }
     i{
       display:none;
@@ -51,14 +63,17 @@ body{
       color: #a29f9f;
       cursor: pointer;
     }
-    a.addModuleBtn,a.addModuleBtn:hover{
-      height:44px;
-      display:inline-block;
-      background:url(../img/icon_add_module.png) no-repeat 10px center;
-      padding-left:10px;
-      font-weight:normal;
-      color:#737989;
+    li.addModule { 
+      margin-left: -5px;
+      a.addModuleBtn,a.addModuleBtn:hover{
+        height:44px;
+        display:inline-block;
+        padding-left:10px;
+        font-weight:normal;
+        color:#737989;
+      }
     }
+    
   }
   li:hover{
     i{
@@ -67,32 +82,32 @@ body{
   }
 }
 .moduleData{
-  height:34px;
-  line-height:34px;
-  color:#373737;
+  height:26px;
+  line-height:26px;
+  color:#3d4d65;
   font-size:14px;
   font-weight:bold;
   border:1px solid #e1e1e1;
-  border-radius:4px;
-  background:url(../img/icon_data.png) no-repeat 22px center;
-  padding:0 22px 0 43px;
+  border-radius:26px;
+  padding:0 17px;
   position:absolute;
   right:25px;
-  top:18px;
+  top:8px;
+  background-color: #eceff4;
 }
 .btnbox {
   width:640px;
   margin:24px auto;
   a {
-    height: 50px;
-    width: 300px;
+    height: 38px;
+    width: 200px;
     display:inline-block;
     text-align: center;
-    line-height: 50px;
+    line-height: 38px;
     color: #fff;
     border-radius: 4px;
-    background: #f25e61;
-    font-size: 24px;
+    background: #247ba0;
+    font-size: 14px;
     margin:0 9px;
   }
   #cancelPublish{
@@ -103,101 +118,119 @@ body{
 .widgetPopup{
   padding: 29px 15px 15px 15px;
   .tab{
-    padding:0 10px 13px 10px;
-    height:24px;
-    line-height:24px;
-    font-size:18px;
+    height:50px;
+    line-height:50px;
+    text-indent: 18px;
+    font-size:14px;
     border-bottom:1px solid #dcdcdc;
+    border-radius: 4px 4px 0 0;
+    background: #eceff4;
     h1{
       color:#282828;
-      font-size:18px;
+      font-size:14px;
       font-weight:normal;
       display:inline-block;
       margin-right:25px;
+      text-indent: 0;
     }
     a{
       display:inline-block;
-      margin:0 13px;
+      margin:13px 13px 0;
       font-size:14px;
       color:#7d8088;
       border-bottom:1px dotted #373737;
       text-align:center;
       padding:0 6px;
+      width: 50px; 
+      height: 24px;
+      line-height: 24px;
+      border-radius: 25px;
+      text-indent: 0;
     }
     a:hover{
       color:#373737;
     }
     a.active{
       border-radius: 12px;
-      background: #f25e61;
+      background: #247ba0;
       border: none;
       color: #fff;
       font-weight: bold;
       margin: 0 3px;
     }
   }
+  .content {
+    background: #fff;
+    padding: 20px 0 0 20px;
+  }
 }
 /*widget*/
 .widget {
   position: relative;
   height: 285px;
-  margin-top:20px;
+  margin-bottom:20px;
   float:left;
   margin-right:7px;
   cursor:pointer;
+  h3.widTitle {
+    color: #505155;
+    font-size: 14px;
+    text-align: center;
+    padding:15px 0;
+  }
   .inner {
-    width: 285px;
+    width: 263px;
+    height: 238px;
     display: block;
-    border: 10px solid #f4f4f4;
-    border-radius: 6px;
-    margin-bottom: 20px;
     position: relative;
-    h3 {
-      color: #505155;
-      font-size: 14px;
-      text-align: center;
-      padding:15px 0;
-    }
-    .description {
-      display: none;
-      text-align: left;
-      color: #FFF;
-      font-size: 13px;
-      line-height: 1.4;
-      color: #9d9d9d;
-      position: absolute;
-      left: -10px;
-      top: 273px;
-      width: 285px;
-      border: 10px solid #f4f4f4;
-      border-radius: 6px;
-      h4 {
-        color: #505155;
-        font-weight: normal;
-        margin: 0 0 5px 0;
-      }
-      p{line-height:18px;}
+    border: 1px solid #cccccc;
+    img {
+      width: 261px;
+      height: 236px;
+      border: 1px solid #fff;
     }
   }
-  .inner:hover {
-    border: 10px solid #eaeaea;
+  .description {
+    display: none;
+    text-align: left;
+    color: #FFF;
+    font-size: 13px;
+    color: #555;
+    position: absolute;
+    top: 2px;
+    left: 2px;
+    width: 221px;
+    height: 196px;
+    padding: 20px;
+    background:#fff;
+    h4 {
+      color: #505155;
+      font-weight: normal;
+      margin: 0 0 5px 0;
+    }
+    p{line-height:18px;}
+  }
+}
+
+.widget:hover{
+  .inner {
+    border: 1px solid #247ba0;
     background: #eaeaea;
     border-bottom-left-radius: 0;
     border-bottom-right-radius: 0;
-    .description {
+    img { border: 1px solid #247ba0;}
+  }
+  .description {
       display: block;
       transform-origin: 100% 0%;
       -webkit-animation: fadeIn 0.3s ease-in-out;
       animation: fadeIn 0.3s ease-in-out;
-      border: 10px solid #eaeaea;
-      background: #eaeaea;
+      background: #fff;
 
     }
-  }
 }
 /*end widget*/
 .componentListWrapper {
-  border-top: 1px solid #e1e1e1;
   .publishTip{
     height:42px;
     line-height:42px;
@@ -219,58 +252,61 @@ body{
       margin-bottom: 24px;
       position: relative;
       .header {
-        padding: 24px 18px 0 18px;
         background: #fff;
         position: relative;
+        border-radius: 5px 5px 0 0;
+        height: 39px; 
+        line-height: 39px;
+        border-bottom: 1px solid #cad3df;
+        background-color: #eceff4;
         h1 {
           float: left;
-          font-size: 22px;
+          font-size: 14px;
           color: #282828;
+          text-indent: 19px;
           font-weight: normal;
         }
         .configBtn {
           height: 30px;
           width: 30px;
           float: right;
-          background: #f4f4f4;
           border-radius: 4px;
           text-align: center;
           line-height: 30px;
           color: #9f9fa1;
+          margin: 5px 21px 0 0 ;
         }
-        .dateBox {
+      }
+      .dateBox {
+        width: 181px;
+        height: 26px;
+        line-height: 28px;
+        left: 0;
+        top: 0px;
+        border-radius: 4px;
+        padding: 0 0 0 10px;
+        margin: 0px 0 10px;
+        cursor: pointer;
+        border: 1px solid #e1e1e1;
+        border-radius: 4px;
+        z-index: 2;
+        margin-top:-71px;
+        span {
+          float: left;
+        }
+        .arrow {
+          width: 30px;
           height: 30px;
           line-height: 30px;
-          position: absolute;
-          bottom: 0;
-          right: 64px;
-          border-radius: 4px;
-          background: url(../img/calendar.png) no-repeat 13px center;
-          padding: 0 0 0 36px;
-          margin-right: 0;
-          cursor: pointer;
-          border: 1px solid #fff;
-          border-bottom-left-radius: 0;
-          border-bottom-right-radius: 0;
-          border-bottom: none;
-          z-index: 2;
-          span {
-            float: left;
-          }
-          .arrow {
-            width: 30px;
-            height: 30px;
-            line-height: 30px;
-            text-align: center;
-            display: inline-block;
-            background: url(../img/icon_arrow.png) no-repeat center center;
-          }
+          text-align: center;
+          display: inline-block;
+          font-size: 13px;
         }
-        .dateBox.active {
-          border: 1px solid #b9bcc4;
-          background-color: #fff9f9;
-          border-bottom: none;
-        }
+      }
+      .dateBox.active {
+        border: 1px solid #b9bcc4;
+        background-color: #fbfbfb;
+        border-bottom: none;
       }
     }
     .first {
@@ -286,13 +322,28 @@ body{
         }
         .sliderBox {
           margin: 28px 0 60px 0;
+          hr.timeSilderLeft{
+            position: absolute;
+            background: url(../img/time_lines.png) no-repeat;
+            width: 1px;
+            height: 29px;
+            top: -13px;
+          }
+          hr.timeSilderRight{
+            position: absolute;
+            background: url(../img/time_lines.png) no-repeat;
+            width: 1px;
+            height: 29px;
+            top: -13px;
+            right:1px;
+          }
         }
         .nextStep {
           width: 382px;
           height: 50px;
           line-height: 50px;
           text-align: center;
-          background: #f25e61;
+          background: #247ba0;
           color: #fff;
           font-size: 24px;
           display: block;
@@ -306,25 +357,36 @@ body{
       padding: 29px 18px;
       background: #fff;
       .phoneList {
-        border-left: 1px solid #efeeec;
-        border-top: 1px solid #efeeec;
+        border: 1px solid #efeeec;
+        height: 460px;
+        overflow: auto;
+        margin-top: 30px;
+        .leftLine {
+          height: auto;
+          position: absolute;
+          top: 37px;
+          bottom: 35px;
+          border-left: 1px solid #cccccc;
+          left: 86px;
+        }
         .left {
           float: left;
           width: 50%;
           position: relative;
           .label {
             position: absolute;
-            left: 29px;
+            left: 20px;
             top: 18px;
             color: #999;
           }
           li {
             border-right: 1px solid #efeeec;
-            border-bottom: 1px solid #efeeec;
             a {
               display: block;
-              padding: 18px 0 18px 83px;
+              padding: 18px 0 18px 70px;
               position:relative;
+              height: 40px; 
+              line-height: 40px;
               span {
                 float: left;
               }
@@ -333,7 +395,8 @@ body{
                 height: 6px;
                 border: 1px solid #ccc;
                 border-radius: 6px;
-                margin: 2px 13px;
+                margin: 17px 13px 0;
+                background: #fff; 
               }
               .releaseDate {
                 color: #b0b0b0;
@@ -343,8 +406,8 @@ body{
                 margin: 0 20px;
               }
               .brandName {
-                margin: 20px 32px 0 0;
-                font-size: 16px;
+                margin: 0px 32px 0 0;
+                font-size: 12px;
                 color: #282828;
 
               }
@@ -368,11 +431,18 @@ body{
                 color:#999;
                 background: #fff;
               }
+              .lineBorder{
+                /*position: absolute;*/
+                border: none;
+                border-bottom:1px solid #e6e6e6;
+                bottom: 0;
+                margin-left: 120px;
+                width: 290px;
+              }
             }
             a:hover {
-              background: #fff9f9;
               .otherAttr{
-                display:block;
+                display:none;
               }
             }
           }
@@ -386,7 +456,8 @@ body{
         font-size:15px;
       }
       .legend{
-        min-height:35px;
+        height:34px;
+        margin-top:30px;
         .hrLine { 
         border: none;
         border-top: 1px solid #e5e5e5;
@@ -394,9 +465,9 @@ body{
         }
         a{
           display:inline-block;
-          height:33px;
-          line-height:33px;
-          width:173px;
+          height:30x;
+          line-height:30px;
+          padding: 0 11px;
           border:1px solid #e5e5e5;
           text-align:center;
           color:#3f4044;
@@ -404,6 +475,8 @@ body{
           background:#fff;
           position:relative;
           margin: -2px 0 0 -1px;
+          vertical-align: top;
+          margin-top: 4px;
           i.delLegendIcon{
             color:#9f9fa1;
             display:none;
@@ -415,16 +488,18 @@ body{
           }
         }
         a.active{
-          background:#fff9f9;
-          border-color:#b9bcc4;
+          background:#eaf6f4;
+          border-color:#e5e5e5;
+          height:34px;
+          margin-top: 0;
           i.delLegendIcon{
             color:#f25e61;
           }
         }
         .addBtn,.delBtn{
           width:44px;
-          height:33px;
-          line-height:33px;
+          height:30px;
+          line-height:30px;
           text-align:center;
           color:#9f9fa1;
           background:#f4f4f4;
@@ -432,13 +507,14 @@ body{
             display:block;
           }
         }
+        .none { display:none;}
         .addShowBtnContainer{
           display:inline-block;
         }
       }
       .chart{
         height:400px;
-        margin:30px 90px;
+        margin:80px 90px 30px;
         position:relative;
         svg{
           position: absolute;
@@ -489,7 +565,28 @@ body{
       }
       .lineChart{
         height:400px;
-        margin:30px 90px;
+        margin:50px 90px 30px;
+        .noData{
+          background:url(../img/icon_noData.png) no-repeat left top;
+          width:99px;
+          height:44px;
+          line-height:22px;
+          padding-left:53px;
+          position:absolute;
+          left:50%;
+          top:50%;
+          margin-left:-76px;
+          margin-top:-22px;
+          text-align:left;
+          h3{
+            font-size:14px;
+            color:#333;
+          }
+          p{
+            font-size:12px;
+            color:#999;
+          }
+        }
       }
       .chartLabel{
         position:absolute;
@@ -510,11 +607,11 @@ body{
       width: 414px;
       height: 110px;
       padding: 24px;
-      background: #fff9f9;
+      background: #fbfbfb;
       border: 1px solid #b9bcc4;
       position: absolute;
-      right: 64px;
-      top: 53px;
+      left: 18px;
+      top: 49px;
       display: none;
       z-index: 1;
       border-radius: 4px;
@@ -523,7 +620,7 @@ body{
         color: #333;
       }
       .sliderBox {
-        margin: 8px 0 19px 0;
+        margin: 20px 0 19px 0;
         font-size: 12px;
         font-style: normal;
       }
@@ -536,7 +633,7 @@ body{
         height:30px;
         line-height:30px;
         text-align:center;
-        background:#f25e61;
+        background:#247ba0;
         color:#fff;
         display:block;
         border-radius:4px;
@@ -551,7 +648,7 @@ body{
           color: #fff;
           width: 380px;
           height: 50px;
-          background: #f25e61;
+          background: #247ba0;
           border-radius: 4px;
           margin: 0 auto;
           font-size: 24px;
@@ -666,10 +763,14 @@ body{
               cursor: pointer;
               float: right;
               margin-top: 19px;
+              display: none;
             }
           }
           .pro:hover {
             background: #fff9f9;
+            i{
+              display: block;
+            }
           }
         }
       }
@@ -694,12 +795,12 @@ body{
     }
   }
   .related{
-    background:#fff;
     padding:13px;
     border-top: 1px solid #efeeec;
+    border-radius: 0 0 5px 5px;
     h1{
       display:inline-block;
-      font-size:18px;
+      font-size:14px;
       color:#282828;
       line-height:39px;
       font-weight:normal;
@@ -712,10 +813,9 @@ body{
       text-align:center;
       border:1px solid #d5d9dc;
       border-radius:4px;
-      margin: 0 10px 10px 0;
+      margin: 0 10px 0px 0;
       font-size:14px;
       color:#3f4044;
-      background: #f4f4f4;
     }
   }
 }
@@ -1025,15 +1125,39 @@ body{
   line-height: 50px;
 }
 #addModulePopup {
-  background: #fff9f9;
-  border: 1px solid #b9bcc4;
-  width: 420px;
-  top: 73px;
+  width: 418px;
+  height: 110px;
+  top: 0px;
   left: 24px;
   z-index:2;
+  background:none;
+  .boxNav {
+     width: 96px; 
+     height: 44px;
+     background:#fff;
+     z-index: 2;
+     border: 1px solid #b9bcc4;
+     border-bottom: 0; 
+     position: absolute;
+     top: 0;
+     i.iconfont { 
+      font-size: 15px;
+      color: #757b8b;
+      display: block;
+      text-align: center;
+      line-height: 44px;
+    }
+  }
   .box {
-    background: #fff9f9;
-    padding: 18px 24px;
+    position: absolute;
+    top: 44px;
+    border: 1px solid #b9bcc4;
+    width: 378px;
+    height: 36px;
+    min-height: 36px;
+    border-radius: 0;
+    background: #fff;
+    padding: 20px;
     margin: 0;
     .fm-row {
       width: 380px;
@@ -1050,14 +1174,14 @@ body{
         }
       }
       input[type=button] {
-        width: 82px;
-        height: 30px;
-        line-height: 30px;
+        width: 80px;
+        height: 38px;
+        line-height: 38px;
         text-align: center;
-        background: #f25e61;
+        background: #247ba0;
         color: #fff;
         border-radius: 4px;
-        margin-left: 10px;
+        margin-left: 7px;
         border: none;
         curspr: pointer;
       }
@@ -1079,42 +1203,67 @@ body{
 .addShowBtnContainer{
   display: inline-block;
   position: relative;
-  .selectProduct_updata{
+  .selectProduct_updata_wrap {
+    height: 105px;
     position: absolute;
-    z-index: 1;
-    top: 30px;
-    left: 0px;
-    width: 640px;
-    padding: 18px 0;
-    background-color: #fbfbfb;
-    border: 1px solid #e5e5e5;
-    li{
-      height: 36px;
-      border: none;
-      width: auto;
-      margin-right: 10px;
-      line-height: 39px;
-      display:inline-block;
-      button{
-        height: 36px;
-        width: 80px;
-        border: 1px solid #e5e5e5;
-        -webkit-border-radius: 4px;
-        -moz-border-radius: 4px;
-        border-radius: 4px;
-        outline: none;
-        color:#9f9fa1;
+    top: 4px;
+    .boxNav {
+      width: 64px;
+      height: 31px;
+      background: #fbfbfb;
+      z-index: 2;
+      border: 1px solid #b9bcc4;
+      border-bottom: 0;
+      position: absolute;
+      top: 0;
+     }
+    i.iconfont {
+        font-size: 16px;
+        color: #757b8b;
+        background: #fbfbfb;
+        line-height: 32px;
+        display: block;
+        text-align: center;
       }
-    }
-    li:first-child{
-      margin-left: 26px;
-      font-size: 14px;
-      select{
+    .selectProduct_updata{
+      position: absolute;
+      z-index: 1;
+      top: 31px;
+      left: 0px;
+      width: 640px;
+      padding: 18px 0;
+      background-color: #fbfbfb;
+      border: 1px solid #e5e5e5;
+      li{
         height: 36px;
-        width: 199px;
+        border: none;
+        width: auto;
+        margin-right: 10px;
+        line-height: 39px;
+        display:inline-block;
+        button{
+          height: 36px;
+          width: 80px;
+          border: 1px solid #e5e5e5;
+          -webkit-border-radius: 4px;
+          -moz-border-radius: 4px;
+          border-radius: 4px;
+          outline: none;
+          color:#757b8b;
+          background:#f4f4f4;
+        }
+      }
+      li:first-child{
+        margin-left: 26px;
+        font-size: 14px;
+        select{
+          height: 36px;
+          width: 199px;
+        }
       }
     }
   }
+  
 }
 .cptConfigBox{
   h3{
@@ -1160,14 +1309,12 @@ body{
     text-align:center;
     a{
       display:block;
-      background:#fff;
       width:258px;
       height:36px;
       line-height:36px;
       text-align:center;
       margin:0 auto 10px auto;
       border-radius:4px;
-      border:1px solid #e5e5e5;
       color:#3f4044;
       position:relative;
       outline:0;
@@ -1179,7 +1326,6 @@ body{
       }
     }
     a:hover{
-      background:#fff9f9;
       border-color:#b9bcc4;
       font-weight:bold;
       i{

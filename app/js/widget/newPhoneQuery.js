@@ -56,7 +56,7 @@
             var that = this;
             this.$element.delegate(".configBtn","click",function(){
              //设置构件同步关系
-               that._initConfigSync();
+               that._initConfigSync($(this));
            });
             this.$element.delegate("li","click",function(){
                 that._updatePhoneModel($(this));
@@ -70,7 +70,7 @@
                 that._onRelatedWidget(param);
             });
         },
-        _initConfigSync:function(){
+        _initConfigSync:function($ele){
             var that = this;
             if(!this.data.condition.cptInstId){
                 $.msg({
@@ -78,6 +78,7 @@
                     msg : "确认删除？",
                     ok : function(){
                         $ele.parents(".component").remove();
+                        that._onComplete(null);
                     }
                 });
                 return;
@@ -90,16 +91,27 @@
                 data : syncAttr,
                 onSwitchType : function(data){
                     var param = {
-                        "attrInstId" : data.id,
-                        "syncType" : data.syncType
+                        "userId" : that.custId,
+                        "attrSyncTypeList" : data
                     };
                     $.ajaxJSON({
                         name: '设置属性实例同步信息',
                         url: URL.UPDATE_SYNC_TYPE,
-                        data: param,
+                        data: JSON.stringify(param),
                         iframe: true,
+                        contentType : 'application/json; charset=UTF-8',
                         success: function (r) {
-                            that.data.condition[data.key]["syncType"] = data.syncType;
+                            for(var i in that.data.condition){
+                                var item = that.data.condition[i];
+                                if(item != null && typeof item == "object"){
+                                    for(var j = 0; j < data.length;j++){
+                                        if(item.id == data[j].attrInstId){
+                                            item["syncType"] = data[j].syncType;
+                                            break;
+                                        }
+                                    }
+                                }
+                            }
                         }
                     });
                 },
@@ -194,8 +206,8 @@
             var html = template(this.data);
             this.$element.html(html).attr("id", that.data.condition.cptInstId);
             this.$element.find(".dateBox").datePicker({
-                beforeDateNum : that.data.condition.searchDateScope["beforeDateNum"],
-                afterDateNum : that.data.condition.searchDateScope["afterDateNum"],
+                beforeDateNum : that.data.condition.searchDateScope.value["beforeDateNum"],
+                afterDateNum : that.data.condition.searchDateScope.value["afterDateNum"],
                 onSaveDate : function(beforeDateNum,afterDateNum){
                     that.data.condition.searchDateScope.value.beforeDateNum = beforeDateNum;
                     that.data.condition.searchDateScope.value.afterDateNum = afterDateNum;
@@ -270,7 +282,12 @@
                     "picUrl" : item.picUrl
                 });
             });
-            this.data.condition.selectedPhone = param["phoneModel"];
+            if(param["phoneModel"].length>8){
+                $ele.find(".checkBoxIcon").removeClass("selected");
+                $.msg("最多只能添加8个手机型号");
+                return
+            }
+            this.data.condition.selectedPhone.value = param["phoneModel"];
             //console.log(JSON.stringify(param));
             $.ajaxJSON({
                 url: URL.UPDATE_CPTiNST_ATTR,

@@ -7,20 +7,21 @@
 	<link type="text/css" rel="stylesheet" href="/bower_components/jquery-ui/themes/base/jquery-ui.css" />
 	<link type="text/css" rel="stylesheet" href="font/iconfont.css"/>
 	<link type="text/css" rel="stylesheet" href="css/common.css"/>
+	<link type="text/css" rel="stylesheet" href="css/public.css"/>
 </head>
 <body>
 	<div class="head">
 		<ul>
-			<li><a href="#">亿商</a></li>
+			<li class="current"><a href="#">亿商</a></li>
 			<li><a href="#">物料工坊</a></li>
 			<li><a href="#">报表系统</a></li>
 			<li><a href="#">舆情</a></li>
 			<li><a href="#">DMP</a></li>
+			<li><a href="#">更多产品</a></li>
 			<li class="personal">
 				<a href="#" class="realName"></a>
 				<div class="showBox">
 					<div class="personalDisplay">
-						<img class="tip" src="img/tip.png">
 						<div>
 							<img src="img/logo1.png">
 							<span></span>
@@ -36,29 +37,31 @@
 					</div>
 				</div>
 			</li>
-			<li><a href="#">更多产品</a></li>
 		</ul>
 	</div>
 	<div class="container hide">
 		<div class="side">
 			<div class="logo"></div>
-			<p class="custName"></p>
+			<div class="custWrap">
+				<i class="iconfont">&#xe618;</i>
+				<p class="custName"></p>
+			</div>
 			<div class="menuBox">
 				<ul class="menu"></ul>
-				<a href="javascript:;" id="addSchemeBtn"><i class="icon iconfont icon-iconprojectadd"></i><p>添加方案</p></a>
+				<a href="javascript:;" id="addSchemeBtn"><i class="icon iconfont">&#xe613;</i><p>添加方案</p></a>
 			</div>
-			<a href='./views/library.html' target='mainIframe' class="componentBtn"><i class="icon iconfont icon-iconlibrary"></i><p>构件库</p></a>
+			<a href='./views/library.html' target='mainIframe' class="componentBtn"><i class="icon iconfont">&#xe61b;</i><p>构件库</p></a>
 <!--			<div class="user"><a href="#">华为</a></div>-->
 		</div>
 		<div class="main"><iframe id="mainIframe" name="mainIframe" width="100%" height="500" src="views/scheme.html"></iframe></div>
 	</div>
-	<div class="editSchemeName hide">修改方案名</div>
-	<div class="customerListContainer">
+	<div class="editSchemeName hide"><i class="iconfont">&#xe607;</i>修改方案名</div>
+	<div class="customerListContainer hide">
 		<div class="container">
 			<p class="customerTitle">选择配置用户</p>
 			<div class="customerContainer">
 				<div class="search">
-					<input class="searchInfo" type="text" placeholder="输入客户名、用户名、开户人搜索">
+					<input class="searchInfo" type="text" placeholder="输入用户名、用户名、开户人搜索">
 					<em href="#" class="delete" style="display: none">x</em>
 				</div>
 				<ul class="customerList"></ul>
@@ -92,25 +95,34 @@
 			<h1>新建方案</h1>
 			<div class="fm-row">
 				<div class="errorTip"></div>
-				<div>
+				<div class="fm-side-line">
+					<i></i>
 					<label class="fm-lb fm-lb-s">方案名称</label>
 					<div class="fm-ipt">
 						<input id="schemeName" name="sltName" type="text" placeholder="输入方案名称">
 					</div>
 				</div>
-				<div>
-					<label class="fm-lb fm-lb-s">附属模块名称</label>
+				<div class="fm-side-line">	
+					<i></i>
+					<label class="fm-lb fm-lb-s "></label>
 					<div class="fm-ipt">
-						<input class="moduleName" id="moduleName" name="moduleName" type="text" placeholder="输入模块名称">
-						<a href="#" id="addModuleBtn">新建模块</a>
+						<label class="fm-in">模块一名称：</label>
+						<input class="moduleName fmInInput" id="moduleName" name="moduleName" type="text" placeholder="输入模块名称">
 					</div>
 				</div>
-				<div class="btn-grp">
-					<button id="confirm-btn" class="btn">
-						创建
-					</button>
+				<div>
+					<label class="fm-lb fm-lb-s"></label>
+					<div class="fm-ipt">
+						<label class="fm-in"></label>
+						<a href="#" id="addModuleBtn"><i class="iconfont">&#xe613;</i>新建模块</a>
+					</div>
 				</div>
 			</div>
+		</div>
+		<div class="btn-grp">
+			<button id="confirm-btn" class="btn">
+				创建
+			</button>
 		</div>
 	</div>
 	<script type="text/javascript" src="/bower_components/jquery/dist/jquery.min.js"></script>

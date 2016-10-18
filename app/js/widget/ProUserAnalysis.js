@@ -70,6 +70,10 @@
                 that._switchLegendBtn($(this));
             });
             this.$element.delegate(".addLegendBtn","click",function(){
+                if(that.data.condition.phoneModel.value.length>=8){
+                    $.msg("最多只能添加8个手机型号")
+                    return
+                }
                 that._openPhoneDialog();
                 that._getPhoneList();
             });
@@ -83,7 +87,14 @@
                 }
             });
             this.$element.delegate(".delLegendIcon","click",function(){
-               that._delPhoneModel($(this));
+                var ele = this;
+                $.msg({
+                    type : "confirm",
+                    msg : "确定要删除该项相关的数据展示吗？",
+                    ok : function(){
+                        that._delPhoneModel($(ele));
+                    }
+                });
             });
             this.$element.delegate(".addBtn_updata","click",function () {
                 that._addProduct();
@@ -103,7 +114,7 @@
             });
             $("body").on("click",function(e){
                 var $el = $(e.target);
-                if($el[0].className != "icon iconfont icon-iconclouse delLegendIcon"&&$el[0].className != "icon iconfont icon-icondel"){
+                if($el[0].className != "icon iconfont icon-iconclouse delLegendIcon"&&$el[0].className != "icon iconfont icon-icondel"&&$el[0].className!=""){
                     if(that.delLegendIconShow){
                         that.$element.find(".legendBtn").find("i").hide();
                         that.delLegendIconShow = false;
@@ -119,6 +130,7 @@
                     msg : "确认删除？",
                     ok : function(){
                         $ele.parents(".component").remove();
+                        that._onComplete(null);
                     }
                 });
                 return;
@@ -127,16 +139,27 @@
                 data : that.data.condition,
                 onSwitchType : function(data){
                     var param = {
-                        "attrInstId" : data.id,
-                        "syncType" : data.syncType
+                        "userId" : that.custId,
+                        "attrSyncTypeList" : data
                     };
                     $.ajaxJSON({
                         name: '设置属性实例同步信息',
                         url: URL.UPDATE_SYNC_TYPE,
-                        data: param,
+                        data: JSON.stringify(param),
                         iframe: true,
+                        contentType : 'application/json; charset=UTF-8',
                         success: function (r) {
-                            that.data.condition[data.key]["syncType"] = data.syncType;
+                            for(var i in that.data.condition){
+                                var item = that.data.condition[i];
+                                if(item != null && typeof item == "object"){
+                                    for(var j = 0; j < data.length;j++){
+                                        if(item.id == data[j].attrInstId){
+                                            item["syncType"] = data[j].syncType;
+                                            break;
+                                        }
+                                    }
+                                }
+                            }
                         }
                     });
                 },
@@ -264,6 +287,10 @@
             if(this.data.condition.conCptInstId){
                 params["conCptInstId"] = this.data.condition.conCptInstId;
             }
+            if(params["phoneModel"].length>8){
+                $.msg("最多添加8个手机型号");
+                return
+            }
             var that = this;
             $.ajaxJSON({
                 name: '新增构件实例',
@@ -295,6 +322,7 @@
             var code = $ele.attr("modelCode");
             $ele.addClass("active");
             $ele.siblings().removeClass("active");
+            console.log(this.data.result)
             this._renderChart(this.data.result[code]);
         },
         _renderResult : function(){
@@ -469,6 +497,10 @@
         /*添加手机型号*/
         _addProduct : function () {
             var that = this;
+            if(that.data.condition.phoneModel.value.length>=8){
+                $.msg("最多只能添加8个手机型号")
+                return
+            }
             var id = $(".model").val(),
                 brandCode = $(".brand").val();
             $.each(that.modelData,function (i) {
@@ -499,8 +531,10 @@
         },
         _openPhoneDialog : function(){
             var that = this;
-            if(this.$element.find(".selectProduct_updata").length==0){
-                var dom = "<ul class='selectProduct_updata'>" +
+            if(this.$element.find(".selectProduct_updata_wrap").length==0){
+                var dom = "<div class='selectProduct_updata_wrap'>"+
+                    "<div class='boxNav'><i class='iconfont'>&#xe61f;</i></div>"+
+                    "<ul class='selectProduct_updata'>" +
                     "<li>选择目标产品:</li>" +
                     "<li>" +
                     "<select class='select brand'>" +
@@ -512,55 +546,68 @@
                     "<option>选择型号</option>" +
                     "</select>" +
                     "</li>" +
-                    "<li><button class='addBtn_updata'><i class='icon iconfont icon-iconadd'></i></button></li>" +
-                    "</ul>";
+                    "<li><button class='addBtn_updata'><i class='icon iconfont'>&#xe61f;</i></button></li>" +
+                    "</ul></div>";
                 this.$element.find(".addShowBtnContainer").append(dom);
+            }else{
+                that.$element.find(".selectProduct_updata_wrap").remove();
             }
         },
         /*获取手机型号列表*/
         _getPhoneList : function () {
             var that = this;
-            $.ajaxJSON({
-                name: "手机列表",
-                url: URL.GET_PHONE_LIST,
-                data: {
-                    industry: "mobile"
-                },
-                type: 'post',
-                iframe: true,
-                success: function (data) {
-                    var arr = [],
-                        modelsObj = {};
-                    this.data = data.data;
-                    that.modelData = data.data.brands;
-                    if (!this.data) {
-                        that.$element.find($(".brand")).select('data', [{text: "请选择", value: -1}]);
-                        that.$element.find($(".model")).select('data', [{text: "请选择", value: -1}]);
-                    } else {
-                        for (var i = 0; i < this.data.brands.length; i++) {
-                            var item = this.data.brands[i];
-                            arr.push({
-                                text: item.brandName,
-                                value: item.brandCode
-                            });
-                            modelsObj[item.brandCode] = [];
-                            for (var j = 0; j < item.models.length; j++) {
-                                modelsObj[item.brandCode].push({
-                                    text: item.models[j].modelName,
-                                    value: item.models[j].modelCode
-                                })
+            if(that.arr&&that.modelsObj){
+                that.$element.find($(".brand")).select('data', that.arr).select("trigger");
+                that.$element.find($(".brand")).on("change", function () {
+                    var val = $(this).val();
+                    that.$element.find($(".model")).select("destroy").select('data', that.modelsObj[val]);
+                });
+                that.$element.find($(".brand")).trigger("change");
+            }else {
+                $.ajaxJSON({
+                    name: "手机列表",
+                    url: URL.GET_PHONE_LIST,
+                    data: {
+                        industry: "mobile"
+                    },
+                    type: 'post',
+                    iframe: true,
+                    success: function (data) {
+                        var arr = [],
+                            modelsObj = {};
+                        this.data = data.data;
+                        that.modelData = data.data.brands;
+                        if (!this.data) {
+                            that.$element.find($(".brand")).select('data', [{text: "请选择", value: -1}]);
+                            that.$element.find($(".model")).select('data', [{text: "请选择", value: -1}]);
+                        } else {
+                            for (var i = 0; i < this.data.brands.length; i++) {
+                                var item = this.data.brands[i];
+                                arr.push({
+                                    text: item.brandName,
+                                    value: item.brandCode
+                                });
+                                modelsObj[item.brandCode] = [];
+                                for (var j = 0; j < item.models.length; j++) {
+                                    modelsObj[item.brandCode].push({
+                                        text: item.models[j].modelName,
+                                        value: item.models[j].modelCode
+                                    })
+                                }
                             }
-                        }
-                        that.$element.find($(".brand")).select('data', arr).select("trigger");
-                        that.$element.find($(".brand")).on("change", function () {
-                            var val = $(this).val();
-                            that.$element.find($(".model")).select("destroy").select('data', modelsObj[val]);
+                            that.$element.find($(".brand")).select('data', arr).select("trigger");
+                            that.$element.find($(".brand")).on("change", function () {
+                                var val = $(this).val();
+                                that.$element.find($(".model")).select("destroy").select('data', modelsObj[val]);
 
-                        });
-                        that.$element.find($(".brand")).trigger("change");
+                            });
+                            that.$element.find($(".brand")).trigger("change");
+                            that.arr = arr;
+                            that.modelsObj = modelsObj;
+                        }
                     }
-                }
-            })
+                })
+            }
         },
         _updatePhoneModel : function() {
             var that = this;
@@ -578,7 +625,7 @@
                 iframe: true,
                 success: function (r) {
                     that._onUpdateAttr(r.data.syncCptInstIdList);
-                    that._renderResult();
+                    that._getData();
                 }
             });
         },

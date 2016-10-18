@@ -140,17 +140,21 @@ body {
 .personal:hover .showBox {
   display: block;
 }
+.personal:hover a {
+  background: #fff;
+  color: #2d2d2d;
+  border: 1px solid #b9bcc4;
+  border-top: none;
+  border-bottom: none;
+}
 .head {
   position: absolute;
   z-index: 1000;
   top: 0;
   width: 100%;
-  background-color: #f4f4f4;
   height: 25px;
-  box-shadow: 0 1px 5px #cccccc;
 }
 .head ul {
-  float: right;
   height: 25px;
 }
 .head ul li {
@@ -160,6 +164,7 @@ body {
   margin-left: 24px;
   line-height: 25px;
   position: relative;
+  font-weight: bold;
 }
 .head ul li .tip {
   position: absolute;
@@ -169,7 +174,7 @@ body {
 .head ul li a {
   color: #3f4044;
   font-size: 12px;
-  text-decoration: underline;
+  text-decoration: none;
 }
 .head ul li .showBox {
   display: none;
@@ -178,12 +183,13 @@ body {
 .head ul li .showBox .personalDisplay {
   position: absolute;
   /*left: -310%;*/
-  right: -105px;
-  top: 40px;
+  right: 2px;
+  top: 25px;
   width: 336px;
   height: 160px;
   border: 1px solid #CCCCCC;
-  box-shadow: 1px 1px 5px #cccccc;
+  border-top: none;
+  box-shadow: 1px 3px 5px #cccccc;
   background-color: #fff;
 }
 .head ul li .showBox .personalDisplay div {
@@ -201,13 +207,22 @@ body {
 .head ul li .showBox .personalDisplay ul {
   float: left;
   margin-top: 45px;
+  width: 175px;
+}
+.head ul li .showBox .personalDisplay ul .realName {
+  color: #000;
+  font-weight: bold;
+}
+.head ul li .showBox .personalDisplay ul .email {
+  color: #666;
 }
 .head ul li .showBox .personalDisplay ul li {
   display: inherit;
   height: 20px;
   font-size: 12px;
   line-height: 20px;
-  background-color: #fff;
+  text-align: left;
+  font-weight: normal;
 }
 .head ul li .showBox .personalDisplay ul li:first-child {
   font-weight: bold;
@@ -218,6 +233,7 @@ body {
 .head ul li .showBox .personalDisplay ul li:last-child {
   width: 180px;
   margin-top: 15px;
+  float: left;
 }
 .head ul li .showBox .personalDisplay ul li:last-child a {
   display: inline-block;
@@ -235,31 +251,47 @@ body {
 }
 .head ul li:last-child {
   width: 88px;
-  background-color: #7d8088;
   text-align: center;
+  float: right;
+  margin-right: 25px;
 }
 .head ul li:last-child a {
-  color: #fff;
+  display: inline-block;
+  width: 81px;
+  height: 25px;
+  text-align: center;
 }
 .side {
-  width: 95px;
+  width: 169px;
   position: absolute;
   left: 0;
   top: 25px;
   z-index: 2;
   min-height: 500px;
-  background: #3f4044;
 }
 .side .logo {
-  height: 68px;
-  background: #f25e61 url(../img/logo.png) no-repeat center center;
+  height: 105px;
+  background: #015c83 url(../img/yishang_logo_50x50.png) no-repeat center center;
 }
-.side .custName {
-  padding-bottom: 10px;
-  background-color: #f25e61;
+.side .custWrap {
+  background-color: #035e85;
   color: #fff;
   text-align: center;
   cursor: pointer;
+  width: 148px;
+  height: 28px;
+  line-height: 28px;
+  border: 1px solid #237597;
+  border-radius: 4px;
+  margin: 15px 0 15px 10px;
+}
+.side .custWrap i.iconfont {
+  font-size: 12px;
+  color: #fff;
+  display: inline-block;
+}
+.side .custWrap .custName {
+  display: inline-block;
 }
 .side .menuBox {
   position: relative;
@@ -288,99 +320,111 @@ body {
   z-index: 2;
 }
 .side .menuBox .menu li {
-  height: 97px;
+  height: 40px;
   text-align: center;
 }
 .side .menuBox .menu li a {
   display: block;
-  height: 55px;
-  width: 55px;
-  padding: 20px;
-  text-align: center;
-  color: #7d8088;
-  background: #3f4044;
+  width: 169px;
+  text-align: left;
+  height: 40px;
+  line-height: 40px;
+  position: relative;
+}
+.side .menuBox .menu li a .sideBlock {
+  width: 3px;
+  height: 40px;
+  background: #fff;
+  position: absolute;
+  left: 0;
+  display: none;
 }
 .side .menuBox .menu li a .iconfont {
-  font-size: 22px;
+  font-size: 12px;
+}
+.side .menuBox .menu li a .iconDropdown {
+  position: absolute;
+  right: 14px;
+  top: 0;
+  display: none;
 }
 .side .menuBox .menu li a p {
-  margin-top: 10px;
+  display: inline-block;
+}
+.side .menuBox .menu li a.active .sideBlock {
+  display: block;
 }
 .side .menuBox .menu li a:hover {
   color: #f25e61;
   background-color: #373737;
 }
+.side .menuBox .menu li a:hover .iconDropdown {
+  display: block;
+}
 .side .menuBox .menu li a:active {
   outline: none;
 }
-.side .menuBox .menu li a.active {
-  color: #f25e61;
-  background: #373737;
-}
 .side .menuBox .menu li i {
-  width: 99px;
-  height: 24px;
+  width: 20px;
+  height: 20px;
+  display: inline-block;
+  margin-left: 23px;
+}
+.side .menuBox .menu li i .activeNumb {
+  display: none;
+  position: absolute;
+  left: 3px;
 }
 .side .menuBox::-webkit-scrollbar {
   width: 5px;
   height: 5px;
 }
-.side .menuBox::-webkit-scrollbar-button {
-  background-color: #3f4044;
-}
-.side .menuBox::-webkit-scrollbar-track {
-  background: #3f4044;
-}
-.side .menuBox::-webkit-scrollbar-track-piece {
-  background: #3f4044;
-}
 .side .menuBox::-webkit-scrollbar-thumb {
-  background: #292727;
   border-radius: 4px;
-}
-.side .menuBox::-webkit-scrollbar-corner {
-  background: #3f4044;
-}
-.side .menuBox::-webkit-scrollbar-resizer {
-  background: #3f4044;
 }
 .side #addSchemeBtn {
   display: block;
   height: 55px;
-  padding: 20px;
-  text-align: center;
   color: #7d8088;
+  line-height: 40px;
 }
 .side #addSchemeBtn .iconfont {
-  font-size: 22px;
+  font-size: 14px;
 }
 .side #addSchemeBtn p {
+  display: inline-block;
   margin-top: 10px;
 }
-.side #addSchemeBtn.active {
-  color: #f25e61;
-  background: #373737;
+.side #addSchemeBtn i {
+  display: inline-block;
+  font-size: 14px;
+  margin: 0 7px 0 23px;
 }
 .side .componentBtn {
   display: block;
-  height: 55px;
-  padding: 20px;
+  width: 150px;
+  height: 36px;
+  line-height: 36px;
   text-align: center;
-  color: #7d8088;
   position: absolute;
   left: 0;
-  bottom: 0;
-  width: 55px;
+  bottom: 20px;
+  color: #fff;
+  background: #3f8bab;
+  border-radius: 4px;
 }
 .side .componentBtn .iconfont {
-  font-size: 22px;
+  font-size: 12px;
+  display: inline-block;
+  margin-right: 10px;
+  vertical-align: top;
 }
 .side .componentBtn p {
-  margin-top: 10px;
+  display: inline-block;
+  vertical-align: top;
 }
 .side .componentBtn.active {
-  color: #f25e61;
-  background: #373737;
+  color: #fff;
 }
 .side .user {
   width: 95px;
@@ -399,23 +443,29 @@ body {
   margin: 20px auto;
 }
 .main {
-  margin-left: 95px;
+  margin-left: 169px;
   min-height: 500px;
   margin-top: 25px;
 }
 .editSchemeName {
-  width: 99px;
-  height: 24px;
-  line-height: 24px;
-  text-indent: 25px;
+  width: 104px;
+  height: 22px;
+  line-height: 21px;
+  text-indent: 10px;
   display: block;
   position: absolute;
-  background: url(../img/icon_editSchemeName.png) no-repeat left top;
-  text-align: center;
-  left: 80px;
+  border: 1px solid #fff;
+  box-shadow: 1px 1px 5px #165c7a;
+  background-color: #247ba0;
+  color: #fff;
+  text-align: left;
+  left: 60px;
   top: 45px;
   cursor: pointer;
-  z-index: 1;
+  z-index: 2;
+}
+.editSchemeName i {
+  margin-right: 9px;
 }
 .hide {
   display: none;
@@ -424,76 +474,134 @@ body {
   position: absolute;
   top: 0;
   width: 100%;
-  background: #f4f4f4;
+  background: #cad3df;
 }
 .form .title {
   color: #7d8088;
-  font-size: 22px;
-  height: 68px;
-  line-height: 68px;
-  border-bottom: 1px solid #e1e1e1;
+  font-size: 14px;
+  height: 40px;
+  line-height: 40px;
+  border-bottom: 1px solid #b5bdc8;
   background: #fff;
   padding-left: 24px;
 }
 .form .box {
-  margin: 24px;
   background: #fff;
-  padding-bottom: 55px;
+  width: 600px;
+  margin: 20px auto 0;
+  min-height: 305px;
+  border-radius: 5px;
 }
 .form .box h1 {
-  padding: 25px 18px;
-  font-size: 22px;
+  height: 39px;
+  line-height: 39px;
+  font-size: 14px;
   color: #282828;
+  text-indent: 18px;
+  background-color: #eceff4;
   font-weight: normal;
 }
 .form .box .fm-row {
   width: 500px;
-  margin: 10px auto 53px auto;
+  margin: 10px 0 53px 34px;
 }
 .form .box .fm-row .fm-lb {
+  width: 80px;
   font-size: 14px;
   color: #333333;
   margin: 10px 0 ;
-  display: block;
+  display: inline-block;
+}
+.form .box .fm-row .fm-in {
+  font-size: 14px;
+  color: #333333;
+  margin: 10px 0 ;
+  display: inline-block;
+  width: 84px;
+}
+.form .box .fm-row .fm-side-line {
+  position: relative;
+}
+.form .box .fm-row .fm-side-line i {
+  position: absolute;
+  top: 0;
+  left: 0;
+  background: url(../img/add_project_border.png) no-repeat;
+}
+.form .box .fm-row .fm-side-line i:first-child {
+  background: url(../img/add_project_border_top.png) no-repeat;
+  top: 37px;
+  left: 25px;
+}
+.form .box .fm-row .fm-side-line:last-child i {
+  background: url(../img/add_project_border_bottom.png) no-repeat;
 }
 .form .box .fm-row .fm-ipt {
+  display: inline-block;
   margin: 10px 0;
 }
 .form .box .fm-row .fm-ipt input[type=text] {
   border: 1px solid #e1e1e1;
   border-radius: 4px;
+  height: 34px;
   line-height: 34px;
   color: #cccccc;
-  width: 380px;
+  width: 284px;
   margin-bottom: 10px;
   text-indent: 9px;
   font-size: 14px;
+  height: 35px;
+}
+.form .box .fm-row .fm-ipt input.fmInInput[type=text] {
+  border: 1px solid #e1e1e1;
+  border-radius: 4px;
+  line-height: 34px;
+  color: #cccccc;
+  width: 198px;
+  margin-bottom: 10px;
+  text-indent: 9px;
+  font-size: 14px;
+  height: 35px;
+}
+.form .box .fm-row .fm-ipt input[type=text]:hover {
+  border: 1px solid #247ba0;
+  box-shadow: 1px 3px 5px #cccccc;
 }
 .form .box .fm-row .fm-ipt input.error {
   border-color: #ff0000;
 }
 .form .box .fm-row .fm-ipt #addModuleBtn {
-  background: url(../img/icon_add_module.png) no-repeat 10px center;
-  padding: 10px 10px 10px 39px;
+  background: #f4f4f4;
+  padding: 0px 45px 0px 69px;
   font-weight: normal;
   color: #737989;
   font-size: 14px;
-}
-.form .box .fm-row .btn {
-  height: 50px;
-  line-height: 50px;
-  background: #f25e61;
-  color: #fff;
-  font-size: 24px;
-  text-align: center;
-  border: none;
+  width: 85px;
+  height: 36px;
+  border: 1px solid #dfdfdf;
+  display: inline-block;
+  line-height: 36px;
   border-radius: 4px;
-  width: 380px;
-  cursor: pointer;
 }
 .form .box .errorTip {
   text-align: left;
   color: #ff0000;
+}
+.form .btn-grp {
+  text-align: center;
+  margin-top: 20px;
+}
+.form .btn-grp #confirm-btn.btn {
+  height: 38px;
+  line-height: 38px;
+  background: #247ba0;
+  color: #fff;
+  font-size: 14px;
+  text-align: center;
+  border: none;
+  border-radius: 4px;
+  width: 200px;
+  cursor: pointer;
 }
 #add-scheme-popup {
   top: 25px;
@@ -520,7 +628,7 @@ body {
 }
 .customerListContainer .container {
   padding: 0 10px 10px;
-  background-color: #fff;
+  background-color: #f9fafc;
   border-radius: 4px;
 }
 .customerListContainer .container .customerTitle {
@@ -534,19 +642,17 @@ body {
   border: 1px solid #cccccc;
 }
 .customerListContainer .container .customerContainer .search {
-  height: 32px;
-  padding: 10px;
-  background-color: #e6e6e6;
+  height: 52px;
+  padding: 0 10px;
   position: relative;
 }
 .customerListContainer .container .customerContainer .search input {
   height: 32px;
-  width: 550px;
+  width: 545px;
   padding-left: 10px;
+  margin-top: 12px;
   background-color: #fff;
-  border-radius: 32px;
   outline: none;
-  border: none;
 }
 .customerListContainer .container .customerContainer .search em {
   display: inline-block;
@@ -556,7 +662,7 @@ body {
   border-radius: 18px;
   position: absolute;
   right: 20px;
-  top: 17px;
+  top: 21px;
   cursor: pointer;
   text-align: center;
   line-height: 15px;
@@ -573,37 +679,61 @@ body {
 .customerListContainer .container .customerContainer .customerList .userName {
   height: 24px;
   padding-left: 10px;
-  margin-top: -1px;
-  background-color: #f5f5f5;
-  border-top: 1px solid #cccccc;
+  margin-top: 15px;
   line-height: 24px;
-  color: #999999;
+  color: #555555;
 }
 .customerListContainer .container .customerContainer .customerList .userInfo {
-  height: 35px;
+  position: relative;
+  height: 20px;
   color: #333333;
   cursor: pointer;
 }
 .customerListContainer .container .customerContainer .customerList .userInfo p {
-  padding: 11px 0;
-  margin-left: 20px;
-  border-bottom: 1px solid #CCCCCC;
+  margin-left: 17px;
+}
+.customerListContainer .container .customerContainer .customerList .userInfo em {
+  display: inline-block;
+  width: 16px;
+  height: 19px;
+  border-left: 1px solid #555555;
+  border-bottom: 1px solid #555555;
+  position: absolute;
+  top: -9px;
+}
+.customerListContainer .container .customerContainer .customerList .userInfo .first {
+  height: 13px;
+  top: -3px;
 }
 .customerListContainer .container .customerContainer .customerList .userInfo span {
   height: 12px;
   display: inline-block;
   text-align: center;
   border-right: 1px solid #CCCCCC;
-}
-.customerListContainer .container .customerContainer .customerList .userInfo span:first-child {
-  width: 127px;
+  line-height: 20px;
 }
 .customerListContainer .container .customerContainer .customerList .userInfo span:nth-child(2) {
+  margin-left: 24px;
+  width: 106px;
+  text-align: left;
+}
+.customerListContainer .container .customerContainer .customerList .userInfo span:nth-child(3) {
   width: 86px;
 }
 .customerListContainer .container .customerContainer .customerList .userInfo span:last-child {
   margin-left: 20px;
   border-right: none;
+}
+.customerListContainer .container .customerContainer .customerList .userInfo .selectCust {
+  position: absolute;
+  right: 18px;
+  top: 5px;
+  font-size: 12px !important;
+  color: #247ba0;
+}
+.customerListContainer .container .customerContainer .customerList .userInfo:hover {
+  background-color: #cce4f5;
+  color: #247ba0;
 }
 .customerListContainer .container .pagesContainer {
   text-align: center;
@@ -669,7 +799,7 @@ body {
 .customerListContainerIn {
   display: block;
   position: absolute;
-  left: -225px;
+  left: -150px;
   z-index: 1;
   width: 320px;
   height: 100%;
@@ -707,17 +837,14 @@ body {
 .customerListContainerIn .container .customerContainer .search {
   height: 32px;
   padding: 10px;
-  background-color: #e6e6e6;
   position: relative;
 }
 .customerListContainerIn .container .customerContainer .search input {
   height: 32px;
-  width: 270px;
+  width: 265px;
   padding-left: 10px;
   background-color: #fff;
-  border-radius: 32px;
   outline: none;
-  border: none;
 }
 .customerListContainerIn .container .customerContainer .search em {
   display: inline-block;
@@ -727,7 +854,7 @@ body {
   border-radius: 18px;
   position: absolute;
   right: 20px;
-  top: 17px;
+  top: 21px;
   cursor: pointer;
   text-align: center;
   line-height: 15px;
@@ -744,37 +871,51 @@ body {
 .customerListContainerIn .container .customerContainer .customerList .userName {
   height: 24px;
   padding-left: 10px;
-  margin-top: -1px;
-  background-color: #f5f5f5;
-  border-top: 1px solid #cccccc;
+  margin-top: 10px;
+  margin-bottom: 8px;
   line-height: 24px;
-  color: #999999;
+  color: #555555;
 }
 .customerListContainerIn .container .customerContainer .customerList .userInfo {
-  height: 35px;
+  position: relative;
+  height: 20px;
   color: #333333;
   cursor: pointer;
 }
 .customerListContainerIn .container .customerContainer .customerList .userInfo p {
-  padding: 11px 0;
-  margin-left: 20px;
-  border-bottom: 1px solid #CCCCCC;
+  margin-left: 17px;
+}
+.customerListContainerIn .container .customerContainer .customerList .userInfo em {
+  display: inline-block;
+  width: 16px;
+  height: 19px;
+  border-left: 1px solid #555555;
+  border-bottom: 1px solid #555555;
+  position: absolute;
+  top: -9px;
 }
 .customerListContainerIn .container .customerContainer .customerList .userInfo span {
   height: 12px;
   display: inline-block;
   text-align: center;
   border-right: 1px solid #CCCCCC;
-}
-.customerListContainerIn .container .customerContainer .customerList .userInfo span:first-child {
-  width: 103px;
+  line-height: 20px;
 }
 .customerListContainerIn .container .customerContainer .customerList .userInfo span:nth-child(2) {
+  margin-left: 24px;
+  width: 79px;
+  text-align: left;
+}
+.customerListContainerIn .container .customerContainer .customerList .userInfo span:nth-child(3) {
   width: 65px;
 }
 .customerListContainerIn .container .customerContainer .customerList .userInfo span:last-child {
   margin-left: 10px;
   border-right: none;
+}
+.customerListContainerIn .container .customerContainer .customerList .userInfo:hover {
+  background-color: #cce4f5;
+  color: #247ba0;
 }
 .customerListContainerIn .container .pagesContainer {
   text-align: center;

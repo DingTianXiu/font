@@ -651,7 +651,7 @@
 			this.$element = $(element);
 			this.$dateBox = $("<div class='clearfix'></div>").appendTo(element);
 			this.$dateBtn = $("<span></span>").appendTo(this.$dateBox);
-			this.$dateBox.append("<span class='arrow'></span>");
+			this.$dateBox.append("<span class='arrow iconfont'>&#xe61c;</span>");
 			this.$dateHoverBox = $("<div class='dateHoverBox'></div>").insertAfter(element);
 			this.$dateHoverBox.append("<p>设置监测时间范围：</p>");
 			this.$sliderBox = $("<div class='sliderBox'></div>").appendTo(this.$dateHoverBox);
@@ -676,7 +676,7 @@
 				that.onSaveDate(that.beforeDateNum,that.afterDateNum);
 				var beforeText = that.beforeDateNum > 0 ? ("前 "+ that.beforeDateNum) : ("后 " + that.beforeDateNum*-1);
 				var afterText = that.afterDateNum > 0  ? ("前 "+ that.afterDateNum) : ("后 " + that.afterDateNum*-1);
-				that.$dateBtn.html("<span>今天"+ beforeText +" 至"+ afterText +"天</span>");
+				that.$dateBtn.html("<span>今天  "+ beforeText +"  至  "+ afterText +"天</span>");
 				that._close();
 			});
 			$("body").on("click",function(e){
@@ -698,7 +698,7 @@
 		filterDateNum : function($ele){
 			var beforeText = this.beforeDateNum > 0 ? ("前"+this.beforeDateNum) : ("后" + this.beforeDateNum * -1);
 			var afterText = this.afterDateNum > 0 ? ("后" + this.afterDateNum) : ("前" + this.afterDateNum * -1);
-			$ele.text("今天"+ beforeText +"天 至"+ afterText +"天");
+			$ele.text("今天  "+ beforeText +"天  至 "+ afterText +"天");
 		},
 		_initSlider : function($ele){
 			var that = this;
@@ -767,7 +767,7 @@
 			this.$label = $("<label>"+ this.label +"</label>").appendTo(this.$sBox);
 			this.$brands = $("<select class='brands'></select>").appendTo(this.$sBox);
 			this.$models = $("<select class='models'></select>").appendTo(this.$sBox);
-			this.$addBtn = $("<a href='javascript:;' class='addBtn'><i class='icon iconfont icon-iconadd'></i></a>").appendTo(this.$sBox);
+			this.$addBtn = $("<a href='javascript:;' class='addBtn'><i class='icon iconfont'>&#xe61f;</i></a>").appendTo(this.$sBox);
 			this.$rBox = $("<div class='rBox'></div>").appendTo(this.$element);
 
 
@@ -813,6 +813,10 @@
 			}
 		},
 		_addBrandsTpl : function(){
+			if(this.selectedData.length>=8){
+				$.msg("最多只能添加8个手机型号");
+				return
+			}
 			var brandCode = this.$brands.val();
 			var brandsIndex = this.$brands[0].selectedIndex;
 			var modelsIndex = this.$models[0].selectedIndex;
@@ -914,7 +918,7 @@
 			this.$sBox = $("<div class='sBox'></div>").appendTo(this.$element);
 			this.$label = $("<label>"+ this.label +"</label>").appendTo(this.$sBox);
 			this.$source = $("<select class='source'></select>").appendTo(this.$sBox);
-			this.$addBtn = $("<a href='javascript:;' class='addBtn'><i class='icon iconfont icon-iconadd'></i></a>").appendTo(this.$sBox);
+			this.$addBtn = $("<a href='javascript:;' class='addBtn'><i class='icon iconfont'>&#xe61f;</i></a>").appendTo(this.$sBox);
 			this.$rBox = $("<div class='rBox'></div>").appendTo(this.$element);
 
 
@@ -1023,7 +1027,8 @@
 	*	onDelete		删除构件加调函数
 	* */
 	$.cptConfig = function(opts){
-		var that = this;
+		var that = this,
+			changed = false;
 		var $cptConfigBox = $("<div class='cptConfigBox'></div>");
 		$cptConfigBox.append("<h3>数据同步</h3>");
 		var $syncBox = $("<ul class='syncBox clearfix'></ul>").appendTo($cptConfigBox);
@@ -1050,17 +1055,27 @@
 			width:600,
 			modal : true,
 			close : function() {
-				$(this).dialog("destroy").remove();
+				if(!changed){
+					$dialog.dialog("destroy").remove();
+					return;
+				}
+
+				var list = [];
+				$cptConfigBox.find("input:checked").each(function(){
+					var type = $(this).attr("name");
+					var data = opts.data[type];
+					list.push({
+						"attrInstId" : data.id,
+						"syncType" : $(this).val()
+					});
+				});
+				opts.onSwitchType &&  opts.onSwitchType.call(this,list);
+				$dialog.dialog("destroy").remove();
 			}
 		}, opts);
 		var $dialog = $cptConfigBox.dialog(nopts);
-		$cptConfigBox.find("input").on("click",function(){
-			var type = $(this).attr("name");
-			var data = opts.data[type];
-			data["key"] = type;
-			data["syncType"] = $(this).val();
-			opts.onSwitchType &&  opts.onSwitchType.apply(this,[data]);
-			$dialog.dialog("destroy").remove();
+		$cptConfigBox.find("input").on("change",function(){
+			changed = true;
 		});
 		$cptConfigBox.find(".delBtn").on("click",function(){
 			$confirmBox.removeClass("hide");

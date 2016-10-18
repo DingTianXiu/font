@@ -10,7 +10,6 @@ html{
     height: 100%;
     .login{
       height: 100%;
-      background-color: #3f4044;
       padding: 0 30px;
       .head{
         height: 140px;
@@ -177,11 +176,12 @@ html{
   }
 }
 body{
-  background:#3f4044;
+  background:#1d769b;
 }
 .login-bd{
   width:1312px;
   margin:0 auto;
+  background: url(../img/login_bg.jpg) repeat-y center top;
 }
 .login-bd .head{
   position: static;
@@ -191,45 +191,75 @@ body{
   box-shadow: none;
 }
 .login-bd .wrap{
-  background:#fff url(../img/login_bg.png) no-repeat 75px center;
-  padding:50px 0 46px 758px;
-  min-height:326px;
+  background: url(../img/login_bg_w.png) no-repeat center top;
+  background-size: auto;
+  height: 693px;
+  padding-top: 60px;
+
 }
 .login-bd .wrap .login-box{
-  width:381px;
+  width: 370px;
+  height:460px;
+  margin: 0 auto 0;
+  background: #e7f0f4;
+  border-radius: 5px;
+  .loginLogo {
+    text-align: center;
+    img {
+      margin-top: 50px;
+    }
+    .fontSty { 
+      font-size: 20px; 
+      color: #3d4d65;
+    }
+  }
+}
+.login-bd .wrap .login-box ul {
+  margin-left: 30px;
+}
+.login-bd .wrap .login-box ul li {
+  position: relative;
+  width: 310px;
+  height: 40px;
+  margin-bottom: 20px;
 }
 .login-bd .wrap .login-box ul li.login-error-tip{
   height:24px;
   line-height:24px;
 }
+.login-bd .wrap .login-box ul li.login-cap .capt {
+  cursor:pointer;position: absolute;right: 10px;top: 4px;
+}
+
 .login-bd .wrap .login-box ul li input {
-  height: 57px;
+  width: 308px;
+  height: 36px;
   float: left;
-  padding: 0 25% 0 5%;
   border: none;
-  border-bottom: 1px solid #d9d9da;
+  border: 1px solid #bbbbbb;
   outline: none;
   font-size: 18px;
-  margin-bottom:1px;
+  margin-bottom:20px;
+  border-radius: 3px;
+  text-indent: 12px;
 }
 .login-bd .wrap .login-box ul li input[type=text]:focus {
-  border-bottom: 2px solid #3f4044;
+  border: 1px solid #247ba0;
   margin-bottom:0;
 }
 
 
 
 .login-bd .wrap .login-box  .btn-login {
-  width: 380px;
-  height: 50px;
-  background-color: #f25e61;
+  width: 310px;
+  height: 45px;
+  background-color: #a7cad9;
   border: none;
   border-radius: 4px;
   outline: none;
-  font-size: 24px;
-  color: #ffffff;
+  font-size: 16px;
+  color: #cadfe8;
   letter-spacing: 5px;
-  margin-top:24px;
   padding:0;
 }
 .login-bd .foot ul {

@@ -10,12 +10,11 @@ body {
 }
 .moduleList {
   background: #fff;
-  padding: 26px 200px 0 24px;
-  height: 47px;
+  padding: 0px 200px 0 24px;
+  height: 44px;
 }
 .moduleList li {
   display: inline-block;
-  min-width: 120px;
   height: 44px;
   line-height: 44px;
   text-align: center;
@@ -23,20 +22,33 @@ body {
   color: #737989;
   font-weight: bold;
   position: relative;
+  min-width: 98px;
+  max-width: 152px;
+  margin-left: -1px;
 }
 .moduleList li a {
-  position: absolute;
-  width: 90px;
+  min-width: 58px;
+  max-width: 112px;
+  padding: 0 19px;
   height: 44px;
   left: 0;
   top: 4px;
   color: #737989;
-  text-align: right;
-  padding-right: 35px;
+  text-align: center;
+  border: 1px solid #b5bdc8;
+  border-top: 0;
+  border-bottom: 0;
+  display: inline-block;
+  vertical-align: top;
+  zoom: 1;
+  word-break: keep-all;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 .moduleList li a.active {
-  background: url(../img/tab_bg.png) no-repeat right top;
-  color: #f25e61;
+  background: #cad3df;
+  color: #3d4d65;
 }
 .moduleList li i {
   display: none;
@@ -49,11 +61,13 @@ body {
   color: #a29f9f;
   cursor: pointer;
 }
-.moduleList li a.addModuleBtn,
-.moduleList li a.addModuleBtn:hover {
+.moduleList li li.addModule {
+  margin-left: -5px;
+}
+.moduleList li li.addModule a.addModuleBtn,
+.moduleList li li.addModule a.addModuleBtn:hover {
   height: 44px;
   display: inline-block;
-  background: url(../img/icon_add_module.png) no-repeat 10px center;
   padding-left: 10px;
   font-weight: normal;
   color: #737989;
@@ -62,33 +76,33 @@ body {
   display: inline-block;
 }
 .moduleData {
-  height: 34px;
-  line-height: 34px;
-  color: #373737;
+  height: 26px;
+  line-height: 26px;
+  color: #3d4d65;
   font-size: 14px;
   font-weight: bold;
   border: 1px solid #e1e1e1;
-  border-radius: 4px;
-  background: url(../img/icon_data.png) no-repeat 22px center;
-  padding: 0 22px 0 43px;
+  border-radius: 26px;
+  padding: 0 17px;
   position: absolute;
   right: 25px;
-  top: 18px;
+  top: 8px;
+  background-color: #eceff4;
 }
 .btnbox {
   width: 640px;
   margin: 24px auto;
 }
 .btnbox a {
-  height: 50px;
-  width: 300px;
+  height: 38px;
+  width: 200px;
   display: inline-block;
   text-align: center;
-  line-height: 50px;
+  line-height: 38px;
   color: #fff;
   border-radius: 4px;
-  background: #f25e61;
-  font-size: 24px;
+  background: #247ba0;
+  font-size: 14px;
   margin: 0 9px;
 }
 .btnbox #cancelPublish {
@@ -99,101 +113,116 @@ body {
   padding: 29px 15px 15px 15px;
 }
 .widgetPopup .tab {
-  padding: 0 10px 13px 10px;
-  height: 24px;
-  line-height: 24px;
-  font-size: 18px;
+  height: 50px;
+  line-height: 50px;
+  text-indent: 18px;
+  font-size: 14px;
   border-bottom: 1px solid #dcdcdc;
+  border-radius: 4px 4px 0 0;
+  background: #eceff4;
 }
 .widgetPopup .tab h1 {
   color: #282828;
-  font-size: 18px;
+  font-size: 14px;
   font-weight: normal;
   display: inline-block;
   margin-right: 25px;
+  text-indent: 0;
 }
 .widgetPopup .tab a {
   display: inline-block;
-  margin: 0 13px;
+  margin: 13px 13px 0;
   font-size: 14px;
   color: #7d8088;
   border-bottom: 1px dotted #373737;
   text-align: center;
   padding: 0 6px;
+  width: 50px;
+  height: 24px;
+  line-height: 24px;
+  border-radius: 25px;
+  text-indent: 0;
 }
 .widgetPopup .tab a:hover {
   color: #373737;
 }
 .widgetPopup .tab a.active {
   border-radius: 12px;
-  background: #f25e61;
+  background: #247ba0;
   border: none;
   color: #fff;
   font-weight: bold;
   margin: 0 3px;
 }
+.widgetPopup .content {
+  background: #fff;
+  padding: 20px 0 0 20px;
+}
 /*widget*/
 .widget {
   position: relative;
   height: 285px;
-  margin-top: 20px;
+  margin-bottom: 20px;
   float: left;
   margin-right: 7px;
   cursor: pointer;
 }
-.widget .inner {
-  width: 285px;
-  display: block;
-  border: 10px solid #f4f4f4;
-  border-radius: 6px;
-  margin-bottom: 20px;
-  position: relative;
-}
-.widget .inner h3 {
+.widget h3.widTitle {
   color: #505155;
   font-size: 14px;
   text-align: center;
   padding: 15px 0;
 }
-.widget .inner .description {
+.widget .inner {
+  width: 263px;
+  height: 238px;
+  display: block;
+  position: relative;
+  border: 1px solid #cccccc;
+}
+.widget .inner img {
+  width: 261px;
+  height: 236px;
+  border: 1px solid #fff;
+}
+.widget .description {
   display: none;
   text-align: left;
   color: #FFF;
   font-size: 13px;
-  line-height: 1.4;
-  color: #9d9d9d;
+  color: #555;
   position: absolute;
-  left: -10px;
-  top: 273px;
-  width: 285px;
-  border: 10px solid #f4f4f4;
-  border-radius: 6px;
+  top: 2px;
+  left: 2px;
+  width: 221px;
+  height: 196px;
+  padding: 20px;
+  background: #fff;
 }
-.widget .inner .description h4 {
+.widget .description h4 {
   color: #505155;
   font-weight: normal;
   margin: 0 0 5px 0;
 }
-.widget .inner .description p {
+.widget .description p {
   line-height: 18px;
 }
-.widget .inner:hover {
-  border: 10px solid #eaeaea;
+.widget:hover .inner {
+  border: 1px solid #247ba0;
   background: #eaeaea;
   border-bottom-left-radius: 0;
   border-bottom-right-radius: 0;
 }
-.widget .inner:hover .description {
+.widget:hover .inner img {
+  border: 1px solid #247ba0;
+}
+.widget:hover .description {
   display: block;
   transform-origin: 100% 0%;
   animation: fadeIn 0.3s ease-in-out;
-  border: 10px solid #eaeaea;
-  background: #eaeaea;
+  background: #fff;
 }
 /*end widget*/
-.componentListWrapper {
-  border-top: 1px solid #e1e1e1;
-}
 .componentListWrapper .publishTip {
   height: 42px;
   line-height: 42px;
@@ -217,57 +246,59 @@ body {
   position: relative;
 }
 .componentListWrapper .componentList .component .header {
-  padding: 24px 18px 0 18px;
   background: #fff;
   position: relative;
+  border-radius: 5px 5px 0 0;
+  height: 39px;
+  line-height: 39px;
+  border-bottom: 1px solid #cad3df;
+  background-color: #eceff4;
 }
 .componentListWrapper .componentList .component .header h1 {
   float: left;
-  font-size: 22px;
+  font-size: 14px;
   color: #282828;
+  text-indent: 19px;
   font-weight: normal;
 }
 .componentListWrapper .componentList .component .header .configBtn {
   height: 30px;
   width: 30px;
   float: right;
-  background: #f4f4f4;
   border-radius: 4px;
   text-align: center;
   line-height: 30px;
   color: #9f9fa1;
+  margin: 5px 21px 0 0 ;
 }
-.componentListWrapper .componentList .component .header .dateBox {
-  height: 30px;
-  line-height: 30px;
-  position: absolute;
-  bottom: 0;
-  right: 64px;
-  border-radius: 4px;
-  background: url(../img/calendar.png) no-repeat 13px center;
-  padding: 0 0 0 36px;
-  margin-right: 0;
+.componentListWrapper .componentList .component .dateBox {
+  width: 181px;
+  height: 26px;
+  line-height: 28px;
+  left: 0;
+  top: 0px;
+  padding: 0 0 0 10px;
+  margin: 0px 0 10px;
   cursor: pointer;
-  border: 1px solid #fff;
-  border-bottom-left-radius: 0;
-  border-bottom-right-radius: 0;
-  border-bottom: none;
+  border: 1px solid #e1e1e1;
+  border-radius: 4px;
   z-index: 2;
+  margin-top: -71px;
 }
-.componentListWrapper .componentList .component .header .dateBox span {
+.componentListWrapper .componentList .component .dateBox span {
   float: left;
 }
-.componentListWrapper .componentList .component .header .dateBox .arrow {
+.componentListWrapper .componentList .component .dateBox .arrow {
   width: 30px;
   height: 30px;
   line-height: 30px;
   text-align: center;
   display: inline-block;
-  background: url(../img/icon_arrow.png) no-repeat center center;
+  font-size: 13px;
 }
-.componentListWrapper .componentList .component .header .dateBox.active {
+.componentListWrapper .componentList .component .dateBox.active {
   border: 1px solid #b9bcc4;
-  background-color: #fff9f9;
+  background-color: #fbfbfb;
   border-bottom: none;
 }
 .componentListWrapper .componentList .first {
@@ -286,12 +317,27 @@ body {
 .componentListWrapper .componentList .first .inner .sliderBox {
   margin: 28px 0 60px 0;
 }
+.componentListWrapper .componentList .first .inner .sliderBox hr.timeSilderLeft {
+  position: absolute;
+  background: url(../img/time_lines.png) no-repeat;
+  width: 1px;
+  height: 29px;
+  top: -13px;
+}
+.componentListWrapper .componentList .first .inner .sliderBox hr.timeSilderRight {
+  position: absolute;
+  background: url(../img/time_lines.png) no-repeat;
+  width: 1px;
+  height: 29px;
+  top: -13px;
+  right: 1px;
+}
 .componentListWrapper .componentList .first .inner .nextStep {
   width: 382px;
   height: 50px;
   line-height: 50px;
   text-align: center;
-  background: #f25e61;
+  background: #247ba0;
   color: #fff;
   font-size: 24px;
   display: block;
@@ -304,8 +350,18 @@ body {
   background: #fff;
 }
 .componentListWrapper .componentList .second .phoneList {
-  border-left: 1px solid #efeeec;
-  border-top: 1px solid #efeeec;
+  border: 1px solid #efeeec;
+  height: 460px;
+  overflow: auto;
+  margin-top: 30px;
+}
+.componentListWrapper .componentList .second .phoneList .leftLine {
+  height: auto;
+  position: absolute;
+  top: 37px;
+  bottom: 35px;
+  border-left: 1px solid #cccccc;
+  left: 86px;
 }
 .componentListWrapper .componentList .second .phoneList .left {
   float: left;
@@ -314,18 +370,19 @@ body {
 }
 .componentListWrapper .componentList .second .phoneList .left .label {
   position: absolute;
-  left: 29px;
+  left: 20px;
   top: 18px;
   color: #999;
 }
 .componentListWrapper .componentList .second .phoneList .left li {
   border-right: 1px solid #efeeec;
-  border-bottom: 1px solid #efeeec;
 }
 .componentListWrapper .componentList .second .phoneList .left li a {
   display: block;
-  padding: 18px 0 18px 83px;
+  padding: 18px 0 18px 70px;
   position: relative;
+  height: 40px;
+  line-height: 40px;
 }
 .componentListWrapper .componentList .second .phoneList .left li a span {
   float: left;
@@ -335,7 +392,8 @@ body {
   height: 6px;
   border: 1px solid #ccc;
   border-radius: 6px;
-  margin: 2px 13px;
+  margin: 17px 13px 0;
+  background: #fff;
 }
 .componentListWrapper .componentList .second .phoneList .left li a .releaseDate {
   color: #b0b0b0;
@@ -345,8 +403,8 @@ body {
   margin: 0 20px;
 }
 .componentListWrapper .componentList .second .phoneList .left li a .brandName {
-  margin: 20px 32px 0 0;
-  font-size: 16px;
+  margin: 0px 32px 0 0;
+  font-size: 12px;
   color: #282828;
 }
 .componentListWrapper .componentList .second .phoneList .left li a .selected {
@@ -368,11 +426,16 @@ body {
   color: #999;
   background: #fff;
 }
-.componentListWrapper .componentList .second .phoneList .left li a:hover {
-  background: #fff9f9;
+.componentListWrapper .componentList .second .phoneList .left li a .lineBorder {
+  /*position: absolute;*/
+  border: none;
+  border-bottom: 1px solid #e6e6e6;
+  bottom: 0;
+  margin-left: 120px;
+  width: 290px;
 }
 .componentListWrapper .componentList .second .phoneList .left li a:hover .otherAttr {
-  display: block;
+  display: none;
 }
 .componentListWrapper .componentList .second .noData {
   content: "无数据";
@@ -382,7 +445,8 @@ body {
   font-size: 15px;
 }
 .componentListWrapper .componentList .second .legend {
-  min-height: 35px;
+  height: 34px;
+  margin-top: 30px;
 }
 .componentListWrapper .componentList .second .legend .hrLine {
   border: none;
@@ -391,9 +455,9 @@ body {
 }
 .componentListWrapper .componentList .second .legend a {
   display: inline-block;
-  height: 33px;
-  line-height: 33px;
-  width: 173px;
+  height: 30x;
+  line-height: 30px;
+  padding: 0 11px;
   border: 1px solid #e5e5e5;
   text-align: center;
   color: #3f4044;
@@ -401,6 +465,8 @@ body {
   background: #fff;
   position: relative;
   margin: -2px 0 0 -1px;
+  vertical-align: top;
+  margin-top: 4px;
 }
 .componentListWrapper .componentList .second .legend a i.delLegendIcon {
   color: #9f9fa1;
@@ -412,8 +478,10 @@ body {
   top: 0;
 }
 .componentListWrapper .componentList .second .legend a.active {
-  background: #fff9f9;
-  border-color: #b9bcc4;
+  background: #eaf6f4;
+  border-color: #e5e5e5;
+  height: 34px;
+  margin-top: 0;
 }
 .componentListWrapper .componentList .second .legend a.active i.delLegendIcon {
   color: #f25e61;
@@ -421,8 +489,8 @@ body {
 .componentListWrapper .componentList .second .legend .addBtn,
 .componentListWrapper .componentList .second .legend .delBtn {
   width: 44px;
-  height: 33px;
-  line-height: 33px;
+  height: 30px;
+  line-height: 30px;
   text-align: center;
   color: #9f9fa1;
   background: #f4f4f4;
@@ -431,12 +499,15 @@ body {
 .componentListWrapper .componentList .second .legend .delBtn .iconfont {
   display: block;
 }
+.componentListWrapper .componentList .second .legend .none {
+  display: none;
+}
 .componentListWrapper .componentList .second .legend .addShowBtnContainer {
   display: inline-block;
 }
 .componentListWrapper .componentList .second .chart {
   height: 400px;
-  margin: 30px 90px;
+  margin: 80px 90px 30px;
   position: relative;
 }
 .componentListWrapper .componentList .second .chart svg {
@@ -484,7 +555,28 @@ body {
 }
 .componentListWrapper .componentList .second .lineChart {
   height: 400px;
-  margin: 30px 90px;
+  margin: 50px 90px 30px;
+}
+.componentListWrapper .componentList .second .lineChart .noData {
+  background: url(../img/icon_noData.png) no-repeat left top;
+  width: 99px;
+  height: 44px;
+  line-height: 22px;
+  padding-left: 53px;
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  margin-left: -76px;
+  margin-top: -22px;
+  text-align: left;
+}
+.componentListWrapper .componentList .second .lineChart .noData h3 {
+  font-size: 14px;
+  color: #333;
+}
+.componentListWrapper .componentList .second .lineChart .noData p {
+  font-size: 12px;
+  color: #999;
 }
 .componentListWrapper .componentList .second .chartLabel {
   position: absolute;
@@ -503,11 +595,11 @@ body {
   width: 414px;
   height: 110px;
   padding: 24px;
-  background: #fff9f9;
+  background: #fbfbfb;
   border: 1px solid #b9bcc4;
   position: absolute;
-  right: 64px;
-  top: 53px;
+  left: 18px;
+  top: 49px;
   display: none;
   z-index: 1;
   border-radius: 4px;
@@ -517,7 +609,7 @@ body {
   color: #333;
 }
 .componentListWrapper .componentList .dateHoverBox .sliderBox {
-  margin: 8px 0 19px 0;
+  margin: 20px 0 19px 0;
   font-size: 12px;
   font-style: normal;
 }
@@ -530,7 +622,7 @@ body {
   height: 30px;
   line-height: 30px;
   text-align: center;
-  background: #f25e61;
+  background: #247ba0;
   color: #fff;
   display: block;
   border-radius: 4px;
@@ -545,7 +637,7 @@ body {
   color: #fff;
   width: 380px;
   height: 50px;
-  background: #f25e61;
+  background: #247ba0;
   border-radius: 4px;
   margin: 0 auto;
   font-size: 24px;
@@ -685,11 +777,17 @@ body {
   cursor: pointer;
   float: right;
   margin-top: 19px;
+  display: none;
 }
 .componentListWrapper .componentList .proContainer .rBox .proWrapper .pro:hover,
 .componentListWrapper .componentList .infoContainer .rBox .proWrapper .pro:hover,
 .componentListWrapper .componentList .infoSource .rBox .proWrapper .pro:hover {
   background: #fff9f9;
+}
+.componentListWrapper .componentList .proContainer .rBox .proWrapper .pro:hover i,
+.componentListWrapper .componentList .infoContainer .rBox .proWrapper .pro:hover i,
+.componentListWrapper .componentList .infoSource .rBox .proWrapper .pro:hover i {
+  display: block;
 }
 .componentListWrapper .componentList .infoContainer .rBox .proWrapper,
 .componentListWrapper .componentList .infoSource .rBox .proWrapper {
@@ -705,13 +803,13 @@ body {
   margin-top: 0;
 }
 .componentListWrapper .related {
-  background: #fff;
   padding: 13px;
   border-top: 1px solid #efeeec;
+  border-radius: 0 0 5px 5px;
 }
 .componentListWrapper .related h1 {
   display: inline-block;
-  font-size: 18px;
+  font-size: 14px;
   color: #282828;
   line-height: 39px;
   font-weight: normal;
@@ -724,10 +822,9 @@ body {
   text-align: center;
   border: 1px solid #d5d9dc;
   border-radius: 4px;
-  margin: 0 10px 10px 0;
+  margin: 0 10px 0px 0;
   font-size: 14px;
   color: #3f4044;
-  background: #f4f4f4;
 }
 /* 新品声量对比 begin */
 .WraNewPro {
@@ -1055,16 +1152,40 @@ body {
   line-height: 50px;
 }
 #addModulePopup {
-  background: #fff9f9;
-  border: 1px solid #b9bcc4;
-  width: 420px;
-  top: 73px;
+  width: 418px;
+  height: 110px;
+  top: 0px;
   left: 24px;
   z-index: 2;
+  background: none;
+}
+#addModulePopup .boxNav {
+  width: 96px;
+  height: 44px;
+  background: #fff;
+  z-index: 2;
+  border: 1px solid #b9bcc4;
+  border-bottom: 0;
+  position: absolute;
+  top: 0;
+}
+#addModulePopup .boxNav i.iconfont {
+  font-size: 15px;
+  color: #757b8b;
+  display: block;
+  text-align: center;
+  line-height: 44px;
 }
 #addModulePopup .box {
-  background: #fff9f9;
-  padding: 18px 24px;
+  position: absolute;
+  top: 44px;
+  border: 1px solid #b9bcc4;
+  width: 378px;
+  height: 36px;
+  min-height: 36px;
+  border-radius: 0;
+  background: #fff;
+  padding: 20px;
   margin: 0;
 }
 #addModulePopup .box .fm-row {
@@ -1083,14 +1204,14 @@ body {
   margin: 0;
 }
 #addModulePopup .box .fm-row input[type=button] {
-  width: 82px;
-  height: 30px;
-  line-height: 30px;
+  width: 80px;
+  height: 38px;
+  line-height: 38px;
   text-align: center;
-  background: #f25e61;
+  background: #247ba0;
   color: #fff;
   border-radius: 4px;
-  margin-left: 10px;
+  margin-left: 7px;
   border: none;
   curspr: pointer;
 }
@@ -1110,17 +1231,40 @@ body {
   display: inline-block;
   position: relative;
 }
-.addShowBtnContainer .selectProduct_updata {
+.addShowBtnContainer .selectProduct_updata_wrap {
+  height: 105px;
+  position: absolute;
+  top: 4px;
+}
+.addShowBtnContainer .selectProduct_updata_wrap .boxNav {
+  width: 64px;
+  height: 31px;
+  background: #fbfbfb;
+  z-index: 2;
+  border: 1px solid #b9bcc4;
+  border-bottom: 0;
+  position: absolute;
+  top: 0;
+}
+.addShowBtnContainer .selectProduct_updata_wrap i.iconfont {
+  font-size: 16px;
+  color: #757b8b;
+  background: #fbfbfb;
+  line-height: 32px;
+  display: block;
+  text-align: center;
+}
+.addShowBtnContainer .selectProduct_updata_wrap .selectProduct_updata {
   position: absolute;
   z-index: 1;
-  top: 30px;
+  top: 31px;
   left: 0px;
   width: 640px;
   padding: 18px 0;
   background-color: #fbfbfb;
   border: 1px solid #e5e5e5;
 }
-.addShowBtnContainer .selectProduct_updata li {
+.addShowBtnContainer .selectProduct_updata_wrap .selectProduct_updata li {
   height: 36px;
   border: none;
   width: auto;
@@ -1128,19 +1272,20 @@ body {
   line-height: 39px;
   display: inline-block;
 }
-.addShowBtnContainer .selectProduct_updata li button {
+.addShowBtnContainer .selectProduct_updata_wrap .selectProduct_updata li button {
   height: 36px;
   width: 80px;
   border: 1px solid #e5e5e5;
   border-radius: 4px;
   outline: none;
-  color: #9f9fa1;
+  color: #757b8b;
+  background: #f4f4f4;
 }
-.addShowBtnContainer .selectProduct_updata li:first-child {
+.addShowBtnContainer .selectProduct_updata_wrap .selectProduct_updata li:first-child {
   margin-left: 26px;
   font-size: 14px;
 }
-.addShowBtnContainer .selectProduct_updata li:first-child select {
+.addShowBtnContainer .selectProduct_updata_wrap .selectProduct_updata li:first-child select {
   height: 36px;
   width: 199px;
 }
@@ -1190,14 +1335,12 @@ body {
 .attrGroup td a,
 .attrGroup th a {
   display: block;
-  background: #fff;
   width: 258px;
   height: 36px;
   line-height: 36px;
   text-align: center;
   margin: 0 auto 10px auto;
   border-radius: 4px;
-  border: 1px solid #e5e5e5;
   color: #3f4044;
   position: relative;
   outline: 0;
@@ -1211,7 +1354,6 @@ body {
 }
 .attrGroup td a:hover,
 .attrGroup th a:hover {
-  background: #fff9f9;
   border-color: #b9bcc4;
   font-weight: bold;
 }

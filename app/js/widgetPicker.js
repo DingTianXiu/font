@@ -58,9 +58,9 @@
                 var zIndex = components.length;
                 for(var j = 0; j < components.length;j++){
                     var item = components[j];
-                    template2 += "<div class='widget' style='z-index:"+ (zIndex-j) +";' id='"+ item["id"] +"' type='"+ item["cptKey"] +"'><div class='inner'><img src='../img/1.jpg'/><h3>";
-                    template2 += components[j]["cptName"] +"</h3><div class='description'><h4>构件描述：</h4><p>";
-                    template2 += (item["cptDesc"]==null ? "无" : item["cptDesc"]) +"</p></div></div></div>";
+                    template2 += "<div class='widget' style='z-index:"+ (zIndex-j) +";' id='"+ item["id"] +"' type='"+ item["cptKey"] +"'><div class='inner'><img src='../img/1.jpg'/>";
+                    template2 += "</div><h3 class='widTitle'>"+ components[j]["cptName"] +"</h3><div class='description'><h4>构件描述：</h4><p>";
+                    template2 += (item["cptDesc"]==null ? "无" : item["cptDesc"]) +"</p></div></div>";
                 }
                 that.$content.html(template2);
             });

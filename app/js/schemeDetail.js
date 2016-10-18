@@ -17,6 +17,8 @@
 						parent.window.schemeData = r.data;
 						parent.window.currentSchemeId = r.data[0]["sltId"];
 						$(".customerListContainer",parent.document).remove();
+						$(".container",parent.document).removeClass("hide");
+						$("#add-scheme-popup",parent.document).addClass("hide");
 						if(that.userInfo.isStaff){
 							$(".side",parent.document).after(
 								"<div class='customerListContainerIn'>" +
@@ -24,7 +26,7 @@
 								"<p class='customerTitle'>选择配置用户<span class='closeList'>x</span></p>"+
 								"<div class='customerContainer'>"+
 								"<div class='search'>"+
-								"<input class='searchInfo' type='text' placeholder='输入客户名、用户名、开户人搜索'>"+
+								"<input class='searchInfo' type='text' placeholder='输入用户名、用户名、开户人搜索'>"+
 								"<em href='#' class='delete' style='display: none'>x</em>"+
 								"</div>"+
 								"<ul class='customerList'></ul>"+
@@ -34,15 +36,15 @@
 							);
 							var h = parent.document.documentElement.clientHeight - $(".head",parent.document).height();
 							$(".customerListContainerIn",parent.document).find(".customerList").css("height",(h-131)+"px");
-							$(".custName",parent.document).html(that.custName);
+							$(".custName",parent.document).html(that.loginName);
+						}else{
+							$(".custWrap",parent.document).addClass("hide");
 						}
-						$(".container",parent.document).removeClass("hide");
-						$("#add-scheme-popup",parent.document).addClass("hide");
 						that._renderPage();
 						that.getModuleList();
 					}else{
 						if(that.userInfo.isStaff){
-							$(".title",parent.document).html(that.custName);
+							$(".title",parent.document).html(that.loginName);
 							$(".customerListContainer",parent.document).addClass("hide");
 							$(".container",parent.document).addClass("hide");
 							$("#add-scheme-popup",parent.document).removeClass("hide");
@@ -64,7 +66,7 @@
 				isActive;
 			for(var i = 0; i < schemeData.length;i++){
 				isActive = parent.window.currentSchemeId==schemeData[i]["sltId"] ? 'class="active"' : '';
-				template += '<li><a '+ isActive +' href="views/scheme.html?id='+ schemeData[i]["sltId"] +'" target="mainIframe"><i class="icon iconfont icon-iconproject'+ (i+1) +'"></i><p>'+ schemeData[i]["sltName"] +'</p></a></li>';
+				template += '<li><a '+ isActive +' href="views/scheme.html?id='+ schemeData[i]["sltId"] +'" target="mainIframe"><em class="sideBlock"></em><i class="icon iconfont icon-123">&#xe61a;<em class="activeNumb">'+ (i+1) +'</em></i><p>'+ schemeData[i]["sltName"] +'</p><i class="iconfont icon-jiantou iconDropdown"></i></a></li>';
 			}
 			$(".menu",parent.document).html(template);
 		},
@@ -96,8 +98,10 @@
 				template += '<li><a href="javascript:;" id="'+ this.moduleData[i]["modId"] +'" class="moduleListItem '+ (i == 0 ? 'active' : '') +'">'+ this.moduleData[i]["modName"] + '</a>';
 				template +=  '<i class="icon iconfont icon-iconmodify editModuleName"></i></li>';
 			}
+			// template += '<li class="addModule"><a href="javascript:;" class="moduleListItem addModuleBtn iconfont">&#xe602;</a></li>';
+
 			if(this.userInfo.isStaff){
-				template += '<li><a href="javascript:;" class="moduleListItem addModuleBtn">新建模块</a></li>';
+				template += '<li class="addModule"><a href="javascript:;" class="moduleListItem addModuleBtn iconfont">&#xe602;</a></li>';
 			}
 			$(".moduleList").html(template);
 		},
@@ -177,8 +181,8 @@
 				if($el.parents("#addModulePopup").length == 0 && ($el[0].id != 'addModulePopup') && ($el[0].className.indexOf('moduleListItem') == -1) && ($el[0].className.indexOf('editModuleName') == -1)){
 					$("#addModulePopup").addClass("hide");
 				}
-				if($el.parents(".selectProduct_updata").length == 0 && !($el[0].className == 'selectProduct_updata') &&  $el[0].className != "addBtn addLegendBtn" && $el[0].className != "icon iconfont icon-iconadd"){
-					$(".selectProduct_updata").remove();
+				if($el.parents(".selectProduct_updata_wrap").length == 0 && !($el[0].className == 'selectProduct_updata_wrap') &&  $el[0].className != "addBtn addLegendBtn" && $el[0].className != "icon iconfont icon-iconadd"){
+					$(".selectProduct_updata_wrap").remove();
 				}
 			});
 			//预览
@@ -250,6 +254,7 @@
 			this.currentModuleId = id;
 			if(this.componentChain[this.currentModuleId] && this.componentChain[this.currentModuleId].length > 0){
 				this._renderComponent();
+				this.setBtnStatus();
 			}else{
 				this._getComponentList();
 			}
@@ -352,6 +357,7 @@
 			}
 		},
 		createWidget : function(param,step){
+
 			var that = this;
 			$(".btnbox").html("");
 			var ele = $("<div class='component'></div>").appendTo(".componentList");
@@ -385,7 +391,7 @@
 					cptInstId: param.cptInstId,
 					conCptInstId : param.conCptInstId ? param.conCptInstId : null,
 					onComplete: function (data) {
-						that.componentChain[that.currentModuleId].push(data);
+						that.updateComponentChain(data);
 						that.setBtnStatus();
 					},
 					//同步关联属性
@@ -398,11 +404,6 @@
 						that.createWidget(data,0);
 					}
 				});
-				// new newPhoAddComp();
-			// // }else{
-			// // 	$.msg("敬请期待1...");
-			// // 	$(".btnbox a").show();
-
 			}else if(param.cptKey == "customerInterestAnalyzeCpt"){
 				$(ele).proUserAnalysis({
 					step: index,
@@ -480,6 +481,13 @@
 					flag = true;
 				}
 			});
+			if($(".widgetPopup").length > 0){
+				$.msg({
+					modal : true,
+					msg : "当前构件未创建完成，不能创建构件"
+				});
+				flag = true;
+			}
 			return flag;
 		},
 		updateSyncData :　function(data){
@@ -532,6 +540,9 @@
 		updateComponentChain : function(data){
 			if(!this.componentChain[this.currentModuleId]){
 				this.componentChain[this.currentModuleId] = [];
+			}
+			if(data == null){
+				return;
 			}
 			if(typeof data == "object"){
 				this.componentChain[this.currentModuleId].push(data);
@@ -670,18 +681,20 @@
 			}
 			if(parent.window.schemeData.length > 0){
 				if(parent.window.custId==localStorage.custId){
+					that.custId = localStorage.custId;
+					that.loginName = localStorage.loginName;
 					this.getModuleList(parent.window.currentSchemeId);
 				}else {
 					localStorage.setItem("custId",parent.window.custId);
-					localStorage.setItem("custName",parent.window.custName);
+					localStorage.setItem("loginName",parent.window.loginName);
 					that.custId = parent.window.custId;
-					that.custName = parent.window.custName;
+					that.loginName = parent.window.loginName;
 					this.getSchemeList();
 				}
 			}else {
 				if(localStorage.custId){
 					that.custId = localStorage.custId;
-					that.custName = localStorage.custName;
+					that.loginName = localStorage.loginName;
 					this.getSchemeList();
 				}
 			}
@@ -695,7 +708,7 @@
 			onSelect : function(type,id){
 				var param = {
 					baseCptId: parseInt(id, 10),
-					cptKey: type,
+					cptKey: type
 				};
 				schemeDetail.createWidget(param, 0);
 

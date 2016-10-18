@@ -72,6 +72,10 @@
                 that._switchLegendBtn($(this));
             });
             this.$element.delegate(".addLegendBtn","click",function(){
+                if(that.data.condition.phoneModel.value.length>=8){
+                    $.msg("最多只能添加8个手机型号")
+                    return
+                }
                 that._openPhoneDialog();
                 that._getPhoneList();
             });
@@ -85,7 +89,14 @@
                 }
             });
             this.$element.delegate(".delLegendIcon","click",function(){
-                that._delPhoneModel($(this));
+                var ele = this;
+                $.msg({
+                    type : "confirm",
+                    msg : "确定要删除该项相关的数据展示吗？",
+                    ok : function(){
+                        that._delPhoneModel($(ele));
+                    }
+                });
             });
             this.$element.delegate(".addBtn_updata","click",function () {
                 that._addProduct();
@@ -105,7 +116,7 @@
             });
             $("body").on("click",function(e){
                 var $el = $(e.target);
-                if($el[0].className != "icon iconfont icon-iconclouse delLegendIcon"&&$el[0].className != "icon iconfont icon-icondel"){
+                if($el[0].className != "icon iconfont icon-iconclouse delLegendIcon"&&$el[0].className != "icon iconfont icon-icondel"&&$el[0].className!=""){
                     if(that.delLegendIconShow){
                         that.$element.find(".legendBtn").find("i").hide();
                         that.delLegendIconShow = false;
@@ -121,6 +132,7 @@
                     msg : "确认删除？",
                     ok : function(){
                         $ele.parents(".component").remove();
+                        that._onComplete(null);
                     }
                 });
                 return;
@@ -129,16 +141,27 @@
                 data : that.data.condition,
                 onSwitchType : function(data){
                     var param = {
-                        "attrInstId" : data.id,
-                        "syncType" : data.syncType
+                        "userId" : that.custId,
+                        "attrSyncTypeList" : data
                     };
                     $.ajaxJSON({
                         name: '设置属性实例同步信息',
                         url: URL.UPDATE_SYNC_TYPE,
-                        data: param,
+                        data: JSON.stringify(param),
                         iframe: true,
+                        contentType : 'application/json; charset=UTF-8',
                         success: function (r) {
-                            that.data.condition[data.key]["syncType"] = data.syncType;
+                            for(var i in that.data.condition){
+                                var item = that.data.condition[i];
+                                if(item != null && typeof item == "object"){
+                                    for(var j = 0; j < data.length;j++){
+                                        if(item.id == data[j].attrInstId){
+                                            item["syncType"] = data[j].syncType;
+                                            break;
+                                        }
+                                    }
+                                }
+                            }
                         }
                     });
                 },
@@ -266,6 +289,10 @@
             if(this.data.condition.conCptInstId){
                 params["conCptInstId"] = this.data.condition.conCptInstId;
             }
+            if(params["phoneModel"].length>8){
+                $.msg("最多添加8个手机型号");
+                return
+            }
             var that = this;
             $.ajaxJSON({
                 name: '新增构件实例',
@@ -327,6 +354,7 @@
             }
             this.$addBtn = $("<div class='addShowBtnContainer'><a href='javascript:;' class='addBtn addLegendBtn'><i class='icon iconfont icon-iconadd'></i></a></div>").appendTo(this.$legend);
             this.delBtn = $("<a href='javascript:;' class='delBtn delLegendBtn'><i class='icon iconfont icon-icondel'></i></a>").appendTo(this.$legend);
+
             this.$hrLline = $("<hr class='hrLine'>").appendTo(this.$legend);
             if(!this.data.result) return;
             var defaultModelCode = this.$legend.find(".legendBtn").eq(0).attr("modelCode");
@@ -335,15 +363,26 @@
         },
         _renderChart : function(data){
             var that = this;
-            if(!data){
-                this.$element.find(".chart").html("");
+            if(!data || data.length == 0){
+                this.$element.find(".chart").html("<div class='noData'><h3>暂无数据</h3><p>有疑问请联系客服</p></div>");
+                this.$element.find(".chartLabel").hide();
                 return;
             }
             var afterDateNum = that.data.condition.compareDateScope.value.afterDateNum,
                 beforeDateNum = that.data.condition.compareDateScope.value.beforeDateNum*-1;
             var dateList = [];
             for(var i=beforeDateNum;i<afterDateNum;i++){
-                dateList.push(i);
+                if(i==0){
+                    dateList.push({
+                        value:"发布日",
+                        textStyle: {
+                            fontSize: 20,
+                            color: 'red'
+                        }
+                    });
+                }else{
+                    dateList.push(i);
+                }
             }
             var option = {
                 title: {
@@ -361,7 +400,13 @@
                 xAxis: {
                     type: 'category',
                     boundaryGap: false,
-                    data: dateList
+                    data: dateList,
+                    axisLabel:{
+                        textStyle:{
+                            color:'#9a9a9a',
+                        },
+                        interval : 0
+                    }
                 },
                 yAxis: {
                     type: 'value'
@@ -371,19 +416,16 @@
                     {
                         name:'声量总量',
                         type:'line',
-                        // stack: '总量',
                         data: data.sum
                     },
                     {
                         name:'正面总量',
                         type:'line',
-                        // stack: '总量',
                         data: data.positive
                     },
                     {
                         name:'负面总量',
                         type:'line',
-                        // stack: '总量',
                         data: data.negative
                     }
                 ]
@@ -499,8 +541,10 @@
         },
         _openPhoneDialog : function(){
             var that = this;
-            if(this.$element.find(".selectProduct_updata").length==0){
-                var dom = "<ul class='selectProduct_updata'>" +
+            if(this.$element.find(".selectProduct_updata_wrap").length==0){
+                var dom = "<div class='selectProduct_updata_wrap'>"+
+                    "<div class='boxNav'><i class='iconfont'>&#xe61f;</i></div>"+
+                    "<ul class='selectProduct_updata'>" +
                     "<li>选择目标产品:</li>" +
                     "<li>" +
                     "<select class='select brand'>" +
@@ -512,11 +556,11 @@
                     "<option>选择型号</option>" +
                     "</select>" +
                     "</li>" +
-                    "<li><button class='addBtn_updata'><i class='icon iconfont icon-iconadd'></i></button></li>" +
-                    "</ul>";
+                    "<li><button class='addBtn_updata'><i class='icon iconfont'>&#xe61f;</i></button></li>" +
+                    "</ul></div>";
                 this.$element.find(".addShowBtnContainer").append(dom);
             }else{
-                that.$element.find(".selectProduct_updata").remove();
+                that.$element.find(".selectProduct_updata_wrap").remove();
             }
         },
         /*获取手机型号列表*/
@@ -591,7 +635,7 @@
                 iframe: true,
                 success: function (r) {
                     that._onUpdateAttr(r.data.syncCptInstIdList);
-                    that._renderResult();
+                    that._getData();
                 }
             });
         },
